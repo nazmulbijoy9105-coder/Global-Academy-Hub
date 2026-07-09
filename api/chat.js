@@ -1,6 +1,6 @@
 // api/chat.js
 // Vercel Serverless Function for Groq API chat
-// Runtime: Node.js (CommonJS required for Vercel)
+// Runtime: Node.js 18+ (native fetch available)
 
 module.exports = async function handler(req, res) {
   // CORS headers
@@ -18,6 +18,16 @@ module.exports = async function handler(req, res) {
     return;
   }
 
+  // Check if GROQ_API_KEY is configured
+  if (!process.env.GROQ_API_KEY) {
+    console.error("[Global Academy Hub] GROQ_API_KEY is missing");
+    res.status(500).json({ 
+      error: "Server configuration error: GROQ_API_KEY not set",
+      hint: "Add GROQ_API_KEY to Vercel Environment Variables"
+    });
+    return;
+  }
+
   try {
     const { messages = [], system } = req.body;
 
@@ -26,6 +36,8 @@ module.exports = async function handler(req, res) {
       `You are the Global Academy Hub AI, an expert academic and visa consultant for Schengen and European higher education. Be concise, professional, warm, and practical. Help students with university recommendations, visa suitability, SOP drafting, blocked account guidance, and interview preparation. Always respond in the same language the user is using (English or Bengali).`;
 
     const fullMessages = [{ role: "system", content: systemContent }, ...messages];
+
+    console.log("[Global Academy Hub] Calling Groq API with", fullMessages.length, "messages");
 
     const groqResponse = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
@@ -44,6 +56,7 @@ module.exports = async function handler(req, res) {
 
     if (!groqResponse.ok) {
       const errText = await groqResponse.text();
+      console.error("[Global Academy Hub] Groq API error:", groqResponse.status, errText);
       throw new Error(`Groq API error ${groqResponse.status}: ${errText}`);
     }
 
