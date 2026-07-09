@@ -8,9 +8,10 @@ import { motion, AnimatePresence } from "motion/react";
 import { 
   Sparkles, MessageSquare, LayoutDashboard, Compass, CreditCard, 
   MapPin, CheckCircle2, ArrowRight, UserCheck, 
-  HelpCircle, GraduationCap, DollarSign, Calendar, ChevronDown,
+  HelpCircle, GraduationCap, DollarSign, Calendar, ChevronDown, Info,
+  Facebook, Instagram, Youtube, Twitter, Linkedin,
   LogOut, Download, Phone, Mail, Award, Loader2, Send, Plus, Trash2, Edit3, Check, Copy, MessageCircle,
-  Mic, Square, Play, Volume2, Clock, BookOpen, RefreshCw
+  Mic, Square, Play, Volume2, Clock, BookOpen, RefreshCw, FileText, Filter
 } from "lucide-react";
 import { User, Conversation, Message, Payment, ServiceTier, StudentProfile } from "./types";
 import AuthModal from "./components/AuthModal";
@@ -53,11 +54,284 @@ const FAQ_ITEMS = [
   }
 ];
 
+const SOP_TEMPLATES = [
+  {
+    id: "stem-rigor",
+    title: "STEM & CS Academic Rigor",
+    category: "STEM",
+    icon: "💻",
+    description: "Designed for engineering, CS, and natural sciences. Highlights prerequisite quantitative coursework, thesis projects, and technical credit alignment.",
+    badge: "German Public Standard",
+    difficulty: "Advanced Credit Matching Required",
+    color: "violet",
+    structure: [
+      { section: "Paragraph 1: Core Technical Hook", detail: "Describe a profound technical challenge, real-world bug, or open research question that defines your academic focus." },
+      { section: "Paragraph 2: Academic Foundations", detail: "Undergrad transcript breakdown, highlighting ECTS credit alignment, math, and theory prerequisite matches." },
+      { section: "Paragraph 3: Practical & Research Pedigree", detail: "Bachelor thesis details, coding projects, lab research, publications, and technical stacks utilized." },
+      { section: "Paragraph 4: Curricular Synergy", detail: "Selected university's specific research labs, elective modules, and faculty interests that match your background." },
+      { section: "Paragraph 5: Professional Blueprint", detail: "Return strategy to Bangladesh, or European industrial research pathways in your specialized technology field." }
+    ],
+    prompt: `I want to draft a Statement of Purpose (SOP) for my target study using the "STEM & CS Academic Rigor" structure.
+
+Please use the following outline:
+- Paragraph 1: Core Technical Hook (technical challenge, motivation)
+- Paragraph 2: Academic Foundations (credit matching, key undergraduate modules)
+- Paragraph 3: Practical & Research Pedigree (thesis summary, coding projects, GitHub)
+- Paragraph 4: Curricular Synergy (why this university, specific modules, and labs)
+- Paragraph 5: Professional Blueprint (long-term career path, returning to Bangladesh or EU research)
+
+Could you ask me 3 or 4 targeted questions one-by-one about my academic and project background so we can write this draft?`
+  },
+  {
+    id: "business-mgmt",
+    title: "MBA & Business Leadership",
+    category: "Business",
+    icon: "📈",
+    description: "Best for business, finance, management, and economics. Focuses on professional progression, leadership, case studies, and career outcomes.",
+    badge: "Schengen Business Approved",
+    difficulty: "Requires Work Experience Focus",
+    color: "emerald",
+    structure: [
+      { section: "Paragraph 1: Business Catalyst Hook", detail: "A real-world commercial challenge, market opportunity, or organizational dilemma you solved." },
+      { section: "Paragraph 2: Managerial Foundations", detail: "Undergraduate business training or analytical background, combined with core industry achievements." },
+      { section: "Paragraph 3: Leadership & Initiative Pedigree", detail: "Team management, process optimization, revenue growth, or corporate projects led by you." },
+      { section: "Paragraph 4: Strategic Academic Fit", detail: "Why this business school, networking circles, Case Study methodology, and club memberships." },
+      { section: "Paragraph 5: Executive Career Blueprint", detail: "Short-term (management consultant, analyst) and long-term (entrepreneurial, corporate executive) goals." }
+    ],
+    prompt: `I want to draft a Statement of Purpose (SOP) for a Business/MBA program using the "MBA & Business Leadership" structure.
+
+Please use the following outline:
+- Paragraph 1: Business Catalyst Hook (commercial challenge, motivation)
+- Paragraph 2: Managerial Foundations (undergrad study, business achievements)
+- Paragraph 3: Leadership & Initiative Pedigree (teamwork, process optimization, corporate projects)
+- Paragraph 4: Strategic Academic Fit (why this business school, case studies, networking)
+- Paragraph 5: Executive Career Blueprint (short-term and long-term career goals)
+
+Could you ask me 3 or 4 targeted questions one-by-one about my professional and leadership background so we can write this draft?`
+  },
+  {
+    id: "social-sci",
+    title: "Humanities & Social Sciences",
+    category: "Humanities",
+    icon: "⚖️",
+    description: "Tailored for sociology, development, policy, and law. Emphasizes critical thinking, qualitative methodologies, and societal impact.",
+    badge: "Research Intensive",
+    difficulty: "Focus on Theoretical Frameworks",
+    color: "amber",
+    structure: [
+      { section: "Paragraph 1: Societal Catalyst Hook", detail: "A societal event, public policy crisis, or cultural discourse that motivated your academic interest." },
+      { section: "Paragraph 2: Theoretical Foundations", detail: "Undergrad coursework, key literature, development theories, and seminars that shaped your perspective." },
+      { section: "Paragraph 3: Methodological Pedigree", detail: "Fieldwork, qualitative interviews, statistical surveys, and independent research projects." },
+      { section: "Paragraph 4: Research Alignment", detail: "Specific university research groups, faculty monographs, seminar topics, and local community outreach." },
+      { section: "Paragraph 5: Social Impact Trajectory", detail: "Academic teaching, think-tank advisory roles, or leadership within international NGOs." }
+    ],
+    prompt: `I want to draft a Statement of Purpose (SOP) for a Humanities / Social Sciences program using the "Humanities & Social Sciences" structure.
+
+Please use the following outline:
+- Paragraph 1: Societal Catalyst Hook (societal event, policy failure, motivation)
+- Paragraph 2: Theoretical Foundations (undergrad work, key theories, seminal authors)
+- Paragraph 3: Methodological Pedigree (fieldwork, qualitative/quantitative methods, research)
+- Paragraph 4: Research Alignment (why this university, matching professors, monographs)
+- Paragraph 5: Social Impact Trajectory (career goals, NGOs, academic teaching)
+
+Could you ask me 3 or 4 targeted questions one-by-one about my research interests and methodology background so we can write this draft?`
+  },
+  {
+    id: "creative-arts",
+    title: "Creative Arts & Design Portfolio",
+    category: "Creative",
+    icon: "🎨",
+    description: "Best for architecture, UI/UX, design, and media. Focuses on creative philosophy, portfolio analysis, and artistic voice.",
+    badge: "SOP + Portfolio Synergy",
+    difficulty: "Portfolio Walkthrough Focus",
+    color: "rose",
+    structure: [
+      { section: "Paragraph 1: Artistic Manifesto Hook", detail: "Your personal creative philosophy, defining aesthetic experience, or design principles." },
+      { section: "Paragraph 2: Aesthetic Foundations", detail: "Academic art/design training, exposure to design history, and spatial or visual mastery." },
+      { section: "Paragraph 3: Portfolio deep-dive", detail: "Detailed walk-through of 2 key portfolio pieces (conceptualization, iteration, and final execution)." },
+      { section: "Paragraph 4: Creative & Studio Fit", detail: "Studio culture at the university, equipment access, critique circles, and design philosophy." },
+      { section: "Paragraph 5: Aesthetic Trajectory", detail: "Future as creative director, studio founder, exhibiting artist, or design leader." }
+    ],
+    prompt: `I want to draft a Statement of Purpose (SOP) for a Creative Arts/Design program using the "Creative Arts & Design Portfolio" structure.
+
+Please use the following outline:
+- Paragraph 1: Artistic Manifesto Hook (creative philosophy, aesthetic principles)
+- Paragraph 2: Aesthetic Foundations (academic training, history, spatial/visual skills)
+- Paragraph 3: Portfolio Deep-Dive (explaining 2 major portfolio projects)
+- Paragraph 4: Creative & Studio Fit (studio culture, specific equipment, critique circles)
+- Paragraph 5: Aesthetic Trajectory (career plans, creative director, exhibition goals)
+
+Could you ask me 3 or 4 targeted questions one-by-one about my portfolio projects and design style so we can write this draft?`
+  }
+];
+
+const ALL_DOCUMENTS = [
+  {
+    id: "passport",
+    titleEn: "Valid Passport",
+    titleBn: "বৈধ পাসপোর্ট ও কপি",
+    descEn: "Valid passport with at least 2 empty pages. Valid for at least 3 months beyond your departure date from Schengen zone. Original plus photocopies of biographical pages.",
+    descBn: "ন্যূনতম ৩ মাস মেয়াদ এবং কমপক্ষে ২টি খালি পৃষ্ঠাসহ বৈধ মূল পাসপোর্ট ও বায়ো ডাটা পেজের স্পষ্ট ফটোকপি।",
+    category: "mandatory"
+  },
+  {
+    id: "photos",
+    titleEn: "Biometric Passport Photos",
+    titleBn: "বায়োমেট্রিক পাসপোর্ট সাইজ ছবি",
+    descEn: "3 recent biometric-compliant passport size photos (35x45mm) with a light gray or white background, taken within the last 6 months.",
+    descBn: "ইউরোপীয় স্ট্যান্ডার্ডের ৩ কপি সাম্প্রতিক রঙ্গিন ছবি (৩৫×৪৫ মিমি, সাদা ব্যাকগ্রাউন্ড, মুখমণ্ডল স্পষ্ট দেখা যেতে হবে)।",
+    category: "mandatory"
+  },
+  {
+    id: "application_form",
+    titleEn: "Visa Application Form",
+    titleBn: "ভিসা আবেদন ফরম",
+    descEn: "Fully completed and signed national visa application form. (VIDEX form printed for Germany, or online portal application summary for other states).",
+    descBn: "সঠিকভাবে এবং সম্পূর্ণ পূরণকৃত ও স্বাক্ষরিত ভিসা অ্যাপ্লিকেশন ফরম (জার্মানির জন্য VIDEX ফরম, অন্যান্য দেশের জন্য অনলাইন পোর্টাল প্রিন্টআউট)।",
+    category: "mandatory"
+  },
+  {
+    id: "insurance",
+    titleEn: "Travel Health Insurance",
+    titleBn: "ভ্রমণ স্বাস্থ্য বীমা",
+    descEn: "Schengen travel medical insurance with a minimum coverage of €30,000, valid for the entire initial stay until university enrollment.",
+    descBn: "অনুমোদিত বীমা কোম্পানি থেকে সংগৃহীত ন্যূনতম ৩০,০০০ ইউরো কাভারেজের ভ্রমণ স্বাস্থ্য বীমা পলিসি।",
+    category: "mandatory"
+  },
+  {
+    id: "acceptance_letter",
+    titleEn: "University Admission Letter",
+    titleBn: "বিশ্ববিদ্যালয় ভর্তির অফার লেটার",
+    descEn: "Official, unconditional or conditional Letter of Admission from your target Schengen university outlining course duration, starting date, and language of instruction.",
+    descBn: "জার্মান বা ইউরোপীয় বিশ্ববিদ্যালয় থেকে প্রাপ্ত অফিশিয়াল অফার লেটার বা ভর্তির কনফার্মেশন পত্র (কোর্সের মেয়াদ ও ভাষা উল্লেখ থাকতে হবে)।",
+    category: "mandatory"
+  },
+  {
+    id: "academic_certificates",
+    titleEn: "Attested Academic Certificates",
+    titleBn: "সত্যায়িত শিক্ষাগত যোগ্যতা সনদ",
+    descEn: "All high school certificates, transcripts, and diplomas (SSC, HSC, Bachelor's). Must be attested by the Education Ministry, Board, and Foreign Ministry of Bangladesh.",
+    descBn: "মাধ্যমিক, উচ্চ মাধ্যমিক এবং ব্যাচেলর ডিগ্রির সকল সার্টিফিকেট ও ট্রান্সক্রিপ্ট (শিক্ষা বোর্ড, শিক্ষা মন্ত্রণালয় ও পররাষ্ট্র মন্ত্রণালয় দ্বারা সত্যায়িত)।",
+    category: "academic"
+  },
+  {
+    id: "language_proficiency",
+    titleEn: "Language Proficiency Proof",
+    titleBn: "ভাষা দক্ষতার প্রমাণ সনদ",
+    descEn: "Official IELTS test report certificate (or equivalent). Embassies strongly prefer an IELTS score of 6.0-6.5+ for English-medium courses.",
+    descBn: "অফিসিয়াল IELTS স্কোর কার্ড বা ভাষা দক্ষতার সার্টিফিকেট (ইংরেজি মাধ্যমে পড়তে চাইলে শেনজেন দূতাবাস সাধারণত ন্যূনতম ৬.০ বা ৬.৫ স্কোর প্রত্যাশা করে)।",
+    category: "academic"
+  },
+  {
+    id: "cv",
+    titleEn: "Curriculum Vitae (CV)",
+    titleBn: "জীবনবৃত্তান্ত (ইউরোপাস সিভি)",
+    descEn: "A professional, updated CV structured in the Europass format, detailing your educational history, academic projects, technical skills, and work history.",
+    descBn: "ইউরোপীয় স্ট্যান্ডার্ডের (Europass) হালনাগাদ ও প্রফেশনাল একাডেমিক জীবনবৃত্তান্ত (সিভি)।",
+    category: "academic"
+  },
+  {
+    id: "sop",
+    titleEn: "Statement of Purpose (SOP)",
+    titleBn: "উদ্দেশ্য বিবৃতি (SOP)",
+    descEn: "A compelling personal statement explaining your motivations to study in Europe, course module connection, university selection, and return plans to Bangladesh.",
+    descBn: "একটি আকর্ষণীয় ও সুসংগঠিত উদ্দেশ্য বিবৃতি (SOP), যা আপনার ক্যারিয়ারের লক্ষ্য এবং ইউরোপে পড়ার যৌক্তিকতা তুলে ধরে।",
+    category: "academic"
+  },
+  {
+    id: "birth_certificate",
+    titleEn: "Birth Registration Certificate",
+    titleBn: "জন্ম নিবন্ধন সনদ",
+    descEn: "Online verified, English-translated Birth Registration Certificate with a valid digital QR code, or National ID Card copy.",
+    descBn: "অনলাইনে ভেরিফাইড এবং ইংরেজিতে অনুবাদকৃত ডিজিটাল কিউআর কোডসহ জন্ম নিবন্ধন সনদ অথবা জাতীয় পরিচয়পত্রের কপি।",
+    category: "optional"
+  },
+  {
+    id: "germany_blocked_account",
+    titleEn: "German Blocked Account (Sperrkonto)",
+    titleBn: "জার্মান ব্লকড অ্যাকাউন্ট নিশ্চিতকরণ",
+    descEn: "Official confirmation of €11,904 deposited in a licensed German blocked account provider (such as Expatrio, Fintiba, or Coracle) to cover annual living costs.",
+    descBn: "জার্মানিতে ১ বছরের জীবনযাত্রার ব্যয়ের জন্য নির্ধারিত ১১,৯০৪ ইউরো যেকোনো অনুমোদিত প্রোভাইডারে (Expatrio/Fintiba) ব্লকড করার চূড়ান্ত প্রুফ বা সার্টিফিকেট।",
+    category: "financial",
+    countries: ["Germany"]
+  },
+  {
+    id: "sweden_financials",
+    titleEn: "Sweden Personal Bank Statement",
+    titleBn: "সুইডিশ ব্যক্তিগত ব্যাংক বিবরণী",
+    descEn: "Bank statements showing at least SEK 10,314 per month of stay (~SEK 103,140 for a standard 10-month academic year) in your personal account to cover maintenance.",
+    descBn: "সুইডেনের মাইগ্রেশন এজেন্সির নিয়ম অনুযায়ী প্রতি মাসের খরচের প্রমাণ হিসেবে নিজের ব্যাংক অ্যাকাউন্টে কমপক্ষে ১০৩,১৪০ SEK সমপরিমাণ টাকা জমার ৩-৬ মাসের স্টেটমেন্ট।",
+    category: "financial",
+    countries: ["Sweden"]
+  },
+  {
+    id: "finland_financials",
+    titleEn: "Finland Secure Funding Proof",
+    titleBn: "ফিনল্যান্ডে জীবনযাত্রার ব্যয়ের তহবিল",
+    descEn: "Bank statement showing a minimum of €800 per month (€9,600 for a 1-year visa) in the student's personal account, plus paid tuition fee transaction receipts.",
+    descBn: "ফিনল্যান্ডে বসবাসের খরচের প্রমাণ হিসেবে শিক্ষার্থীর ব্যক্তিগত অ্যাকাউন্টে কমপক্ষে ৯,৬০০ ইউরো থাকার ব্যাংক স্টেটমেন্ট এবং বিশ্ববিদ্যালয়ের টিউশন ফি পরিশোধের স্লিপ।",
+    category: "financial",
+    countries: ["Finland"]
+  },
+  {
+    id: "poland_financials",
+    titleEn: "Poland Living & Tuition Funds",
+    titleBn: "পোল্যান্ড জীবনযাত্রা ও টিউশন ফান্ড",
+    descEn: "Proof of paid tuition fees for the first year, bank statements of student or sponsor showing living funds (~PLN 800/month), plus travel ticket reserves (~PLN 2,500).",
+    descBn: "পোল্যান্ডে প্রথম বছরের টিউশন ফি পরিশোধের প্রমাণপত্র এবং জীবনযাত্রার ব্যয়ের জন্য ব্যাংক অ্যাকাউন্টে পর্যাপ্ত টাকার ৩ মাসের ব্যাংক স্টেটমেন্ট ও স্পন্সরের হলফনামা।",
+    category: "financial",
+    countries: ["Poland"]
+  },
+  {
+    id: "recommendation_letters",
+    titleEn: "Letters of Recommendation",
+    titleBn: "সুপারিশপত্র (রিকমেন্ডেশন লেটার)",
+    descEn: "At least 2 academic recommendation letters signed by your undergraduate university professors on official letterhead.",
+    descBn: "পূর্ববর্তী বিশ্ববিদ্যালয়ের অধ্যাপক বা শিক্ষকদের কাছ থেকে অফিসিয়াল প্যাডে স্বাক্ষরিত কমপক্ষে ২টি একাডেমিক সুপারিশপত্র বা রিকমেন্ডেশন লেটার।",
+    category: "optional",
+    degrees: ["Master's", "PhD"]
+  },
+  {
+    id: "thesis_abstract",
+    titleEn: "Bachelor's Thesis or Abstract",
+    titleBn: "ব্যাচেলর থিসিস বা পাবলিকেশন",
+    descEn: "A copy of your undergraduate thesis abstract, research project summary, or any peer-reviewed scientific publication. (Mandatory for PhD).",
+    descBn: "ব্যাচেলর থিসিসের সারসংক্ষেপ (অ্যাবস্ট্রাক্ট), রিসার্চ প্রজেক্ট সামারি বা কোনো বৈজ্ঞানিক প্রকাশনার কপি (পিএইচডির জন্য এটি অত্যন্ত গুরুত্বপূর্ণ)।",
+    category: "optional",
+    degrees: ["Master's", "PhD"]
+  },
+  {
+    id: "phd_supervisor_agreement",
+    titleEn: "Doctoral Supervisor Invitation Letter",
+    titleBn: "পিএইচডি সুপারভাইজার আমন্ত্রণ পত্র",
+    descEn: "A formal, signed acceptance or invitation letter from your assigned supervisor/professor at the target European university indicating research supervision.",
+    descBn: "টার্গেট ইউরোপীয় বিশ্ববিদ্যালয়ের নিযুক্ত সুপারভাইজার বা অধ্যাপকের সই করা অফিশিয়াল আমন্ত্রণ বা সুপারভিশন চুক্তি পত্র।",
+    category: "mandatory",
+    degrees: ["PhD"]
+  },
+  {
+    id: "work_experience",
+    titleEn: "Work Experience Certificates",
+    titleBn: "কাজের অভিজ্ঞতা এবং গ্যাপ সার্টিফিকেট",
+    descEn: "Official experience letters, appointment letters, or pay slips from previous employers to justify any academic gap since graduation.",
+    descBn: "গ্র্যাজুয়েশনের পর কোনো গ্যাপ থাকলে তা জাস্টিফাই করতে পূর্ববর্তী চাকরিদাতার কাছ থেকে সংগৃহীত কাজের অভিজ্ঞতার অফিসিয়াল লেটার বা পে-স্লিপ।",
+    category: "optional"
+  }
+];
+
 export default function App() {
   // --- States ---
   const [user, setUser] = useState<User | null>(null);
-  const [activeTab, setActiveTab] = useState<"chat" | "dashboard" | "pricing" | "tracker" | "payments" | "channels" | "simulator">("chat");
+  const [activeTab, setActiveTab] = useState<"chat" | "dashboard" | "pricing" | "tracker" | "payments" | "channels" | "simulator" | "checklist" | "about">("chat");
   const [language, setLanguage] = useState<"en" | "bn">("en");
+
+  // --- Contact / Counseling Form States ---
+  const [contactFirstName, setContactFirstName] = useState("");
+  const [contactLastName, setContactLastName] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
+  const [contactPhone, setContactPhone] = useState("");
+  const [contactQuestion, setContactQuestion] = useState("");
+  const [isSubmittingContact, setIsSubmittingContact] = useState(false);
   
   // Conversations list
   const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -94,6 +368,28 @@ export default function App() {
   const [showReportViewer, setShowReportViewer] = useState(false);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
   const [copiedFaqIdx, setCopiedFaqIdx] = useState<number | null>(null);
+  const [gpaError, setGpaError] = useState<string | null>(null);
+  const [ieltsError, setIeltsError] = useState<string | null>(null);
+  
+  // --- SOP Templates Library States ---
+  const [selectedSopCategory, setSelectedSopCategory] = useState<string>("all");
+  const [searchSopQuery, setSearchSopQuery] = useState<string>("");
+  const [expandedSopId, setExpandedSopId] = useState<string | null>(null);
+
+  // --- Document Checklist States ---
+  const [checkedDocs, setCheckedDocs] = useState<Record<string, boolean>>(() => {
+    try {
+      const saved = localStorage.getItem("checked_documents");
+      return saved ? JSON.parse(saved) : {};
+    } catch (e) {
+      return {};
+    }
+  });
+  const [checklistFilter, setChecklistFilter] = useState<"all" | "mandatory" | "financial" | "academic" | "optional">("all");
+
+  useEffect(() => {
+    localStorage.setItem("checked_documents", JSON.stringify(checkedDocs));
+  }, [checkedDocs]);
   
   // --- Interview Simulator States ---
   const [practiceAttempts, setPracticeAttempts] = useState<Array<{
@@ -286,6 +582,35 @@ export default function App() {
       }
     }
     addToast("Conversation deleted", "info");
+  };
+
+  const handleLoadSopTemplate = (template: typeof SOP_TEMPLATES[0]) => {
+    let currentConvId = activeConvId;
+    if (!currentConvId || conversations.length === 0) {
+      const newConv: Conversation = {
+        id: "conv-" + Math.floor(Math.random() * 100000),
+        userId: user?.id || "guest",
+        title: `${template.title} Draft`,
+        active: true,
+        messages: [
+          {
+            id: "msg-" + Math.floor(Math.random() * 100000),
+            role: "assistant",
+            content: `I have prepared the "${template.title}" outline for you. Let's work together to draft an exceptional Statement of Purpose! To begin, look at the prompt pre-loaded in your message bar below, customize it, and hit Send.`,
+            timestamp: Date.now()
+          }
+        ],
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+      };
+      const updated = conversations.map(c => ({ ...c, active: false }));
+      setConversations([newConv, ...updated]);
+      setActiveConvId(newConv.id);
+    } else {
+      // Set active conversation welcome if it's currently empty or has just been created
+      addToast(`"${template.title}" structure loaded into your chat input!`, "success");
+    }
+    setInputMessage(template.prompt);
   };
 
   const activeConv = conversations.find(c => c.id === activeConvId);
@@ -1036,8 +1361,54 @@ But I can tell you that for ${profile.targetCountry} higher study:
   };
 
   // --- Profile Manager ---
+  const handleGpaChange = (val: string) => {
+    setProfile(prev => ({ ...prev, gpa: val }));
+    const num = parseFloat(val);
+    if (val.trim() === "") {
+      setGpaError("CGPA cannot be empty");
+    } else if (isNaN(num)) {
+      setGpaError("CGPA must be a valid number");
+    } else if (num < 1.0 || num > 4.0) {
+      setGpaError("CGPA must be between 1.00 and 4.00");
+    } else {
+      setGpaError(null);
+    }
+  };
+
+  const handleIeltsChange = (val: string) => {
+    setProfile(prev => ({ ...prev, ielts: val }));
+    const num = parseFloat(val);
+    if (val.trim() === "") {
+      setIeltsError("IELTS cannot be empty");
+    } else if (isNaN(num)) {
+      setIeltsError("IELTS must be a valid number");
+    } else if (num < 0.0 || num > 9.0) {
+      setIeltsError("IELTS must be between 0.0 and 9.0 (0 if not taken yet)");
+    } else {
+      setIeltsError(null);
+    }
+  };
+
   const handleSaveProfile = (e: React.FormEvent) => {
     e.preventDefault();
+    const gpaNum = parseFloat(profile.gpa);
+    const ieltsNum = parseFloat(profile.ielts);
+    
+    let hasErr = false;
+    if (profile.gpa.trim() === "" || isNaN(gpaNum) || gpaNum < 1.0 || gpaNum > 4.0) {
+      setGpaError("CGPA must be between 1.00 and 4.00");
+      hasErr = true;
+    }
+    if (profile.ielts.trim() === "" || isNaN(ieltsNum) || ieltsNum < 0.0 || ieltsNum > 9.0) {
+      setIeltsError("IELTS must be between 0.0 and 9.0 (0 if not taken yet)");
+      hasErr = true;
+    }
+
+    if (hasErr) {
+      addToast("Please correct errors before saving", "error");
+      return;
+    }
+
     localStorage.setItem("student_profile", JSON.stringify(profile));
     setIsEditingProfile(false);
     addToast("Consultancy Profile Updated Successfully!", "success");
@@ -1229,6 +1600,18 @@ But I can tell you that for ${profile.targetCountry} higher study:
             Visa & Study Plans
           </button>
 
+  <button
+            onClick={() => setActiveTab("checklist")}
+            className={`flex items-center gap-2.5 px-3 py-2 rounded text-[11px] font-medium tracking-wider uppercase shrink-0 transition-all ${
+              activeTab === "checklist" 
+                ? "bg-violet-600/10 text-violet-400 border-l-2 border-violet-600 font-bold" 
+                : "text-slate-400 hover:text-white hover:bg-slate-800"
+            }`}
+          >
+            <FileText className="w-3.5 h-3.5" />
+            Document Checklist
+          </button>
+
           <button
             onClick={() => setActiveTab("tracker")}
             className={`flex items-center gap-2.5 px-3 py-2 rounded text-[11px] font-medium tracking-wider uppercase shrink-0 transition-all ${
@@ -1251,6 +1634,18 @@ But I can tell you that for ${profile.targetCountry} higher study:
           >
             <CreditCard className="w-3.5 h-3.5" />
             Payment Ledger
+          </button>
+
+          <button
+            onClick={() => setActiveTab("about")}
+            className={`flex items-center gap-2.5 px-3 py-2 rounded text-[11px] font-medium tracking-wider uppercase shrink-0 transition-all ${
+              activeTab === "about" 
+                ? "bg-violet-600/10 text-violet-400 border-l-2 border-violet-600 font-bold" 
+                : "text-slate-400 hover:text-white hover:bg-slate-800"
+            }`}
+          >
+            <Info className="w-3.5 h-3.5" />
+            About Us & Contact
           </button>
 
           {/* Interactive Tier Widget */}
@@ -1328,7 +1723,7 @@ But I can tell you that for ${profile.targetCountry} higher study:
                 </div>
 
                 {/* Main Advisory chat container */}
-                <div className="lg:col-span-9 bg-white border border-slate-200/80 rounded-3xl shadow-sm flex flex-col h-[550px] overflow-hidden">
+                <div className="lg:col-span-6 bg-white border border-slate-200/80 rounded-3xl shadow-sm flex flex-col h-[550px] overflow-hidden">
                   <div className="px-5 py-3.5 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center shrink-0">
                     <div className="flex items-center gap-3">
                       <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -1589,197 +1984,603 @@ But I can tell you that for ${profile.targetCountry} higher study:
                     )}
                   </div>
                 </div>
+
+                {/* SOP Templates Library */}
+                <div className="lg:col-span-3 bg-white border border-slate-200/80 rounded-2xl p-4 flex flex-col gap-4 h-[550px] overflow-hidden">
+                  <div className="flex flex-col gap-1 pb-2 border-b border-slate-100 shrink-0">
+                    <div className="flex items-center gap-2">
+                      <BookOpen className="h-4.5 w-4.5 text-violet-600" />
+                      <h4 className="font-display font-bold text-xs text-slate-900">SOP Templates Library</h4>
+                    </div>
+                    <p className="text-[10px] text-slate-400 leading-normal">
+                      Select and load proven structures based on your field of study to draft with AI.
+                    </p>
+                  </div>
+
+                  {/* Search and Category Filter */}
+                  <div className="space-y-2 shrink-0">
+                    <input
+                      type="text"
+                      placeholder="Search structures..."
+                      value={searchSopQuery}
+                      onChange={(e) => setSearchSopQuery(e.target.value)}
+                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-[11px] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/20 bg-slate-50/50"
+                    />
+
+                    {/* Category pills */}
+                    <div className="flex flex-wrap gap-1">
+                      {["all", "STEM", "Business", "Humanities", "Creative"].map((cat) => (
+                        <button
+                          key={cat}
+                          onClick={() => setSelectedSopCategory(cat.toLowerCase())}
+                          className={`px-2 py-1 rounded-lg text-[9px] font-bold tracking-wider uppercase transition-all uppercase cursor-pointer ${
+                            selectedSopCategory === cat.toLowerCase()
+                              ? "bg-violet-600 text-white shadow-sm"
+                              : "bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-200/40"
+                          }`}
+                        >
+                          {cat}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Templates List */}
+                  <div className="flex-1 space-y-2.5 overflow-y-auto pr-1 scrollbar-none">
+                    {(() => {
+                      const filteredSopTemplates = SOP_TEMPLATES.filter(tmpl => {
+                        const matchesCategory = selectedSopCategory === "all" || tmpl.category.toLowerCase() === selectedSopCategory;
+                        const matchesSearch = tmpl.title.toLowerCase().includes(searchSopQuery.toLowerCase()) ||
+                          tmpl.description.toLowerCase().includes(searchSopQuery.toLowerCase());
+                        return matchesCategory && matchesSearch;
+                      });
+
+                      if (filteredSopTemplates.length === 0) {
+                        return (
+                          <div className="text-center py-8 text-slate-400 text-[11px]">
+                            <p>No templates found.</p>
+                          </div>
+                        );
+                      }
+
+                      return filteredSopTemplates.map((tmpl) => {
+                        const isExpanded = expandedSopId === tmpl.id;
+                        return (
+                          <div
+                            key={tmpl.id}
+                            className={`border rounded-xl transition-all overflow-hidden ${
+                              isExpanded ? "border-violet-300 bg-violet-50/10 shadow-sm" : "border-slate-150 hover:border-slate-300 bg-white"
+                            }`}
+                          >
+                            {/* Card Header */}
+                            <div
+                              onClick={() => setExpandedSopId(isExpanded ? null : tmpl.id)}
+                              className="p-3 cursor-pointer flex justify-between items-start gap-2.5 hover:bg-slate-50/30"
+                            >
+                              <div className="flex items-start gap-2">
+                                <span className="text-sm mt-0.5">{tmpl.icon}</span>
+                                <div className="space-y-0.5">
+                                  <div className="flex items-center gap-1.5 flex-wrap">
+                                    <h5 className="font-bold text-[11.5px] text-slate-800 leading-snug">{tmpl.title}</h5>
+                                    <span className="px-1.5 py-0.5 bg-violet-50 text-[8px] text-violet-700 font-bold tracking-wide uppercase rounded">
+                                      {tmpl.category}
+                                    </span>
+                                  </div>
+                                  <p className="text-[10px] text-slate-500 leading-relaxed">{tmpl.description}</p>
+                                </div>
+                              </div>
+                              <ChevronDown className={`w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5 transition-transform duration-200 ${isExpanded ? "rotate-180 text-violet-600" : ""}`} />
+                            </div>
+
+                            {/* Card Expanded Content */}
+                            {isExpanded && (
+                              <div className="px-3 pb-3 pt-1 border-t border-slate-100 bg-slate-50/30 space-y-3">
+                                <div className="flex flex-col gap-1 text-[9px] font-mono border-b border-slate-100 pb-2">
+                                  <div className="flex justify-between text-slate-500">
+                                    <span>STANDARDS TIER:</span>
+                                    <span className="font-bold text-violet-700">{tmpl.badge}</span>
+                                  </div>
+                                  <div className="flex justify-between text-slate-500">
+                                    <span>REQUIREMENT:</span>
+                                    <span className="font-bold text-slate-700">{tmpl.difficulty}</span>
+                                  </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Paragraph-by-Paragraph Outline</span>
+                                  <div className="space-y-1.5">
+                                    {tmpl.structure.map((sect, sidx) => (
+                                      <div key={sidx} className="bg-white p-2 rounded-lg border border-slate-150 text-[10px] leading-relaxed font-sans">
+                                        <span className="font-bold text-slate-800 block mb-0.5">{sect.section}</span>
+                                        <p className="text-slate-500">{sect.detail}</p>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+
+                                <button
+                                  onClick={() => handleLoadSopTemplate(tmpl)}
+                                  className="w-full py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg text-xs font-bold transition-all shadow-sm flex items-center justify-center gap-1.5 mt-2 cursor-pointer"
+                                >
+                                  <Sparkles className="w-3.5 h-3.5" />
+                                  <span>Load into Chat Base</span>
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      });
+                    })()}
+                  </div>
+                </div>
               </motion.div>
             )}
 
             {/* 2. DASHBOARD TAB */}
-            {activeTab === "dashboard" && (
-              <motion.div
-                key="dashboard-tab"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="space-y-6"
-              >
-                <div className="bg-white border border-slate-200/80 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-center gap-6">
-                  <div className="space-y-2 text-center md:text-left">
-                    <span className="px-2.5 py-0.5 text-[9px] uppercase font-mono tracking-wider text-violet-700 bg-violet-50 rounded-full font-bold">
-                      Dynamic Study Profile
-                    </span>
-                    <h2 className="text-xl md:text-2xl font-display font-bold text-slate-900">
-                      Welcome to your Consultancy Command Hub
-                    </h2>
-                    <p className="text-xs md:text-sm text-slate-500 max-w-xl">
-                      Update your study metrics to instantly customize university recommendations and visa feasibility reports.
-                    </p>
-                  </div>
-                  
-                  <div className="shrink-0 flex flex-col gap-2">
-                    <button
-                      onClick={() => {
-                        if (user?.tier === "free" || !user) {
-                          handleTriggerPayment("entry");
-                        } else {
-                          setShowReportViewer(true);
-                        }
-                      }}
-                      className="flex items-center justify-center gap-2 px-5 py-3 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-violet-100"
-                    >
-                      <Download className="h-4 w-4" />
-                      <span>{user?.tier === "free" || !user ? "Unlock Suitability Evaluation (৳30)" : "View Pathway Report"}</span>
-                    </button>
-                  </div>
-                </div>
+            {activeTab === "dashboard" && (() => {
+              const gpaVal = parseFloat(profile.gpa) || 0;
+              const ieltsVal = parseFloat(profile.ielts) || 0;
+              const budgetVal = profile.budget;
+              const countryVal = profile.targetCountry;
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                  <div className="lg:col-span-2 bg-white border border-slate-200/80 rounded-3xl p-6 shadow-sm">
-                    <div className="flex justify-between items-center mb-5 pb-3 border-b border-slate-100">
-                      <div className="flex items-center gap-2">
-                        <GraduationCap className="h-5 w-5 text-violet-600" />
-                        <h3 className="font-display font-bold text-sm text-slate-900">Your Academic Metrics</h3>
-                      </div>
-                      
-                      {!isEditingProfile ? (
-                        <button
-                          type="button"
-                          onClick={() => setIsEditingProfile(true)}
-                          className="flex items-center gap-1.5 px-3 py-1 bg-slate-50 text-slate-600 hover:bg-violet-50 hover:text-violet-700 text-[11px] font-bold rounded-lg"
-                        >
-                          <Edit3 className="h-3.5 w-3.5" />
-                          Edit Profile
-                        </button>
-                      ) : (
-                        <div className="flex gap-1.5">
-                          <button
-                            type="button"
-                            onClick={() => setIsEditingProfile(false)}
-                            className="px-2.5 py-1 text-slate-500 text-[11px] font-medium"
-                          >
-                            Cancel
-                          </button>
-                          <button
-                            type="button"
-                            onClick={handleSaveProfile}
-                            className="flex items-center gap-1 px-2.5 py-1 bg-violet-600 text-white text-[11px] font-bold rounded-lg hover:bg-violet-700"
-                          >
-                            <Check className="h-3.5 w-3.5" />
-                            Save
-                          </button>
-                        </div>
-                      )}
-                    </div>
+              let gpaStrength = "Developing";
+              let gpaColor = "text-rose-700 bg-rose-50 border-rose-200";
+              if (gpaVal >= 3.8) {
+                gpaStrength = "Elite Merit";
+                gpaColor = "text-emerald-700 bg-emerald-50 border-emerald-200";
+              } else if (gpaVal >= 3.5) {
+                gpaStrength = "Excellent";
+                gpaColor = "text-teal-700 bg-teal-50 border-teal-200";
+              } else if (gpaVal >= 3.0) {
+                gpaStrength = "Strong";
+                gpaColor = "text-violet-700 bg-violet-50 border-violet-200";
+              } else if (gpaVal >= 2.5) {
+                gpaStrength = "Moderate";
+                gpaColor = "text-amber-700 bg-amber-50 border-amber-200";
+              }
 
-                    <form onSubmit={handleSaveProfile} className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs md:text-sm">
-                      <div className="space-y-1">
-                        <label className="text-slate-500 font-semibold">Target Destination</label>
-                        <select
-                          disabled={!isEditingProfile}
-                          value={profile.targetCountry}
-                          onChange={(e) => setProfile(prev => ({ ...prev, targetCountry: e.target.value }))}
-                          className="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50/50 disabled:opacity-85 font-semibold text-slate-800"
-                        >
-                          <option value="Germany">🇩🇪 Germany (জার্মানি)</option>
-                          <option value="Sweden">🇸🇪 Sweden (সুইডেন)</option>
-                          <option value="Finland">🇫🇮 Finland (ফিনল্যান্ড)</option>
-                          <option value="Poland">🇵🇱 Poland (পোল্যান্ড)</option>
-                        </select>
-                      </div>
+              let ieltsLevel = "Needs Attention";
+              let ieltsColor = "text-rose-700 bg-rose-50 border-rose-200";
+              if (ieltsVal >= 7.5) {
+                ieltsLevel = "Expert (C1/C2)";
+                ieltsColor = "text-emerald-700 bg-emerald-50 border-emerald-200";
+              } else if (ieltsVal >= 6.5) {
+                ieltsLevel = "Proficient (B2+)";
+                ieltsColor = "text-teal-700 bg-teal-50 border-teal-200";
+              } else if (ieltsVal >= 6.0) {
+                ieltsLevel = "Competent (B2)";
+                ieltsColor = "text-violet-700 bg-violet-50 border-violet-200";
+              } else if (ieltsVal >= 5.5) {
+                ieltsLevel = "Modest (B1)";
+                ieltsColor = "text-amber-700 bg-amber-50 border-amber-200";
+              }
 
-                      <div className="space-y-1">
-                        <label className="text-slate-500 font-semibold">Degree Goal</label>
-                        <select
-                          disabled={!isEditingProfile}
-                          value={profile.targetDegree}
-                          onChange={(e) => setProfile(prev => ({ ...prev, targetDegree: e.target.value }))}
-                          className="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50/50 disabled:opacity-85 font-semibold text-slate-800"
-                        >
-                          <option value="Bachelor's">Bachelor's Degree</option>
-                          <option value="Master's">Master's Degree</option>
-                          <option value="PhD">Doctorate / PhD</option>
-                        </select>
-                      </div>
+              let budgetLevel = "Budget-Conscious";
+              let budgetColor = "text-amber-700 bg-amber-50 border-amber-200";
+              if (budgetVal === "high") {
+                budgetLevel = "Premium Standard";
+                budgetColor = "text-emerald-700 bg-emerald-50 border-emerald-200";
+              } else if (budgetVal === "medium") {
+                budgetLevel = "Sufficient (Sperrkonto Ready)";
+                budgetColor = "text-violet-700 bg-violet-50 border-violet-200";
+              }
 
-                      <div className="space-y-1">
-                        <label className="text-slate-500 font-semibold">Desired Major Subject</label>
-                        <input
-                          type="text"
-                          disabled={!isEditingProfile}
-                          value={profile.targetSubject}
-                          onChange={(e) => setProfile(prev => ({ ...prev, targetSubject: e.target.value }))}
-                          placeholder="Computer Science"
-                          className="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50/50 disabled:opacity-85 font-semibold text-slate-800"
-                        />
-                      </div>
+              let compositeScore = 50;
+              if (gpaVal >= 3.8) compositeScore += 25;
+              else if (gpaVal >= 3.5) compositeScore += 20;
+              else if (gpaVal >= 3.0) compositeScore += 15;
+              else if (gpaVal >= 2.5) compositeScore += 10;
+              else compositeScore += 5;
 
-                      <div className="space-y-1">
-                        <label className="text-slate-500 font-semibold">CGPA (out of 4.00)</label>
-                        <input
-                          type="text"
-                          disabled={!isEditingProfile}
-                          value={profile.gpa}
-                          onChange={(e) => setProfile(prev => ({ ...prev, gpa: e.target.value }))}
-                          className="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50/50 disabled:opacity-85 font-semibold text-slate-800"
-                        />
-                      </div>
+              if (ieltsVal >= 7.0) compositeScore += 20;
+              else if (ieltsVal >= 6.5) compositeScore += 15;
+              else if (ieltsVal >= 6.0) compositeScore += 10;
+              else if (ieltsVal >= 5.5) compositeScore += 5;
 
-                      <div className="space-y-1">
-                        <label className="text-slate-500 font-semibold">IELTS Score</label>
-                        <input
-                          type="text"
-                          disabled={!isEditingProfile}
-                          value={profile.ielts}
-                          onChange={(e) => setProfile(prev => ({ ...prev, ielts: e.target.value }))}
-                          className="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50/50 disabled:opacity-85 font-semibold text-slate-800"
-                        />
-                      </div>
+              if (budgetVal === "high") compositeScore += 10;
+              else if (budgetVal === "medium") compositeScore += 8;
+              else compositeScore += 4;
 
-                      <div className="space-y-1">
-                        <label className="text-slate-500 font-semibold">Funding Budget Capacity</label>
-                        <select
-                          disabled={!isEditingProfile}
-                          value={profile.budget}
-                          onChange={(e) => setProfile(prev => ({ ...prev, budget: e.target.value }))}
-                          className="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50/50 disabled:opacity-85 font-semibold text-slate-800"
-                        >
-                          <option value="low">Affordable (৳5L - ৳8L / year)</option>
-                          <option value="medium">Medium (৳10L - ৳15L / year - Standard Blocked)</option>
-                          <option value="high">Premium (৳18L+ / year)</option>
-                        </select>
-                      </div>
-                    </form>
-                  </div>
+              const isGermany = countryVal.toLowerCase().includes("germany");
+              const isSweden = countryVal.toLowerCase().includes("sweden");
+              const isFinland = countryVal.toLowerCase().includes("finland");
+              const isPoland = countryVal.toLowerCase().includes("poland");
 
-                  <div className="bg-slate-900 text-white rounded-3xl p-6 flex flex-col justify-between border border-slate-800 shadow-xl">
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-2">
-                        <MapPin className="h-5 w-5 text-violet-400" />
-                        <h4 className="font-display font-semibold text-md">Destination Insight: {profile.targetCountry}</h4>
-                      </div>
-                      
-                      <div className="space-y-3 text-xs text-slate-300">
-                        <p>
-                          Your target destination is highly viable for a <strong className="text-white">{profile.targetDegree}</strong> program in <strong className="text-white">{profile.targetSubject}</strong>.
-                        </p>
-                        
-                        <div className="p-3 bg-white/5 rounded-xl border border-white/10 space-y-1.5">
-                          <span className="text-[9px] font-mono uppercase tracking-widest text-violet-300 block font-bold">Eligibility Guidance</span>
-                          <p className="text-[11px] leading-relaxed">
-                            {Number(profile.gpa) >= 3.0 ? "✅ Excellent CGPA! Public tuition-free universities are heavily receptive." : "⚠️ GPA is moderately competitive. Private pathways or credit transfer is suggested."}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
+              if (isGermany) {
+                if (gpaVal < 3.0) compositeScore -= 12;
+                if (budgetVal === "low") compositeScore -= 12;
+              } else if (isSweden || isFinland) {
+                if (budgetVal === "low") compositeScore -= 12;
+              } else if (isPoland) {
+                if (gpaVal >= 2.5) compositeScore += 5;
+                if (budgetVal === "low") compositeScore += 3;
+              }
 
-                    <div className="pt-4 border-t border-slate-800 mt-6 flex justify-between items-center text-xs">
-                      <span className="text-slate-400">Consultancy Status</span>
-                      <span className="px-2 py-0.5 bg-violet-500/20 text-violet-300 border border-violet-500/30 rounded-full font-mono text-[10px] font-bold uppercase">
-                        READY TO EVALUATE
+              compositeScore = Math.min(100, Math.max(20, compositeScore));
+
+              let scoreColor = "text-rose-600 stroke-rose-500";
+              let bgStrokeColor = "stroke-rose-100";
+              let scoreLabel = "Challenging Feasibility";
+              let ratingDesc = "Your academic or financial profile needs adjustment or human consultant mapping.";
+              if (compositeScore >= 85) {
+                scoreColor = "text-emerald-600 stroke-emerald-500";
+                bgStrokeColor = "stroke-emerald-100";
+                scoreLabel = "Optimal Feasibility";
+                ratingDesc = "Excellent compatibility! Profile strongly meets typical entrance metrics.";
+              } else if (compositeScore >= 70) {
+                scoreColor = "text-teal-600 stroke-teal-500";
+                bgStrokeColor = "stroke-teal-100";
+                scoreLabel = "Highly Feasible Path";
+                ratingDesc = "Solid profile. Meets standard requirements for public higher studies.";
+              } else if (compositeScore >= 50) {
+                scoreColor = "text-amber-600 stroke-amber-500";
+                bgStrokeColor = "stroke-amber-100";
+                scoreLabel = "Moderate Feasibility";
+                ratingDesc = "Feasible, with strategic university shortlists or potential profile boosting.";
+              }
+
+              const radius = 40;
+              const circumference = 2 * Math.PI * radius;
+              const strokeDashoffset = circumference - (compositeScore / 100) * circumference;
+
+              return (
+                <motion.div
+                  key="dashboard-tab"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="space-y-6"
+                >
+                  <div className="bg-white border border-slate-200/80 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div className="space-y-2 text-center md:text-left">
+                      <span className="px-2.5 py-0.5 text-[9px] uppercase font-mono tracking-wider text-violet-700 bg-violet-50 rounded-full font-bold">
+                        Dynamic Study Profile
                       </span>
+                      <h2 className="text-xl md:text-2xl font-display font-bold text-slate-900">
+                        Welcome to your Consultancy Command Hub
+                      </h2>
+                      <p className="text-xs md:text-sm text-slate-500 max-w-xl">
+                        Update your study metrics to instantly customize university recommendations and visa feasibility reports.
+                      </p>
+                    </div>
+                    
+                    <div className="shrink-0 flex flex-col gap-2">
+                      <button
+                        onClick={() => {
+                          if (user?.tier === "free" || !user) {
+                            handleTriggerPayment("entry");
+                          } else {
+                            setShowReportViewer(true);
+                          }
+                        }}
+                        className="flex items-center justify-center gap-2 px-5 py-3 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-violet-100"
+                      >
+                        <Download className="h-4 w-4" />
+                        <span>{user?.tier === "free" || !user ? "Unlock Suitability Evaluation (৳30)" : "View Pathway Report"}</span>
+                      </button>
                     </div>
                   </div>
-                </div>
-              </motion.div>
-            )}
+
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="lg:col-span-2 bg-white border border-slate-200/80 rounded-3xl p-6 shadow-sm">
+                      <div className="flex justify-between items-center mb-5 pb-3 border-b border-slate-100">
+                        <div className="flex items-center gap-2">
+                          <GraduationCap className="h-5 w-5 text-violet-600" />
+                          <h3 className="font-display font-bold text-sm text-slate-900">Your Academic Metrics</h3>
+                        </div>
+                        
+                        {!isEditingProfile ? (
+                          <button
+                            type="button"
+                            onClick={() => setIsEditingProfile(true)}
+                            className="flex items-center gap-1.5 px-3 py-1 bg-slate-50 text-slate-600 hover:bg-violet-50 hover:text-violet-700 text-[11px] font-bold rounded-lg"
+                          >
+                            <Edit3 className="h-3.5 w-3.5" />
+                            Edit Profile
+                          </button>
+                        ) : (
+                          <div className="flex gap-1.5">
+                            <button
+                              type="button"
+                              onClick={() => setIsEditingProfile(false)}
+                              className="px-2.5 py-1 text-slate-500 text-[11px] font-medium"
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              type="button"
+                              onClick={handleSaveProfile}
+                              className="flex items-center gap-1 px-2.5 py-1 bg-violet-600 text-white text-[11px] font-bold rounded-lg hover:bg-violet-700"
+                            >
+                              <Check className="h-3.5 w-3.5" />
+                              Save
+                            </button>
+                          </div>
+                        )}
+                      </div>
+
+                      <form onSubmit={handleSaveProfile} className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs md:text-sm">
+                        <div className="space-y-1">
+                          <label className="text-slate-500 font-semibold">Target Destination</label>
+                          <select
+                            disabled={!isEditingProfile}
+                            value={profile.targetCountry}
+                            onChange={(e) => setProfile(prev => ({ ...prev, targetCountry: e.target.value }))}
+                            className="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50/50 disabled:opacity-85 font-semibold text-slate-800"
+                          >
+                            <option value="Germany">🇩🇪 Germany (জার্মানি)</option>
+                            <option value="Sweden">🇸🇪 Sweden (সুইডেন)</option>
+                            <option value="Finland">🇫🇮 Finland (ফিনল্যান্ড)</option>
+                            <option value="Poland">🇵🇱 Poland (পোল্যান্ড)</option>
+                          </select>
+                        </div>
+
+                        <div className="space-y-1">
+                          <label className="text-slate-500 font-semibold">Degree Goal</label>
+                          <select
+                            disabled={!isEditingProfile}
+                            value={profile.targetDegree}
+                            onChange={(e) => setProfile(prev => ({ ...prev, targetDegree: e.target.value }))}
+                            className="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50/50 disabled:opacity-85 font-semibold text-slate-800"
+                          >
+                            <option value="Bachelor's">Bachelor's Degree</option>
+                            <option value="Master's">Master's Degree</option>
+                            <option value="PhD">Doctorate / PhD</option>
+                          </select>
+                        </div>
+
+                        <div className="space-y-1">
+                          <label className="text-slate-500 font-semibold">Desired Major Subject</label>
+                          <input
+                            type="text"
+                            disabled={!isEditingProfile}
+                            value={profile.targetSubject}
+                            onChange={(e) => setProfile(prev => ({ ...prev, targetSubject: e.target.value }))}
+                            placeholder="Computer Science"
+                            className="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50/50 disabled:opacity-85 font-semibold text-slate-800"
+                          />
+                        </div>
+
+                        <div className="space-y-1">
+                          <label className="text-slate-500 font-semibold flex justify-between">
+                            <span>CGPA (out of 4.00)</span>
+                            {gpaError && <span className="text-rose-500 text-[10px] animate-pulse">{gpaError}</span>}
+                          </label>
+                          <input
+                            type="text"
+                            disabled={!isEditingProfile}
+                            value={profile.gpa}
+                            onChange={(e) => handleGpaChange(e.target.value)}
+                            className={`w-full p-2.5 rounded-xl border bg-slate-50/50 disabled:opacity-85 font-semibold text-slate-800 ${
+                              gpaError ? "border-rose-300 focus:ring-rose-500/25 focus:border-rose-500" : "border-slate-200 focus:ring-violet-500/25 focus:border-violet-500"
+                            }`}
+                          />
+                        </div>
+
+                        <div className="space-y-1">
+                          <label className="text-slate-500 font-semibold flex justify-between">
+                            <span>IELTS Score</span>
+                            {ieltsError && <span className="text-rose-500 text-[10px] animate-pulse">{ieltsError}</span>}
+                          </label>
+                          <input
+                            type="text"
+                            disabled={!isEditingProfile}
+                            value={profile.ielts}
+                            onChange={(e) => handleIeltsChange(e.target.value)}
+                            className={`w-full p-2.5 rounded-xl border bg-slate-50/50 disabled:opacity-85 font-semibold text-slate-800 ${
+                              ieltsError ? "border-rose-300 focus:ring-rose-500/25 focus:border-rose-500" : "border-slate-200 focus:ring-violet-500/25 focus:border-violet-500"
+                            }`}
+                          />
+                        </div>
+
+                        <div className="space-y-1">
+                          <label className="text-slate-500 font-semibold">Funding Budget Capacity</label>
+                          <select
+                            disabled={!isEditingProfile}
+                            value={profile.budget}
+                            onChange={(e) => setProfile(prev => ({ ...prev, budget: e.target.value }))}
+                            className="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50/50 disabled:opacity-85 font-semibold text-slate-800"
+                          >
+                            <option value="low">Affordable (৳5L - ৳8L / year)</option>
+                            <option value="medium">Medium (৳10L - ৳15L / year - Standard Blocked)</option>
+                            <option value="high">Premium (৳18L+ / year)</option>
+                          </select>
+                        </div>
+                      </form>
+                    </div>
+
+                    <div className="bg-slate-900 text-white rounded-3xl p-6 flex flex-col justify-between border border-slate-800 shadow-xl">
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-2">
+                          <MapPin className="h-5 w-5 text-violet-400" />
+                          <h4 className="font-display font-semibold text-md">Destination Insight: {profile.targetCountry}</h4>
+                        </div>
+                        
+                        <div className="space-y-3 text-xs text-slate-300">
+                          <p>
+                            Your target destination is highly viable for a <strong className="text-white">{profile.targetDegree}</strong> program in <strong className="text-white">{profile.targetSubject}</strong>.
+                          </p>
+                          
+                          <div className="p-3 bg-white/5 rounded-xl border border-white/10 space-y-1.5">
+                            <span className="text-[9px] font-mono uppercase tracking-widest text-violet-300 block font-bold">Eligibility Guidance</span>
+                            <p className="text-[11px] leading-relaxed">
+                              {Number(profile.gpa) >= 3.0 ? "✅ Excellent CGPA! Public tuition-free universities are heavily receptive." : "⚠️ GPA is moderately competitive. Private pathways or credit transfer is suggested."}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="pt-4 border-t border-slate-800 mt-6 flex justify-between items-center text-xs">
+                        <span className="text-slate-400">Consultancy Status</span>
+                        <span className="px-2 py-0.5 bg-violet-500/20 text-violet-300 border border-violet-500/30 rounded-full font-mono text-[10px] font-bold uppercase">
+                          READY TO EVALUATE
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Real-time Academic Audit Panel */}
+                  <div className="bg-white border border-slate-200/80 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
+                    <div className="flex items-center gap-2.5 pb-4 border-b border-slate-100">
+                      <Award className="h-5.5 w-5.5 text-violet-650" />
+                      <div>
+                        <h3 className="font-display font-bold text-base text-slate-900">Real-Time Academic & Visa Feasibility Deep Audit</h3>
+                        <p className="text-xs text-slate-500">Live calculation of eligibility parameters for Schengen Student Visas from Bangladesh.</p>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                      {/* Left: Score Wheel */}
+                      <div className="md:col-span-4 flex flex-col items-center text-center p-6 bg-slate-50 rounded-2xl border border-slate-100">
+                        <div className="relative w-32 h-32 flex items-center justify-center">
+                          <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                            <circle
+                              cx="50"
+                              cy="50"
+                              r={radius}
+                              className="fill-none stroke-slate-200"
+                              strokeWidth="8"
+                            />
+                            <circle
+                              cx="50"
+                              cy="50"
+                              r={radius}
+                              className={`fill-none ${scoreColor}`}
+                              strokeWidth="8"
+                              strokeDasharray={circumference}
+                              strokeDashoffset={strokeDashoffset}
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                          <div className="absolute flex flex-col items-center">
+                            <span className="text-2xl font-display font-bold text-slate-950">{compositeScore}%</span>
+                            <span className="text-[8px] uppercase font-bold tracking-wider text-slate-400">COMPLIANCE</span>
+                          </div>
+                        </div>
+
+                        <div className="mt-4 space-y-1">
+                          <h4 className="text-xs font-bold text-slate-900">{scoreLabel}</h4>
+                          <p className="text-[10.5px] text-slate-500 leading-relaxed max-w-[220px]">{ratingDesc}</p>
+                        </div>
+                      </div>
+
+                      {/* Right: Metrics Audit Checklist & Status */}
+                      <div className="md:col-span-8 space-y-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                          <div className={`p-4 rounded-xl border flex flex-col gap-1.5 ${gpaColor}`}>
+                            <span className="text-[9px] font-mono font-bold uppercase tracking-wider opacity-80">CGPA Quality Indicator</span>
+                            <span className="text-sm font-bold">{profile.gpa} / 4.00</span>
+                            <span className="text-[10px] font-medium leading-tight">Strength: {gpaStrength}</span>
+                          </div>
+
+                          <div className={`p-4 rounded-xl border flex flex-col gap-1.5 ${ieltsColor}`}>
+                            <span className="text-[9px] font-mono font-bold uppercase tracking-wider opacity-80">English Language Capacity</span>
+                            <span className="text-sm font-bold">IELTS {profile.ielts}</span>
+                            <span className="text-[10px] font-medium leading-tight">Tier: {ieltsLevel}</span>
+                          </div>
+
+                          <div className={`p-4 rounded-xl border flex flex-col gap-1.5 ${budgetColor}`}>
+                            <span className="text-[9px] font-mono font-bold uppercase tracking-wider opacity-80">Financial Readiness</span>
+                            <span className="text-sm font-bold capitalize">{profile.budget === "high" ? "৳18L+ / Year" : profile.budget === "medium" ? "৳10L - ৳15L / Year" : "৳5L - ৳8L / Year"}</span>
+                            <span className="text-[10px] font-medium leading-tight">{budgetLevel}</span>
+                          </div>
+                        </div>
+
+                        {/* European Compliance Checks */}
+                        <div className="space-y-3 bg-slate-50/50 rounded-2xl p-4 border border-slate-100">
+                          <h4 className="text-[10px] font-bold text-slate-800 uppercase tracking-widest font-mono">Schengen Compliance Metrics</h4>
+                          
+                          <div className="space-y-2.5">
+                            {/* Blocked Account compliance */}
+                            <div className="flex items-start gap-2.5 text-[11px]">
+                              {budgetVal !== "low" ? (
+                                <CheckCircle2 className="w-4 h-4 text-emerald-650 shrink-0 mt-0.5" />
+                              ) : (
+                                <HelpCircle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                              )}
+                              <div className="space-y-0.5">
+                                <span className="font-bold text-slate-850">Sperrkonto / German Blocked Account Check</span>
+                                <p className="text-slate-500 text-[10px] leading-relaxed">
+                                  {budgetVal !== "low" 
+                                    ? "Verified! Your budget profile satisfies standard German/Swedish maintenance funding rules (~€11,904 block)." 
+                                    : "Warning: Low budget profile might require fully-funded scholarships or alternative EU paths (e.g. Poland / Italian regional waivers)."}
+                                </p>
+                              </div>
+                            </div>
+
+                            {/* IELTS Threshold */}
+                            <div className="flex items-start gap-2.5 text-[11px]">
+                              {ieltsVal >= 6.5 ? (
+                                <CheckCircle2 className="w-4 h-4 text-emerald-650 shrink-0 mt-0.5" />
+                              ) : ieltsVal >= 6.0 ? (
+                                <CheckCircle2 className="w-4 h-4 text-teal-650 shrink-0 mt-0.5" />
+                              ) : (
+                                <HelpCircle className="w-4 h-4 text-rose-550 shrink-0 mt-0.5" />
+                              )}
+                              <div className="space-y-0.5">
+                                <span className="font-bold text-slate-850">University IELTS Admission Threshold</span>
+                                <p className="text-slate-500 text-[10px] leading-relaxed">
+                                  {ieltsVal >= 6.5 
+                                    ? "Optimal score! Meets 95% of standard European English master's pathways." 
+                                    : ieltsVal >= 6.0 
+                                    ? "Borderline score. Eligible for general public programs, but higher-ranking tracks often require IELTS 6.5." 
+                                    : "Requires retake or specific non-IELTS alternative programs (like MOI or internal tests in lower-barrier states)."}
+                                </p>
+                              </div>
+                            </div>
+
+                            {/* Subject Alignment */}
+                            <div className="flex items-start gap-2.5 text-[11px]">
+                              <CheckCircle2 className="w-4 h-4 text-emerald-650 shrink-0 mt-0.5" />
+                              <div className="space-y-0.5">
+                                <span className="font-bold text-slate-850">Field Credit Compatibility Index</span>
+                                <p className="text-slate-500 text-[10px] leading-relaxed">
+                                  Your desired subject <span className="text-violet-700 font-semibold">"{profile.targetSubject}"</span> is analyzed. Ensure your Bachelor's transcripts possess at least 120 ECTS or equivalent credits in matching fields to pass stringent German consecutive criteria.
+                                </p>
+                              </div>
+                            </div>
+
+                            {/* Visa Success Ratio */}
+                            <div className="flex items-start gap-2.5 text-[11px]">
+                              {compositeScore >= 75 ? (
+                                <CheckCircle2 className="w-4 h-4 text-emerald-650 shrink-0 mt-0.5" />
+                              ) : (
+                                <HelpCircle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                              )}
+                              <div className="space-y-0.5">
+                                <span className="font-bold text-slate-850">Estimated Dhaka Embassy Visa Approval Potential</span>
+                                <p className="text-slate-500 text-[10px] leading-relaxed">
+                                  {compositeScore >= 85 
+                                    ? "Excellent success metrics. Proper SOP + solid paperwork results in high visa approval rates." 
+                                    : compositeScore >= 70 
+                                    ? "Strong profile. Focus closely on writing an exquisite Statement of Purpose (SOP)." 
+                                    : "High rejection risk in standard German public channels. We recommend considering Poland or obtaining formal admissions from Sweden."}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* SOP & Application Next Steps */}
+                    <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-xs">
+                      <div className="space-y-0.5">
+                        <span className="font-bold text-slate-850">Expert Next Step Recommendation (Bangladesh-to-Schengen Zone)</span>
+                        <p className="text-slate-500">Use our AI Chatbot to draft a customized Statement of Purpose (SOP) tailored for your target "{profile.targetSubject}" program.</p>
+                      </div>
+                      <button 
+                        onClick={() => { setActiveTab("chat"); addToast("Ready to draft your SOP!", "success"); }}
+                        className="flex items-center gap-1.5 px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl whitespace-nowrap transition-all cursor-pointer"
+                      >
+                        <span>Draft SOP with AI</span>
+                        <ArrowRight className="w-3 h-3" />
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })()}
 
             {/* 3. PRICING & STUDY PLANS TAB */}
             {activeTab === "pricing" && (
@@ -2406,6 +3207,801 @@ But I can tell you that for ${profile.targetCountry} higher study:
               </motion.div>
             )}
 
+            {/* DOCUMENT CHECKLIST TAB */}
+            {activeTab === "checklist" && (() => {
+              const applicableDocs = ALL_DOCUMENTS.filter(doc => {
+                const matchesCountry = !doc.countries || doc.countries.includes(profile.targetCountry);
+                const matchesDegree = !doc.degrees || doc.degrees.includes(profile.targetDegree);
+                return matchesCountry && matchesDegree;
+              });
+
+              const filteredDocs = applicableDocs.filter(doc => {
+                if (checklistFilter === "all") return true;
+                return doc.category === checklistFilter;
+              });
+
+              const totalCount = applicableDocs.length;
+              const completedCount = applicableDocs.filter(doc => checkedDocs[doc.id]).length;
+              const percentComplete = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+
+              // Format template tags
+              const formatText = (text: string) => {
+                return text
+                  .replace("{profile.ielts}", profile.ielts || "not provided")
+                  .replace("{profile.gpa}", profile.gpa || "not provided")
+                  .replace("{profile.targetCountry}", profile.targetCountry)
+                  .replace("{profile.targetDegree}", profile.targetDegree)
+                  .replace("{profile.targetSubject}", profile.targetSubject);
+              };
+
+              const handleToggleDoc = (id: string) => {
+                setCheckedDocs(prev => ({
+                  ...prev,
+                  [id]: !prev[id]
+                }));
+              };
+
+              const handleResetChecklist = () => {
+                if (confirm("Are you sure you want to clear all checked items in your checklist?")) {
+                  setCheckedDocs({});
+                  addToast("Checklist reset successfully", "info");
+                }
+              };
+
+              const handleDownloadChecklistPdf = () => {
+                try {
+                  const doc = new jsPDF({
+                    orientation: "portrait",
+                    unit: "mm",
+                    format: "a4"
+                  });
+
+                  const pageWidth = doc.internal.pageSize.getWidth();
+                  const pageHeight = doc.internal.pageSize.getHeight();
+                  const margin = 20;
+                  const contentWidth = pageWidth - (margin * 2);
+
+                  let y = margin;
+
+                  // Header bar
+                  doc.setFillColor(124, 58, 237);
+                  doc.rect(0, 0, pageWidth, 15, "F");
+                  
+                  doc.setTextColor(255, 255, 255);
+                  doc.setFont("helvetica", "bold");
+                  doc.setFontSize(10);
+                  doc.text("GLOBAL ACADEMY HUB • SCHENGEN STUDY VISA CHECKLIST", margin, 9.5);
+
+                  const todayStr = new Date().toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric"
+                  });
+                  doc.text(todayStr, pageWidth - margin, 9.5, { align: "right" });
+
+                  y += 12;
+
+                  // Document Title
+                  doc.setTextColor(124, 58, 237);
+                  doc.setFont("helvetica", "bold");
+                  doc.setFontSize(16);
+                  y += 8;
+                  doc.text("Visa Application Document Checklist", margin, y);
+
+                  // Profile Stats Header
+                  doc.setFillColor(248, 250, 252);
+                  doc.rect(margin, y + 4, contentWidth, 24, "F");
+                  doc.setDrawColor(226, 232, 240);
+                  doc.rect(margin, y + 4, contentWidth, 24, "S");
+
+                  doc.setTextColor(30, 41, 59);
+                  doc.setFont("helvetica", "bold");
+                  doc.setFontSize(9);
+                  doc.text("STUDENT APPLICANT PROFILE", margin + 5, y + 10);
+
+                  doc.setFont("helvetica", "normal");
+                  doc.setFontSize(8.5);
+                  doc.text(`Target Country: ${profile.targetCountry}`, margin + 5, y + 15);
+                  doc.text(`Target Degree: ${profile.targetDegree}`, margin + 5, y + 20);
+                  doc.text(`Subject: ${profile.targetSubject}`, margin + 5, y + 25);
+
+                  doc.text(`GPA: ${profile.gpa} / 4.00`, margin + 85, y + 15);
+                  doc.text(`IELTS Score: ${profile.ielts}`, margin + 85, y + 20);
+                  doc.text(`Budget Tier: ${profile.budget.toUpperCase()}`, margin + 85, y + 25);
+
+                  // Progress Stats
+                  doc.setFillColor(124, 58, 237);
+                  doc.rect(margin + 135, y + 8, 30, 14, "F");
+                  doc.setTextColor(255, 255, 255);
+                  doc.setFont("helvetica", "bold");
+                  doc.setFontSize(11);
+                  doc.text(`${percentComplete}%`, margin + 150, y + 14, { align: "center" });
+                  doc.setFontSize(7.5);
+                  doc.text(`${completedCount} of ${totalCount} Ready`, margin + 150, y + 19, { align: "center" });
+
+                  y += 36;
+
+                  doc.setTextColor(100, 116, 139);
+                  doc.setFont("helvetica", "bold");
+                  doc.setFontSize(10);
+                  doc.text("REQUIRED DOCUMENTS DIRECTIVE", margin, y);
+                  y += 4;
+                  doc.setDrawColor(226, 232, 240);
+                  doc.setLineWidth(0.5);
+                  doc.line(margin, y, pageWidth - margin, y);
+                  y += 6;
+
+                  applicableDocs.forEach((docItem, index) => {
+                    const isChecked = !!checkedDocs[docItem.id];
+                    const statusText = isChecked ? "[X] READY" : "[ ] PENDING";
+                    const statusColor = isChecked ? [16, 185, 129] : [100, 116, 139]; // Emerald vs Slate
+
+                    if (y > pageHeight - 35) {
+                      doc.addPage();
+                      // Header bar
+                      doc.setFillColor(124, 58, 237);
+                      doc.rect(0, 0, pageWidth, 15, "F");
+                      doc.setTextColor(255, 255, 255);
+                      doc.setFont("helvetica", "bold");
+                      doc.setFontSize(10);
+                      doc.text("GLOBAL ACADEMY HUB • SCHENGEN STUDY VISA CHECKLIST", margin, 9.5);
+                      doc.text(todayStr, pageWidth - margin, 9.5, { align: "right" });
+                      y = margin + 15;
+                    }
+
+                    // Status block
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(8.5);
+                    doc.setTextColor(statusColor[0], statusColor[1], statusColor[2]);
+                    doc.text(statusText, margin, y);
+
+                    // Document Title
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(9.5);
+                    doc.setTextColor(15, 23, 42);
+                    doc.text(`${index + 1}. ${docItem.titleEn}`, margin + 25, y);
+
+                    // Category tag
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(7);
+                    doc.setTextColor(124, 58, 237);
+                    doc.text(`(${docItem.category.toUpperCase()})`, margin + 135, y, { align: "right" });
+
+                    y += 4.5;
+
+                    // Description text
+                    doc.setFont("helvetica", "normal");
+                    doc.setFontSize(8.5);
+                    doc.setTextColor(71, 85, 105);
+
+                    const formattedDesc = formatText(docItem.descEn);
+                    const lines = doc.splitTextToSize(formattedDesc, contentWidth - 25);
+                    const lineHeight = 4.5;
+
+                    lines.forEach((line: string) => {
+                      doc.text(line, margin + 25, y);
+                      y += lineHeight;
+                    });
+
+                    y += 4; // Spacing after item
+                  });
+
+                  if (y > pageHeight - 25) {
+                    doc.addPage();
+                    // Header bar
+                    doc.setFillColor(124, 58, 237);
+                    doc.rect(0, 0, pageWidth, 15, "F");
+                    doc.setTextColor(255, 255, 255);
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(10);
+                    doc.text("GLOBAL ACADEMY HUB • SCHENGEN STUDY VISA CHECKLIST", margin, 9.5);
+                    y = margin + 15;
+                  }
+
+                  y += 2;
+                  doc.setDrawColor(226, 232, 240);
+                  doc.line(margin, y, pageWidth - margin, y);
+                  y += 6;
+
+                  doc.setFont("helvetica", "normal");
+                  doc.setFontSize(7.5);
+                  doc.setTextColor(148, 163, 184);
+                  doc.text("Officially compiled by Global Academy Hub based on current Schengen immigration rules.", margin, y);
+                  y += 3.5;
+                  doc.text("Ensure all academic files are physically attested in Dhaka prior to booking your Embassy visa appointment.", margin, y);
+
+                  doc.save(`GAH_Schengen_Visa_Checklist_${profile.targetCountry}.pdf`);
+                  addToast("Checklist successfully exported to PDF!", "success");
+                } catch (err: any) {
+                  console.error("PDF generation failed:", err);
+                  addToast("Failed to generate PDF.", "error");
+                }
+              };
+
+              return (
+                <motion.div
+                  key="checklist-tab"
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -15 }}
+                  className="space-y-6"
+                >
+                  {/* Top Dashboard Banner */}
+                  <div className="bg-gradient-to-r from-violet-600 via-indigo-600 to-indigo-700 rounded-3xl p-6 md:p-8 text-white shadow-xl shadow-indigo-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                    <div className="space-y-2 max-w-2xl">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/10 rounded-full text-[10px] font-mono tracking-wider uppercase">
+                        <GraduationCap className="h-3.5 w-3.5 text-violet-200" /> 
+                        {language === "bn" ? "ভিসা পেপারওয়ার্ক গাইড" : "Visa Paperwork Blueprint"}
+                      </span>
+                      <h2 className="text-2xl md:text-3xl font-display font-bold">
+                        {language === "bn" ? `${profile.targetCountry} স্টুডেন্ট ভিসা ডকুমেন্ট চেকলিস্ট` : `${profile.targetCountry} Student Visa Document Checklist`}
+                      </h2>
+                      <p className="text-xs md:text-sm text-indigo-100 leading-relaxed">
+                        {language === "bn" 
+                          ? `আপনার প্রোফাইল অনুযায়ী (${profile.targetDegree} ডিগ্রী, IELTS ${profile.ielts}, CGPA ${profile.gpa}) শেনজেনভুক্ত দেশে আবেদন করার প্রয়োজনীয় নথিপত্র নিচে দেওয়া হলো।`
+                          : `Customized specifically for your profile (${profile.targetDegree} Degree, IELTS ${profile.ielts}, CGPA ${profile.gpa}) to ensure zero rejection rates at the Dhaka Embassy.`}
+                      </p>
+                    </div>
+
+                    {/* Progress Wheel */}
+                    <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center gap-4 shrink-0 w-full md:w-auto">
+                      <div className="relative w-16 h-16 flex items-center justify-center">
+                        <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                          <circle cx="18" cy="18" r="16" className="fill-none stroke-white/10" strokeWidth="3" />
+                          <circle 
+                            cx="18" 
+                            cy="18" 
+                            r="16" 
+                            className="fill-none stroke-violet-300" 
+                            strokeWidth="3" 
+                            strokeDasharray="100" 
+                            strokeDashoffset={100 - percentComplete}
+                            strokeLinecap="round"
+                          />
+                        </svg>
+                        <span className="absolute text-xs font-bold font-mono text-white">{percentComplete}%</span>
+                      </div>
+                      <div className="space-y-1">
+                        <span className="text-[10px] font-mono uppercase tracking-wider text-violet-200 block font-bold">
+                          {language === "bn" ? "প্রস্তুতির অগ্রগতি" : "Preparation Progress"}
+                        </span>
+                        <span className="text-sm font-bold block">{completedCount} of {totalCount} Ready</span>
+                        <p className="text-[9px] text-indigo-200">
+                          {percentComplete === 100 
+                            ? (language === "bn" ? "সব পেপার রেডি! আপনি সম্পূর্ণ প্রস্তুত।" : "Outstanding! All documents prepared.")
+                            : (language === "bn" ? "বাকি ফাইলগুলো রেডি করুন।" : "Complete the rest of your files.")}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Visa Readiness Advice / Tips Alert Boxes */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {/* Country Specific Specific Insight */}
+                    <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm space-y-3 md:col-span-2">
+                      <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
+                        <MapPin className="h-5 w-5 text-indigo-650" />
+                        <h4 className="font-display font-bold text-xs text-slate-900 uppercase tracking-wide">
+                          {language === "bn" ? `${profile.targetCountry} এর জন্য বিশেষ ভিসা টিপস` : `Critical Embassy Advice for ${profile.targetCountry}`}
+                        </h4>
+                      </div>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        {profile.targetCountry === "Germany" && (
+                          language === "bn" 
+                            ? "জার্মান স্টুডেন্ট ভিসার জন্য অন্যতম শর্ত হলো 'Sperrkonto' বা ব্লকড অ্যাকাউন্ট। আপনাকে অবশ্যই এফডিআর বা ফ্যামিলি ফান্ড থেকে Expatrio/Fintiba-তে ১১,৯০৪ ইউরো জমা দিতে হবে। এছাড়া ঢাকা জার্মান দূতাবাসে ফিজিক্যাল ইন্টারভিউয়ের মুখোমুখি হতে হবে এবং আপনার সমস্ত কাগজপত্র পররাষ্ট্র মন্ত্রণালয় থেকে সত্যায়িত হতে হবে।"
+                            : "A German visa is contingent on activating your Blocked Account (Sperrkonto) with €11,904. Make sure to schedule your Embassy appointment in Dhaka at least 3-4 months ahead as slots are highly competitive. All academic files must be verified prior to the interview."
+                        )}
+                        {profile.targetCountry === "Sweden" && (
+                          language === "bn" 
+                            ? "সুইডেনের ক্ষেত্রে কোনো ব্লকড অ্যাকাউন্টের প্রয়োজন নেই, তবে নিজের ব্যক্তিগত ব্যাংক অ্যাকাউন্টে কমপক্ষে ১০৩,১৪০ SEK সমপরিমাণ টাকা প্রায় ৩ মাসের জন্য দেখাতে হবে। সুইডিশ মাইগ্রেশন এজেন্সির ওয়েবসাইট থেকে সম্পূর্ণ আবেদনটি অনলাইনে সাবমিট করা হয় এবং বায়োমেট্রিকের জন্য সুইডিশ দূতাবাসে যেতে হয়।"
+                            : "For Sweden, funds (SEK 103,140 for 10 months) must remain inside your personal bank account. Sweden's student residence permit is processed completely online. Avoid depositing sudden large sums of money in your account without showing source of funds."
+                        )}
+                        {profile.targetCountry === "Finland" && (
+                          language === "bn" 
+                            ? "ফিনল্যান্ডের জন্য আপনার নিজের ব্যাংক অ্যাকাউন্টে কমপক্ষে ৯,৬০০ ইউরো থাকতে হবে। ফিনল্যান্ড মাইগ্রেশন বোর্ড টাকার উৎসের ব্যাপারে অনেক কঠোর, তাই আপনার বা আপনার স্পন্সরের আয়ের বৈধ প্রমাণ থাকতে হবে। এছাড়া প্রথম বছরের টিউশন ফি পরিশোধের মূল রসিদটি দূতাবাসে জমা দিতে হবে।"
+                            : "Finland demands €9,600 inside the student's personal account. Finland is extremely rigorous about bank account ownership (no joint accounts or distant relatives). You must also purchase a comprehensive international health insurance policy."
+                        )}
+                        {profile.targetCountry === "Poland" && (
+                          language === "bn" 
+                            ? "পোল্যান্ড স্টুডেন্ট ভিসার জন্য প্রথম বছরের টিউশন ফি এবং আবাসন ভাড়া পরিশোধের রসিদ আবশ্যিক। আপনার স্পন্সরের ব্যাংক স্টেটমেন্টে পর্যাপ্ত তহবিল দেখাতে হবে। ঢাকা থেকে পোল্যান্ডের কোনো দূতাবাস সরাসরি সার্ভিস দেয় না, তাই দিল্লিতে গিয়ে অথবা ভারতের পোলিশ দূতাবাসে ভিসার জন্য আবেদন সাবমিট করতে হয়।"
+                            : "Poland student visas require paying tuition for the first year upfront. Since Poland does not have a functioning student visa embassy in Dhaka, Bangladeshi students often apply through the Embassy in New Delhi, India. Flawless sponsorship files are vital."
+                        )}
+                      </p>
+                    </div>
+
+                    {/* Dynamic Status Badges for Profile Score Card */}
+                    <div className="bg-slate-900 text-white rounded-2xl p-5 border border-slate-800 shadow-sm space-y-3 flex flex-col justify-between">
+                      <div className="space-y-2">
+                        <span className="text-[9px] font-mono tracking-widest text-violet-300 block font-bold uppercase">
+                          {language === "bn" ? "প্রোফাইল সতর্কতা" : "Profile Audit Flag"}
+                        </span>
+                        <h4 className="font-display font-bold text-xs text-slate-100">
+                          {language === "bn" ? "দূতাবাস রেট ইমপ্যাক্ট" : "Dhk Embassy Viability"}
+                        </h4>
+                        <div className="space-y-1.5 text-[11px] text-slate-300 leading-normal">
+                          {Number(profile.ielts) < 6.0 ? (
+                            <p className="text-rose-300 font-semibold">
+                              ⚠️ IELTS Score is Low ({profile.ielts}): Most embassies will flag this. Consider a retake to raise it to 6.5!
+                            </p>
+                          ) : (
+                            <p className="text-emerald-300">
+                              ✓ IELTS score is excellent ({profile.ielts}). Highly compliant!
+                            </p>
+                          )}
+                          {Number(profile.gpa) < 3.0 ? (
+                            <p className="text-amber-300">
+                              ⚠️ CGPA ({profile.gpa}) is below 3.00. Expect academic consistency queries during your visa interview.
+                            </p>
+                          ) : (
+                            <p className="text-emerald-300">
+                              ✓ CGPA is superb ({profile.gpa}). Excellent academic standings!
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="pt-3 border-t border-slate-800 text-[10px] text-slate-400 flex justify-between items-center">
+                        <span>Profile Quality</span>
+                        <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold font-mono ${Number(profile.ielts) >= 6.5 && Number(profile.gpa) >= 3.0 ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-300 border border-amber-500/20'}`}>
+                          {Number(profile.ielts) >= 6.5 && Number(profile.gpa) >= 3.0 ? "HIGH PASS" : "REVIEW NEEDED"}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Main Checklist Card and Filters */}
+                  <div className="bg-white border border-slate-200/80 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-slate-100">
+                      <div className="space-y-0.5">
+                        <h3 className="font-display font-bold text-base text-slate-900">
+                          {language === "bn" ? "প্রয়োজনীয় নথিপত্রের তালিকা" : "Interactive Document Builder"}
+                        </h3>
+                        <p className="text-xs text-slate-500">
+                          {language === "bn" 
+                            ? "ফাইল রেডি করার সাথে সাথে চেকবক্স টিক দিন এবং শেষে একটি অফিসিয়াল পিডিএফ কপি ডাউনলোড করুন।"
+                            : "Mark off items as you gather them. Click 'Export Checklist' to generate a physical PDF for records."}
+                        </p>
+                      </div>
+
+                      {/* Header Actions */}
+                      <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                        <button
+                          onClick={handleResetChecklist}
+                          className="px-3 py-1.5 border border-slate-200 text-slate-500 rounded-xl hover:bg-slate-50 text-[11px] font-bold flex items-center gap-1 transition-all uppercase cursor-pointer"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                          <span>{language === "bn" ? "রিসেট করুন" : "Reset checks"}</span>
+                        </button>
+                        <button
+                          onClick={handleDownloadChecklistPdf}
+                          className="px-3.5 py-1.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-[11px] font-bold flex items-center gap-1.5 transition-all shadow-sm cursor-pointer"
+                        >
+                          <Download className="h-3.5 w-3.5" />
+                          <span>{language === "bn" ? "পিডিএফ ডাউনলোড" : "Export PDF Checklist"}</span>
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Category Filter Tabs */}
+                    <div className="flex overflow-x-auto gap-1 pb-1 scrollbar-none border-b border-slate-100">
+                      {[
+                        { id: "all", labelEn: "All Documents", labelBn: "সকল কাগজপত্র" },
+                        { id: "mandatory", labelEn: "Identity & Mandatory", labelBn: "বাধ্যতামূলক ও আইডেন্টিটি" },
+                        { id: "financial", labelEn: "Financial Soundness", labelBn: "আর্থিক সক্ষমতার প্রমাণ" },
+                        { id: "academic", labelEn: "Academic Papers", labelBn: "একাডেমিক ফাইলসমূহ" },
+                        { id: "optional", labelEn: "Supporting & Optional", labelBn: "অতিরিক্ত কাগজপত্র" }
+                      ].map((tab) => (
+                        <button
+                          key={tab.id}
+                          onClick={() => setChecklistFilter(tab.id as any)}
+                          className={`px-3 py-2 rounded-xl text-[10.5px] font-bold tracking-wider uppercase shrink-0 transition-all cursor-pointer ${
+                            checklistFilter === tab.id
+                              ? "bg-violet-600 text-white shadow-xs"
+                              : "bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-200/40"
+                          }`}
+                        >
+                          {language === "bn" ? tab.labelBn : tab.labelEn}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Document list */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {filteredDocs.map((docItem) => {
+                        const isChecked = !!checkedDocs[docItem.id];
+                        return (
+                          <div
+                            key={docItem.id}
+                            onClick={() => handleToggleDoc(docItem.id)}
+                            className={`p-4 rounded-2xl border transition-all cursor-pointer flex gap-3.5 select-none ${
+                              isChecked 
+                                ? "bg-emerald-50/20 border-emerald-300 shadow-xs" 
+                                : "bg-white border-slate-150 hover:border-slate-250 hover:bg-slate-50/20"
+                            }`}
+                          >
+                            {/* Checkbox circle */}
+                            <div className="shrink-0 mt-0.5">
+                              <div className={`w-5.5 h-5.5 rounded-full border flex items-center justify-center transition-all ${
+                                isChecked 
+                                  ? "bg-emerald-500 border-emerald-500 text-white" 
+                                  : "border-slate-300 bg-white text-transparent hover:border-violet-500"
+                              }`}>
+                                <Check className="w-3.5 h-3.5 stroke-[3px]" />
+                              </div>
+                            </div>
+
+                            {/* Text and description details */}
+                            <div className="space-y-1 flex-1">
+                              <div className="flex items-center justify-between gap-2">
+                                <h4 className={`text-[12.5px] font-bold ${isChecked ? "text-slate-800 line-through opacity-75" : "text-slate-900"}`}>
+                                  {language === "bn" ? docItem.titleBn : docItem.titleEn}
+                                </h4>
+                                <span className={`px-2 py-0.5 rounded text-[8px] font-bold tracking-wider uppercase shrink-0 ${
+                                  docItem.category === "mandatory" 
+                                    ? "bg-rose-50 text-rose-700 border border-rose-100" 
+                                    : docItem.category === "financial" 
+                                    ? "bg-amber-50 text-amber-700 border border-amber-100" 
+                                    : docItem.category === "academic" 
+                                    ? "bg-indigo-50 text-indigo-700 border border-indigo-100" 
+                                    : "bg-slate-100 text-slate-600"
+                                }`}>
+                                  {docItem.category}
+                                </span>
+                              </div>
+                              <p className="text-xs text-slate-500 leading-relaxed font-medium">
+                                {language === "bn" ? formatText(docItem.descBn) : formatText(docItem.descEn)}
+                              </p>
+
+                              {/* Minor translated language subtitle */}
+                              <p className="text-[10px] text-slate-400 italic">
+                                {language === "bn" ? `En: ${formatText(docItem.descEn)}` : `বাংলা: ${formatText(docItem.descBn)}`}
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* SOP Assistance Hook */}
+                    <div className="pt-5 border-t border-slate-150 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-xs bg-slate-50/50 p-4 rounded-2xl border border-slate-100">
+                      <div className="space-y-1">
+                        <span className="font-bold text-slate-800 flex items-center gap-1">
+                          <Sparkles className="w-4 h-4 text-violet-600" />
+                          <span>{language === "bn" ? "প্রোফাইল ম্যাচড এআই রাইটার এসিস্ট্যান্স" : "Academic Integrity Assurance"}</span>
+                        </span>
+                        <p className="text-slate-500 text-[11px] leading-relaxed max-w-2xl">
+                          {language === "bn"
+                            ? "আপনার উদ্দেশ্য বিবৃতি (Statement of Purpose - SOP) পেপারটি সুন্দরভাবে লিখতে আমাদের 'SOP Templates' ও 'AI Consultancy' ট্যাব ব্যবহার করুন।"
+                            : "Your Statement of Purpose (SOP) requires meticulous academic tailoring to reflect continuous credits. Use our SOP Templates Library or chat to structure it correctly."}
+                        </p>
+                      </div>
+                      <button 
+                        onClick={() => { setActiveTab("chat"); addToast("Ready to draft your SOP!", "success"); }}
+                        className="flex items-center gap-1.5 px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl whitespace-nowrap transition-all cursor-pointer"
+                      >
+                        <span>{language === "bn" ? "এআই দিয়ে এসওপি তৈরি" : "Begin SOP Drafting"}</span>
+                        <ArrowRight className="w-3 h-3" />
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+            )}
+
+            {/* ABOUT US TAB */}
+            {activeTab === "about" && (
+              <motion.div
+                key="about-tab"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                className="space-y-8 max-w-5xl mx-auto"
+              >
+                {/* About Us Hero Banner */}
+                <div className="bg-gradient-to-r from-violet-600 via-indigo-600 to-indigo-700 rounded-3xl p-8 md:p-12 text-white shadow-xl relative overflow-hidden">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(120,119,198,0.15),transparent_50%)]" />
+                  <div className="relative z-10 space-y-4 max-w-3xl">
+                    <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-white/10 rounded-full text-[10px] font-mono tracking-widest uppercase font-bold text-violet-200">
+                      <Sparkles className="h-3.5 w-3.5 text-violet-300" />
+                      {language === "bn" ? "গ্লোবাল একাডেমি হাব" : "Global Academy Hub"}
+                    </span>
+                    <h1 className="text-3xl md:text-5xl font-display font-extrabold tracking-tight">
+                      {language === "bn" ? "আমাদের সম্পর্কে" : "About Us"}
+                    </h1>
+                    <p className="text-sm md:text-lg text-indigo-100 font-medium tracking-wide uppercase font-mono">
+                      "where ambition meets opportunity"
+                    </p>
+                    <p className="text-xs md:text-sm text-slate-200 leading-relaxed max-w-2xl">
+                      {language === "bn"
+                        ? "গ্লোবাল একাডেমি হাব বাংলাদেশ একটি বিশ্বস্ত এবং শিক্ষার্থী-বান্ধব উচ্চশিক্ষা কনসালটেন্সি ফার্ম। আমরা আপনার বিদেশের বিশ্ববিদ্যালয়ে ভর্তি, ভিসা প্রসেসিং ও আইইএলটিএস প্রস্তুতিতে দিচ্ছি সম্পূর্ণ গাইডলাইন।"
+                        : "Global Academy Hub is a trusted and student‑oriented study abroad consultancy in Bangladesh, dedicated to guiding students who aspire to pursue higher education overseas."}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Main Narrative split with Mission & Vision */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                  {/* Left Column: Core Description Story */}
+                  <div className="lg:col-span-2 space-y-6">
+                    <div className="bg-white border border-slate-200/80 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
+                      <div className="space-y-4 text-xs md:text-sm text-slate-600 leading-relaxed font-medium">
+                        <p>
+                          <strong>Global Academy Hub</strong> is a trusted and student‑oriented study abroad consultancy in Bangladesh, dedicated to guiding students who aspire to pursue higher education overseas. We support students at every stage of their study abroad journey by providing professional counseling, coaching, and application support, ensuring a smooth and well‑informed process.
+                        </p>
+                        <p>
+                          A key service of Global Academy Hub is personalized academic counseling to help students choose the right courses, universities, and countries. Our experienced counselors carefully assess each student’s academic background, career goals, interests, and financial capacity before offering tailored recommendations. This ensures that students select study options that align with both their current qualifications and future ambitions.
+                        </p>
+                        <p className="border-l-2 border-violet-500 pl-4 py-1 italic text-slate-500 font-mono text-[11px] uppercase tracking-wide">
+                          Global Academy hub bd | Global Academy hub Bangladesh
+                        </p>
+                        <p>
+                          In addition, we arrange IELTS preparation for students who need to meet English language requirements for admission and visa purposes. Our coaching approach focuses on building language skills, exam strategies, and student confidence, helping learners achieve competitive scores and meet international standards.
+                        </p>
+                        <p>
+                          Global Academy Hub has expert file processing teams for major study destinations, including Australia, The UK, New Zealand, EU countries, Malaysia, and other popular international education hubs. Our specialists are highly knowledgeable about country‑specific admission procedures, visa requirements, and documentation standards. This expertise allows us to manage applications efficiently, accurately, and professionally.
+                        </p>
+                        <p>
+                          We are officially connected with several universities and institutions abroad, which enables us to provide authentic information, up‑to‑date admission requirements, and direct application support. These official partnerships strengthen our credibility and help students access genuine study opportunities with confidence.
+                        </p>
+                        <p>
+                          At Global Academy Hub, we believe studying abroad is a life‑changing opportunity. Our goal is not only to help students secure admission and visas but also to prepare them for academic success and personal growth in a global environment. From IELTS preparation and course selection to visa guidance and pre‑departure support, we remain committed to our students until they begin their international education journey.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right Column: Mission, Vision, Destinations */}
+                  <div className="space-y-6">
+                    {/* Mission Card */}
+                    <div className="bg-slate-900 text-white rounded-3xl p-6 border border-slate-800 shadow-lg space-y-4 relative overflow-hidden">
+                      <div className="absolute -top-12 -right-12 w-24 h-24 bg-violet-600/10 rounded-full blur-xl" />
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-violet-600/20 rounded-xl border border-violet-500/20 text-violet-400">
+                          <Award className="h-5 w-5" />
+                        </div>
+                        <h3 className="font-display font-bold text-sm tracking-wide uppercase text-slate-100">Our Mission</h3>
+                      </div>
+                      <p className="text-xs text-slate-300 leading-relaxed font-medium">
+                        Our Mission is to provide honest, professional, and student‑focused study abroad services that enable students to access quality global education and build successful international careers.
+                      </p>
+                    </div>
+
+                    {/* Vision Card */}
+                    <div className="bg-slate-950 text-white rounded-3xl p-6 border border-slate-900 shadow-lg space-y-4 relative overflow-hidden">
+                      <div className="absolute -top-12 -right-12 w-24 h-24 bg-indigo-600/10 rounded-full blur-xl" />
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-indigo-600/20 rounded-xl border border-indigo-500/20 text-indigo-400">
+                          <Compass className="h-5 w-5" />
+                        </div>
+                        <h3 className="font-display font-bold text-sm tracking-wide uppercase text-slate-100">Our Vision</h3>
+                      </div>
+                      <p className="text-xs text-slate-300 leading-relaxed font-medium">
+                        Our Vision is to become one of the most trusted study abroad consultancies in Bangladesh by maintaining excellence in counseling, IELTS coaching, admission support, and visa guidance, while building strong partnerships with universities worldwide.
+                      </p>
+                    </div>
+
+                    {/* Quick Destinations Card */}
+                    <div className="bg-white border border-slate-200/80 rounded-3xl p-6 shadow-sm space-y-4">
+                      <h3 className="font-display font-bold text-xs tracking-wider uppercase text-slate-900 pb-2 border-b border-slate-100">
+                        Study Abroad Destinations
+                      </h3>
+                      <div className="grid grid-cols-2 gap-2 text-[11px] font-bold text-slate-700">
+                        <span className="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 rounded-xl border border-slate-200/40">Study in Australia</span>
+                        <span className="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 rounded-xl border border-slate-200/40">Study in New Zealand</span>
+                        <span className="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 rounded-xl border border-slate-200/40">Study in UK</span>
+                        <span className="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 rounded-xl border border-slate-200/40">Study in Europe</span>
+                        <span className="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 rounded-xl border border-slate-200/40">Study in Canada</span>
+                        <span className="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-50 rounded-xl border border-slate-200/40">Study in Asia</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Contact Us & Counseling Request Form Section */}
+                <div id="contact-us-section" className="bg-white border border-slate-200/80 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
+                  <div className="flex flex-col md:flex-row gap-8">
+                    {/* Left Panel: Contact Info */}
+                    <div className="flex-1 space-y-6">
+                      <div className="space-y-2">
+                        <h3 className="font-display font-extrabold text-xl text-slate-900">
+                          Contact Us for any Query
+                        </h3>
+                        <p className="text-xs text-slate-500 font-medium">
+                          Talk to an expert student advisor & get personalized guidance.
+                        </p>
+                      </div>
+
+                      <div className="p-5 bg-violet-50/40 border border-violet-100 rounded-2xl space-y-4">
+                        <p className="text-xs text-slate-600 leading-relaxed font-semibold">
+                          A renowned study abroad advisor, Global Academy Hub is committed to helping students who wish to study for Bachelor’s, Master’s and Doctoral degrees abroad.
+                        </p>
+
+                        <div className="space-y-2.5 text-xs text-slate-700">
+                          <div className="flex items-center gap-2.5">
+                            <Phone className="w-4 h-4 text-violet-600 shrink-0" />
+                            <span className="font-mono font-bold">+8801346582060</span>
+                          </div>
+                          <div className="flex items-center gap-2.5">
+                            <Mail className="w-4 h-4 text-violet-600 shrink-0" />
+                            <span className="font-mono font-bold">contact@globalacademyhubbd.com</span>
+                          </div>
+                          <div className="flex items-start gap-2.5">
+                            <MapPin className="w-4 h-4 text-violet-600 shrink-0 mt-0.5" />
+                            <span className="leading-relaxed font-medium">Building 2, Mullick Villa, House-519 Road No-01, Dhanmondi, Dhaka 1205.</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Social Links */}
+                      <div className="space-y-3">
+                        <p className="text-[10px] font-mono tracking-wider uppercase text-slate-400 font-bold">Follow Our Channels</p>
+                        <div className="flex flex-wrap gap-2">
+                          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3 py-2 bg-slate-50 hover:bg-violet-50 border border-slate-200/80 rounded-xl text-xs font-bold text-slate-700 hover:text-violet-700 transition-all">
+                            <Facebook className="w-3.5 h-3.5 text-[#1877F2]" />
+                            <span>Facebook</span>
+                          </a>
+                          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3 py-2 bg-slate-50 hover:bg-violet-50 border border-slate-200/80 rounded-xl text-xs font-bold text-slate-700 hover:text-violet-700 transition-all">
+                            <Instagram className="w-3.5 h-3.5 text-[#E4405F]" />
+                            <span>Instagram</span>
+                          </a>
+                          <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3 py-2 bg-slate-50 hover:bg-violet-50 border border-slate-200/80 rounded-xl text-xs font-bold text-slate-700 hover:text-violet-700 transition-all">
+                            <Youtube className="w-3.5 h-3.5 text-[#FF0000]" />
+                            <span>Youtube</span>
+                          </a>
+                          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3 py-2 bg-slate-50 hover:bg-violet-50 border border-slate-200/80 rounded-xl text-xs font-bold text-slate-700 hover:text-violet-700 transition-all">
+                            <Twitter className="w-3.5 h-3.5 text-[#1DA1F2]" />
+                            <span>X-twitter</span>
+                          </a>
+                          <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3 py-2 bg-slate-50 hover:bg-violet-50 border border-slate-200/80 rounded-xl text-xs font-bold text-slate-700 hover:text-violet-700 transition-all">
+                            <Sparkles className="w-3.5 h-3.5 text-[#000000]" />
+                            <span>Tiktok</span>
+                          </a>
+                          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3 py-2 bg-slate-50 hover:bg-violet-50 border border-slate-200/80 rounded-xl text-xs font-bold text-slate-700 hover:text-violet-700 transition-all">
+                            <Linkedin className="w-3.5 h-3.5 text-[#0A66C2]" />
+                            <span>Linkedin</span>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Right Panel: Counseling Request Form */}
+                    <div className="flex-1 bg-slate-50 border border-slate-100 rounded-3xl p-6 space-y-4">
+                      <div className="space-y-1">
+                        <h4 className="font-display font-bold text-sm text-slate-900 uppercase tracking-wide">
+                          Get Personalized Counseling
+                        </h4>
+                        <p className="text-[11px] text-slate-500 font-medium">
+                          Fill out this form and book an appointment with our elite counselors instantly.
+                        </p>
+                      </div>
+
+                      <form
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          if (!contactFirstName || !contactEmail || !contactPhone) {
+                            addToast("Please fill out all required fields.", "error");
+                            return;
+                          }
+                          setIsSubmittingContact(true);
+                          setTimeout(() => {
+                            setIsSubmittingContact(false);
+                            addToast(`Awesome ${contactFirstName}! Your query has been logged. Our student advisor will contact you within 24 hours.`, "success");
+                            setContactFirstName("");
+                            setContactLastName("");
+                            setContactEmail("");
+                            setContactPhone("");
+                            setContactQuestion("");
+                          }, 1000);
+                        }}
+                        className="space-y-3.5 text-xs"
+                      >
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="space-y-1">
+                            <label className="text-slate-500 font-bold block">First Name <span className="text-rose-500">*</span></label>
+                            <input
+                              type="text"
+                              required
+                              placeholder="Enter Your First Name"
+                              value={contactFirstName}
+                              onChange={(e) => setContactFirstName(e.target.value)}
+                              className="w-full px-3 py-2 bg-white rounded-xl border border-slate-200 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none font-medium transition-all"
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <label className="text-slate-500 font-bold block">Last Name</label>
+                            <input
+                              type="text"
+                              placeholder="Enter Your Last Name"
+                              value={contactLastName}
+                              onChange={(e) => setContactLastName(e.target.value)}
+                              className="w-full px-3 py-2 bg-white rounded-xl border border-slate-200 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none font-medium transition-all"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          <div className="space-y-1">
+                            <label className="text-slate-500 font-bold block">Email <span className="text-rose-500">*</span></label>
+                            <input
+                              type="email"
+                              required
+                              placeholder="Email Address"
+                              value={contactEmail}
+                              onChange={(e) => setContactEmail(e.target.value)}
+                              className="w-full px-3 py-2 bg-white rounded-xl border border-slate-200 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none font-medium font-mono transition-all"
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <label className="text-slate-500 font-bold block">Phone <span className="text-rose-500">*</span></label>
+                            <input
+                              type="tel"
+                              required
+                              placeholder="Phone Number"
+                              value={contactPhone}
+                              onChange={(e) => setContactPhone(e.target.value)}
+                              className="w-full px-3 py-2 bg-white rounded-xl border border-slate-200 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none font-medium font-mono transition-all"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-1">
+                          <label className="text-slate-500 font-bold block">Question</label>
+                          <textarea
+                            placeholder="Question"
+                            rows={3}
+                            value={contactQuestion}
+                            onChange={(e) => setContactQuestion(e.target.value)}
+                            className="w-full px-3 py-2 bg-white rounded-xl border border-slate-200 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none font-medium transition-all resize-none"
+                          />
+                        </div>
+
+                        <div className="pt-2 flex flex-col sm:flex-row gap-2">
+                          <button
+                            type="submit"
+                            disabled={isSubmittingContact}
+                            className="flex-1 py-3 bg-violet-600 hover:bg-violet-700 text-white font-bold rounded-xl transition-all shadow-sm shadow-violet-100 flex items-center justify-center gap-2 cursor-pointer"
+                          >
+                            {isSubmittingContact ? (
+                              <>
+                                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                <span>Logging Request...</span>
+                              </>
+                            ) : (
+                              <span>Get Personalized Counseling</span>
+                            )}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (!contactFirstName || !contactEmail || !contactPhone) {
+                                addToast("Please fill out at least First Name, Email and Phone to request an appointment.", "error");
+                                return;
+                              }
+                              setIsSubmittingContact(true);
+                              setTimeout(() => {
+                                setIsSubmittingContact(false);
+                                addToast(`Success! Your appointment has been booked. An expert advisor will contact you at ${contactPhone} shortly.`, "success");
+                                setContactFirstName("");
+                                setContactLastName("");
+                                setContactEmail("");
+                                setContactPhone("");
+                                setContactQuestion("");
+                              }, 1000);
+                            }}
+                            className="py-3 px-4 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-1 cursor-pointer"
+                          >
+                            <Calendar className="w-3.5 h-3.5" />
+                            <span>Book An Appointment</span>
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
           </AnimatePresence>
         </main>
       </div>
@@ -2413,6 +4009,7 @@ But I can tell you that for ${profile.targetCountry} higher study:
       <footer className="bg-white border-t border-slate-200 py-6 px-8 text-center text-xs text-slate-400 shrink-0">
         <p className="font-semibold">© 2026 Global Academy Hub. All Rights Reserved.</p>
         <p className="mt-1">Headquarters: Panthapath, Dhaka, Bangladesh | Hotline: +880 01841800841</p>
+        <p className="mt-2 text-[10px] text-slate-300 font-mono tracking-wider">Developed by Md Nazmul Islam, NB TECH BD</p>
       </footer>
 
       {/* Auth Modal */}
