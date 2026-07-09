@@ -1482,7 +1482,7 @@ But I can tell you that for ${profile.targetCountry} higher study:
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans relative antialiased selection:bg-violet-100 selection:text-violet-900">
+    <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans relative antialiased selection:bg-violet-100 selection:text-violet-900">
       
       {/* Toast Notification Container */}
       <div className="fixed top-5 right-5 z-[999] flex flex-col gap-2 max-w-sm">
@@ -1606,8 +1606,8 @@ But I can tell you that for ${profile.targetCountry} higher study:
       <div className="flex-1 flex flex-col md:flex-row md:overflow-hidden max-w-[1600px] w-full mx-auto">
         
         {/* Navigation Sidebar */}
-        <aside className="w-full md:w-60 bg-slate-900 border-b md:border-b-0 md:border-r border-slate-800 p-2 md:p-3 flex flex-row md:flex-col gap-1 overflow-x-auto shrink-0 md:sticky md:top-14 md:h-[calc(100vh-56px)] scrollbar-none">
-          <div className="hidden md:block text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-2 px-3">
+        <aside className="w-full md:w-60 bg-white border-b md:border-b-0 md:border-r border-slate-200 p-2 md:p-3 flex flex-row md:flex-col gap-1 overflow-x-auto shrink-0 md:sticky md:top-14 md:h-[calc(100vh-56px)] scrollbar-none">
+          <div className="hidden md:block text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2 px-3">
             Navigation Menu
           </div>
           
@@ -1615,8 +1615,8 @@ But I can tell you that for ${profile.targetCountry} higher study:
             onClick={() => setActiveTab("chat")}
             className={`flex items-center gap-2.5 px-3 py-2 rounded text-[11px] font-medium tracking-wider uppercase shrink-0 transition-all ${
               activeTab === "chat" 
-                ? "bg-violet-600/10 text-violet-400 border-l-2 border-violet-600 font-bold" 
-                : "text-slate-400 hover:text-white hover:bg-slate-800"
+                ? "bg-violet-50 text-violet-600 border-l-2 border-violet-600 font-bold" 
+                : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
             }`}
           >
             <MessageSquare className="w-3.5 h-3.5" />
@@ -1627,8 +1627,8 @@ But I can tell you that for ${profile.targetCountry} higher study:
             onClick={() => setActiveTab("channels")}
             className={`flex items-center gap-2.5 px-3 py-2 rounded text-[11px] font-medium tracking-wider uppercase shrink-0 transition-all ${
               activeTab === "channels" 
-                ? "bg-violet-600/10 text-violet-400 border-l-2 border-violet-600 font-bold" 
-                : "text-slate-400 hover:text-white hover:bg-slate-800"
+                ? "bg-violet-50 text-violet-600 border-l-2 border-violet-600 font-bold" 
+                : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
             }`}
           >
             <MessageCircle className="w-3.5 h-3.5" />
@@ -1639,8 +1639,8 @@ But I can tell you that for ${profile.targetCountry} higher study:
             onClick={() => setActiveTab("simulator")}
             className={`flex items-center gap-2.5 px-3 py-2 rounded text-[11px] font-medium tracking-wider uppercase shrink-0 transition-all ${
               activeTab === "simulator" 
-                ? "bg-violet-600/10 text-violet-400 border-l-2 border-violet-600 font-bold" 
-                : "text-slate-400 hover:text-white hover:bg-slate-800"
+                ? "bg-violet-50 text-violet-600 border-l-2 border-violet-600 font-bold" 
+                : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
             }`}
           >
             <Mic className="w-3.5 h-3.5" />
@@ -1651,8 +1651,8 @@ But I can tell you that for ${profile.targetCountry} higher study:
             onClick={() => setActiveTab("dashboard")}
             className={`flex items-center gap-2.5 px-3 py-2 rounded text-[11px] font-medium tracking-wider uppercase shrink-0 transition-all ${
               activeTab === "dashboard" 
-                ? "bg-violet-600/10 text-violet-400 border-l-2 border-violet-600 font-bold" 
-                : "text-slate-400 hover:text-white hover:bg-slate-800"
+                ? "bg-violet-50 text-violet-600 border-l-2 border-violet-600 font-bold" 
+                : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
             }`}
           >
             <LayoutDashboard className="w-3.5 h-3.5" />
@@ -1663,8 +1663,8 @@ But I can tell you that for ${profile.targetCountry} higher study:
             onClick={() => setActiveTab("pricing")}
             className={`flex items-center gap-2.5 px-3 py-2 rounded text-[11px] font-medium tracking-wider uppercase shrink-0 transition-all ${
               activeTab === "pricing" 
-                ? "bg-violet-600/10 text-violet-400 border-l-2 border-violet-600 font-bold" 
-                : "text-slate-400 hover:text-white hover:bg-slate-800"
+                ? "bg-violet-50 text-violet-600 border-l-2 border-violet-600 font-bold" 
+                : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
             }`}
           >
             <Compass className="w-3.5 h-3.5" />
@@ -1675,8 +1675,8 @@ But I can tell you that for ${profile.targetCountry} higher study:
             onClick={() => setActiveTab("checklist")}
             className={`flex items-center gap-2.5 px-3 py-2 rounded text-[11px] font-medium tracking-wider uppercase shrink-0 transition-all ${
               activeTab === "checklist" 
-                ? "bg-violet-600/10 text-violet-400 border-l-2 border-violet-600 font-bold" 
-                : "text-slate-400 hover:text-white hover:bg-slate-800"
+                ? "bg-violet-50 text-violet-600 border-l-2 border-violet-600 font-bold" 
+                : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
             }`}
           >
             <FileText className="w-3.5 h-3.5" />
@@ -1687,8 +1687,8 @@ But I can tell you that for ${profile.targetCountry} higher study:
             onClick={() => setActiveTab("tracker")}
             className={`flex items-center gap-2.5 px-3 py-2 rounded text-[11px] font-medium tracking-wider uppercase shrink-0 transition-all ${
               activeTab === "tracker" 
-                ? "bg-violet-600/10 text-violet-400 border-l-2 border-violet-600 font-bold" 
-                : "text-slate-400 hover:text-white hover:bg-slate-800"
+                ? "bg-violet-50 text-violet-600 border-l-2 border-violet-600 font-bold" 
+                : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
             }`}
           >
             <CheckCircle2 className="w-3.5 h-3.5" />
@@ -1699,8 +1699,8 @@ But I can tell you that for ${profile.targetCountry} higher study:
             onClick={() => setActiveTab("payments")}
             className={`flex items-center gap-2.5 px-3 py-2 rounded text-[11px] font-medium tracking-wider uppercase shrink-0 transition-all ${
               activeTab === "payments" 
-                ? "bg-violet-600/10 text-violet-400 border-l-2 border-violet-600 font-bold" 
-                : "text-slate-400 hover:text-white hover:bg-slate-800"
+                ? "bg-violet-50 text-violet-600 border-l-2 border-violet-600 font-bold" 
+                : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
             }`}
           >
             <CreditCard className="w-3.5 h-3.5" />
@@ -1711,8 +1711,8 @@ But I can tell you that for ${profile.targetCountry} higher study:
             onClick={() => setActiveTab("about")}
             className={`flex items-center gap-2.5 px-3 py-2 rounded text-[11px] font-medium tracking-wider uppercase shrink-0 transition-all ${
               activeTab === "about" 
-                ? "bg-violet-600/10 text-violet-400 border-l-2 border-violet-600 font-bold" 
-                : "text-slate-400 hover:text-white hover:bg-slate-800"
+                ? "bg-violet-50 text-violet-600 border-l-2 border-violet-600 font-bold" 
+                : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
             }`}
           >
             <Info className="w-3.5 h-3.5" />
@@ -1720,16 +1720,16 @@ But I can tell you that for ${profile.targetCountry} higher study:
           </button>
 
           {/* Interactive Tier Widget */}
-          <div className="hidden md:block mt-auto p-3.5 bg-slate-800/80 border border-slate-700/60 rounded-xl text-white">
-            <p className="text-[9px] uppercase font-mono tracking-widest text-slate-400 mb-0.5">Current Standing</p>
-            <p className="font-display font-semibold text-xs mb-1.5 capitalize text-violet-300">{user ? `${user.tier} Pathway` : "Free Pathway"}</p>
-            <div className="w-full bg-slate-700 h-1 rounded-full mb-1.5">
+          <div className="hidden md:block mt-auto p-3.5 bg-violet-50/50 border border-violet-100/50 rounded-xl">
+            <p className="text-[9px] uppercase font-mono tracking-widest text-slate-500 mb-0.5">Current Standing</p>
+            <p className="font-display font-semibold text-xs mb-1.5 capitalize text-violet-700">{user ? `${user.tier} Pathway` : "Free Pathway"}</p>
+            <div className="w-full bg-slate-200 h-1 rounded-full mb-1.5">
               <div 
                 className="bg-violet-500 h-full rounded-full transition-all duration-500" 
                 style={{ width: user?.tier === "free" || !user ? "25%" : user.tier === "entry" ? "50%" : user.tier === "structured" ? "70%" : "95%" }}
               />
             </div>
-            <p className="text-[10px] leading-relaxed text-slate-300">
+            <p className="text-[10px] leading-relaxed text-slate-500">
               {user?.tier === "free" || !user 
                 ? "Unlock suitability Evaluations by upgrading plan."
                 : "Professional pathways active."}
@@ -2494,20 +2494,20 @@ But I can tell you that for ${profile.targetCountry} higher study:
                       </form>
                     </div>
 
-                    <div className="bg-slate-900 text-white rounded-3xl p-6 flex flex-col justify-between border border-slate-800 shadow-xl">
+                    <div className="bg-slate-50 text-slate-900 rounded-3xl p-6 flex flex-col justify-between border border-slate-200 shadow-sm">
                       <div className="space-y-4">
                         <div className="flex items-center gap-2">
-                          <MapPin className="h-5 w-5 text-violet-400" />
+                          <MapPin className="h-5 w-5 text-violet-600" />
                           <h4 className="font-display font-semibold text-md">Destination Insight: {profile.targetCountry}</h4>
                         </div>
                         
-                        <div className="space-y-3 text-xs text-slate-300">
+                        <div className="space-y-3 text-xs text-slate-600">
                           <p>
-                            Your target destination is highly viable for a <strong className="text-white">{profile.targetDegree}</strong> program in <strong className="text-white">{profile.targetSubject}</strong>.
+                            Your target destination is highly viable for a <strong className="text-slate-900">{profile.targetDegree}</strong> program in <strong className="text-slate-900">{profile.targetSubject}</strong>.
                           </p>
                           
-                          <div className="p-3 bg-white/5 rounded-xl border border-white/10 space-y-1.5">
-                            <span className="text-[9px] font-mono uppercase tracking-widest text-violet-300 block font-bold">Eligibility Guidance</span>
+                          <div className="p-3 bg-white rounded-xl border border-slate-200 space-y-1.5">
+                            <span className="text-[9px] font-mono uppercase tracking-widest text-violet-600 block font-bold">Eligibility Guidance</span>
                             <p className="text-[11px] leading-relaxed">
                               {Number(profile.gpa) >= 3.0 ? "✅ Excellent CGPA! Public tuition-free universities are heavily receptive." : "⚠️ GPA is moderately competitive. Private pathways or credit transfer is suggested."}
                             </p>
@@ -2515,9 +2515,9 @@ But I can tell you that for ${profile.targetCountry} higher study:
                         </div>
                       </div>
 
-                      <div className="pt-4 border-t border-slate-800 mt-6 flex justify-between items-center text-xs">
-                        <span className="text-slate-400">Consultancy Status</span>
-                        <span className="px-2 py-0.5 bg-violet-500/20 text-violet-300 border border-violet-500/30 rounded-full font-mono text-[10px] font-bold uppercase">
+                      <div className="pt-4 border-t border-slate-200 mt-6 flex justify-between items-center text-xs">
+                        <span className="text-slate-500">Consultancy Status</span>
+                        <span className="px-2 py-0.5 bg-violet-100 text-violet-700 border border-violet-200 rounded-full font-mono text-[10px] font-bold uppercase">
                           READY TO EVALUATE
                         </span>
                       </div>
@@ -2803,16 +2803,16 @@ But I can tell you that for ${profile.targetCountry} higher study:
                   </div>
 
                   {/* Elite */}
-                  <div className="bg-slate-900 text-white border border-slate-850 rounded-2xl p-5 space-y-4">
+                  <div className="bg-violet-50 text-slate-900 border border-violet-100 rounded-2xl p-5 space-y-4">
                     <div className="space-y-1">
-                      <span className="text-[9px] font-mono uppercase tracking-widest text-violet-400 font-bold">Tier 05</span>
-                      <h4 className="font-display font-bold text-base">ELITE Board</h4>
-                      <p className="text-slate-400 text-[10px]">Full board management.</p>
+                      <span className="text-[9px] font-mono uppercase tracking-widest text-violet-600 font-bold">Tier 05</span>
+                      <h4 className="font-display font-bold text-base text-slate-900">ELITE Board</h4>
+                      <p className="text-slate-500 text-[10px]">Full board management.</p>
                     </div>
-                    <div className="text-xl font-display font-bold">
+                    <div className="text-xl font-display font-bold text-slate-900">
                       Call for Details
                     </div>
-                    <ul className="space-y-2 text-[11px] text-slate-300">
+                    <ul className="space-y-2 text-[11px] text-slate-600">
                       <li className="flex items-center gap-2">✓ Professor research outreach</li>
                       <li className="flex items-center gap-2">✓ Scholarship negotiation</li>
                       <li className="flex items-center gap-2">✓ Direct Board representation</li>
@@ -3735,39 +3735,39 @@ But I can tell you that for ${profile.targetCountry} higher study:
                     </div>
 
                     {/* Dynamic Status Badges for Profile Score Card */}
-                    <div className="bg-slate-900 text-white rounded-2xl p-5 border border-slate-800 shadow-sm space-y-3 flex flex-col justify-between">
+                    <div className="bg-slate-50 text-slate-900 rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3 flex flex-col justify-between">
                       <div className="space-y-2">
-                        <span className="text-[9px] font-mono tracking-widest text-violet-300 block font-bold uppercase">
+                        <span className="text-[9px] font-mono tracking-widest text-violet-600 block font-bold uppercase">
                           {language === "bn" ? "প্রোফাইল সতর্কতা" : "Profile Audit Flag"}
                         </span>
-                        <h4 className="font-display font-bold text-xs text-slate-100">
+                        <h4 className="font-display font-bold text-xs text-slate-800">
                           {language === "bn" ? "দূতাবাস রেট ইমপ্যাক্ট" : "Dhk Embassy Viability"}
                         </h4>
-                        <div className="space-y-1.5 text-[11px] text-slate-300 leading-normal">
+                        <div className="space-y-1.5 text-[11px] text-slate-600 leading-normal">
                           {Number(profile.ielts) < 6.0 ? (
-                            <p className="text-rose-300 font-semibold">
+                            <p className="text-rose-600 font-semibold">
                               ⚠️ IELTS Score is Low ({profile.ielts}): Most embassies will flag this. Consider a retake to raise it to 6.5!
                             </p>
                           ) : (
-                            <p className="text-emerald-300">
+                            <p className="text-emerald-600">
                               ✓ IELTS score is excellent ({profile.ielts}). Highly compliant!
                             </p>
                           )}
                           {Number(profile.gpa) < 3.0 ? (
-                            <p className="text-amber-300">
+                            <p className="text-amber-600">
                               ⚠️ CGPA ({profile.gpa}) is below 3.00. Expect academic consistency queries during your visa interview.
                             </p>
                           ) : (
-                            <p className="text-emerald-300">
+                            <p className="text-emerald-600">
                               ✓ CGPA is superb ({profile.gpa}). Excellent academic standings!
                             </p>
                           )}
                         </div>
                       </div>
 
-                      <div className="pt-3 border-t border-slate-800 text-[10px] text-slate-400 flex justify-between items-center">
+                      <div className="pt-3 border-t border-slate-200 text-[10px] text-slate-500 flex justify-between items-center">
                         <span>Profile Quality</span>
-                        <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold font-mono ${Number(profile.ielts) >= 6.5 && Number(profile.gpa) >= 3.0 ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-300 border border-amber-500/20'}`}>
+                        <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold font-mono ${Number(profile.ielts) >= 6.5 && Number(profile.gpa) >= 3.0 ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' : 'bg-amber-100 text-amber-700 border border-amber-200'}`}>
                           {Number(profile.ielts) >= 6.5 && Number(profile.gpa) >= 3.0 ? "HIGH PASS" : "REVIEW NEEDED"}
                         </span>
                       </div>
@@ -4077,29 +4077,29 @@ But I can tell you that for ${profile.targetCountry} higher study:
                   {/* Right Column: Mission, Vision, Destinations */}
                   <div className="space-y-6">
                     {/* Mission Card */}
-                    <div className="bg-slate-900 text-white rounded-3xl p-6 border border-slate-800 shadow-lg space-y-4 relative overflow-hidden">
-                      <div className="absolute -top-12 -right-12 w-24 h-24 bg-violet-600/10 rounded-full blur-xl" />
+                    <div className="bg-white text-slate-900 rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4 relative overflow-hidden">
+                      <div className="absolute -top-12 -right-12 w-24 h-24 bg-violet-600/5 rounded-full blur-xl" />
                       <div className="flex items-center gap-3">
-                        <div className="p-2 bg-violet-600/20 rounded-xl border border-violet-500/20 text-violet-400">
+                        <div className="p-2 bg-violet-50 rounded-xl border border-violet-200 text-violet-600">
                           <Award className="h-5 w-5" />
                         </div>
-                        <h3 className="font-display font-bold text-sm tracking-wide uppercase text-slate-100">Our Mission</h3>
+                        <h3 className="font-display font-bold text-sm tracking-wide uppercase text-slate-800">Our Mission</h3>
                       </div>
-                      <p className="text-xs text-slate-300 leading-relaxed font-medium">
+                      <p className="text-xs text-slate-600 leading-relaxed font-medium">
                         Our Mission is to provide honest, professional, and student‑focused study abroad services that enable students to access quality global education and build successful international careers.
                       </p>
                     </div>
 
                     {/* Vision Card */}
-                    <div className="bg-slate-950 text-white rounded-3xl p-6 border border-slate-900 shadow-lg space-y-4 relative overflow-hidden">
-                      <div className="absolute -top-12 -right-12 w-24 h-24 bg-indigo-600/10 rounded-full blur-xl" />
+                    <div className="bg-white text-slate-900 rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4 relative overflow-hidden">
+                      <div className="absolute -top-12 -right-12 w-24 h-24 bg-indigo-600/5 rounded-full blur-xl" />
                       <div className="flex items-center gap-3">
-                        <div className="p-2 bg-indigo-600/20 rounded-xl border border-indigo-500/20 text-indigo-400">
+                        <div className="p-2 bg-indigo-50 rounded-xl border border-indigo-200 text-indigo-600">
                           <Compass className="h-5 w-5" />
                         </div>
-                        <h3 className="font-display font-bold text-sm tracking-wide uppercase text-slate-100">Our Vision</h3>
+                        <h3 className="font-display font-bold text-sm tracking-wide uppercase text-slate-800">Our Vision</h3>
                       </div>
-                      <p className="text-xs text-slate-300 leading-relaxed font-medium">
+                      <p className="text-xs text-slate-600 leading-relaxed font-medium">
                         Our Vision is to become one of the most trusted study abroad consultancies in Bangladesh by maintaining excellence in counseling, IELTS coaching, admission support, and visa guidance, while building strong partnerships with universities worldwide.
                       </p>
                     </div>
