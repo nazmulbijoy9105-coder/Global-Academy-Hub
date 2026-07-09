@@ -3,6 +3,7 @@ import path from "path";
 import fs from "fs";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
+import "dotenv/config";
 
 async function startServer() {
   const app = express();
@@ -45,18 +46,22 @@ async function startServer() {
   // Use JSON parsing for requests
   app.use(express.json());
 
+  // Health check
+  app.get("/api/health", (req, res) => {
+    res.json({ status: "ok", message: "Server is running" });
+  });
+
   // API Routes
   app.post("/api/chat", async (req, res) => {
     const origin = req.headers.origin;
-    const allowedOrigin = origin || process.env.ALLOWED_ORIGIN || 'https://earth-solutions-ecg.vercel.app';
-
-    res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
+    
+    // Flexible CORS for Vercel and AI Studio
+    res.setHeader('Access-Control-Allow-Origin', origin || '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
     if (req.method === 'OPTIONS') {
-      res.statusCode = 200;
-      res.end();
+      res.sendStatus(200);
       return;
     }
 
@@ -69,11 +74,14 @@ async function startServer() {
       const { messages = [], system, stage } = req.body;
 
       if (!process.env.GROQ_API_KEY) {
-        throw new Error('GROQ_API_KEY not set');
+        console.error('[Global Academy Hub] GROQ_API_KEY is missing');
+        res.write(`data: ${JSON.stringify({ error: 'Server configuration error: API key missing' })}\n\n`);
+        res.end();
+        return;
       }
 
       const systemContent = system ||
-        `You are Peopole AI, an expert academic and visa consultant from Earth Solutions Visa Zone, Dhaka, Bangladesh. Be concise, warm, and practical.`;
+        `You are the Global Academy Hub AI, an expert academic and visa consultant for Schengen and European higher education. Be concise, professional, warm, and practical. Help students with university recommendations, visa suitability, and preparation.`;
 
       const fullMessages = [{ role: 'system', content: systemContent }, ...messages];
 
@@ -125,7 +133,7 @@ async function startServer() {
       res.end();
 
     } catch (err: any) {
-      console.error('[Peopole AI Error]', err.message);
+      console.error('[Global Academy Hub Error]', err.message);
       res.write(`data: ${JSON.stringify({ error: err.message })}\n\n`);
       res.end();
     }

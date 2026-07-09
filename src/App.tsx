@@ -11,7 +11,7 @@ import {
   HelpCircle, GraduationCap, DollarSign, Calendar, ChevronDown, Info,
   Facebook, Instagram, Youtube, Twitter, Linkedin,
   LogOut, Download, Phone, Mail, Award, Loader2, Send, Plus, Trash2, Edit3, Check, Copy, MessageCircle,
-  Mic, Square, Play, Volume2, Clock, BookOpen, RefreshCw, FileText, Filter, Search, X
+  Mic, Square, Play, Volume2, Clock, BookOpen, RefreshCw, FileText, Filter, Search, X, Shield, Users
 } from "lucide-react";
 import { User, Conversation, Message, Payment, ServiceTier, StudentProfile } from "./types";
 import AuthModal from "./components/AuthModal";
@@ -441,6 +441,14 @@ export default function App() {
       return {};
     }
   });
+  const [reviewRequestedDocs, setReviewRequestedDocs] = useState<Record<string, boolean>>(() => {
+    try {
+      const saved = localStorage.getItem("review_requested_docs");
+      return saved ? JSON.parse(saved) : {};
+    } catch (e) {
+      return {};
+    }
+  });
   const [checklistFilter, setChecklistFilter] = useState<"all" | "mandatory" | "financial" | "academic" | "optional">("all");
   const [checklistSearchQuery, setChecklistSearchQuery] = useState<string>("");
   const [targetIntake, setTargetIntake] = useState<string>("october_2026");
@@ -450,6 +458,10 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem("checked_documents", JSON.stringify(checkedDocs));
   }, [checkedDocs]);
+
+  useEffect(() => {
+    localStorage.setItem("review_requested_docs", JSON.stringify(reviewRequestedDocs));
+  }, [reviewRequestedDocs]);
   
   // --- Interview Simulator States ---
   const [practiceAttempts, setPracticeAttempts] = useState<Array<{
@@ -2572,7 +2584,7 @@ But I can tell you that for ${profile.targetCountry} higher study:
 
                       {/* Right: Metrics Audit Checklist & Status */}
                       <div className="md:col-span-8 space-y-6">
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                           <div className={`p-4 rounded-xl border flex flex-col gap-1.5 ${gpaColor}`}>
                             <span className="text-[9px] font-mono font-bold uppercase tracking-wider opacity-80">CGPA Quality Indicator</span>
                             <span className="text-sm font-bold">{profile.gpa} / 4.00</span>
@@ -2589,6 +2601,14 @@ But I can tell you that for ${profile.targetCountry} higher study:
                             <span className="text-[9px] font-mono font-bold uppercase tracking-wider opacity-80">Financial Readiness</span>
                             <span className="text-sm font-bold capitalize">{profile.budget === "high" ? "৳18L+ / Year" : profile.budget === "medium" ? "৳10L - ৳15L / Year" : "৳5L - ৳8L / Year"}</span>
                             <span className="text-[10px] font-medium leading-tight">{budgetLevel}</span>
+                          </div>
+
+                          <div className={`p-4 rounded-xl border flex flex-col gap-1.5 ${Object.values(reviewRequestedDocs).filter(Boolean).length > 0 ? "bg-amber-50 text-amber-700 border-amber-200" : "bg-slate-50 text-slate-600 border-slate-200"}`}>
+                            <span className="text-[9px] font-mono font-bold uppercase tracking-wider opacity-80">Counselor Sync Status</span>
+                            <span className="text-sm font-bold">{Object.values(reviewRequestedDocs).filter(Boolean).length} Docs</span>
+                            <span className="text-[10px] font-medium leading-tight">
+                              {Object.values(reviewRequestedDocs).filter(Boolean).length > 0 ? "Awaiting Verification" : "All Clear"}
+                            </span>
                           </div>
                         </div>
 
@@ -3354,6 +3374,22 @@ But I can tell you that for ${profile.targetCountry} higher study:
                 }));
               };
 
+              const handleToggleReviewRequest = (id: string, e: React.MouseEvent) => {
+                e.stopPropagation(); // Prevent toggling the checkbox when clicking the sync button
+                setReviewRequestedDocs(prev => {
+                  const newState = {
+                    ...prev,
+                    [id]: !prev[id]
+                  };
+                  if (newState[id]) {
+                    addToast("Document flagged for counselor verification", "success");
+                  } else {
+                    addToast("Verification request cancelled", "info");
+                  }
+                  return newState;
+                });
+              };
+
               const handleResetChecklist = () => {
                 if (confirm("Are you sure you want to clear all checked items in your checklist?")) {
                   setCheckedDocs({});
@@ -4011,6 +4047,44 @@ But I can tell you that for ${profile.targetCountry} higher study:
                                     </span>
                                   </div>
                                 )}
+
+                                {/* Sync with Counselor / Awaiting Verification */}
+                                <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between">
+                                  <div className="flex items-center gap-1.5">
+                                    {reviewRequestedDocs[docItem.id] ? (
+                                      <div className="flex items-center gap-1.5 px-2 py-1 bg-amber-50 rounded-lg border border-amber-100 animate-pulse">
+                                        <Loader2 className="w-3 h-3 text-amber-600 animate-spin" />
+                                        <span className="text-[10px] font-bold text-amber-700 uppercase tracking-tight">
+                                          {language === "bn" ? "ভেরিফিকেশনের অপেক্ষায়" : "Awaiting Verification"}
+                                        </span>
+                                      </div>
+                                    ) : (
+                                      <span className="text-[10px] font-medium text-slate-400">
+                                        {language === "bn" ? "কাউন্সেলর রিভিউ প্রয়োজন?" : "Need counselor review?"}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <button
+                                    onClick={(e) => handleToggleReviewRequest(docItem.id, e)}
+                                    className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition-all ${
+                                      reviewRequestedDocs[docItem.id]
+                                        ? "bg-rose-50 text-rose-600 border border-rose-100 hover:bg-rose-100"
+                                        : "bg-violet-50 text-violet-600 border border-violet-100 hover:bg-violet-100"
+                                    }`}
+                                  >
+                                    {reviewRequestedDocs[docItem.id] ? (
+                                      <>
+                                        <X className="w-3 h-3" />
+                                        {language === "bn" ? "অনুরোধ বাতিল" : "Cancel Request"}
+                                      </>
+                                    ) : (
+                                      <>
+                                        <RefreshCw className="w-3 h-3" />
+                                        {language === "bn" ? "কাউন্সেলর সিঙ্ক" : "Sync with Counselor"}
+                                      </>
+                                    )}
+                                  </button>
+                                </div>
                               </div>
                             </div>
                           );
