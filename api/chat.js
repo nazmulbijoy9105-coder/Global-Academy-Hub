@@ -1,8 +1,8 @@
 // api/chat.js
 // Vercel Serverless Function for Groq API chat
-// Runtime: Node.js (most compatible with streaming)
+// Runtime: Node.js (CommonJS required for Vercel)
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   // CORS headers
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -94,4 +94,4 @@ export default async function handler(req, res) {
       res.status(500).json({ error: err.message });
     }
   }
-}
+};
