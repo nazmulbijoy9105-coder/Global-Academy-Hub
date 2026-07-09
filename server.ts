@@ -4,6 +4,7 @@ import fs from "fs";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 import "dotenv/config";
+import { handleChat } from "./src/server/chat";
 
 async function startServer() {
   const app = express();
@@ -52,92 +53,7 @@ async function startServer() {
   });
 
   // API Routes
-  app.post("/api/chat", async (req, res) => {
-    const origin = req.headers.origin;
-    
-    // Flexible CORS for Vercel and AI Studio
-    res.setHeader('Access-Control-Allow-Origin', origin || '*');
-    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-    if (req.method === 'OPTIONS') {
-      res.sendStatus(200);
-      return;
-    }
-
-    res.setHeader('Content-Type', 'text/event-stream');
-    res.setHeader('Cache-Control', 'no-cache, no-transform');
-    res.setHeader('Connection', 'keep-alive');
-    if (typeof (res as any).flushHeaders === 'function') (res as any).flushHeaders();
-
-    try {
-      const { messages = [], system, stage } = req.body;
-
-      if (!process.env.GROQ_API_KEY) {
-        console.error('[Global Academy Hub] GROQ_API_KEY is missing');
-        res.write(`data: ${JSON.stringify({ error: 'Server configuration error: API key missing' })}\n\n`);
-        res.end();
-        return;
-      }
-
-      const systemContent = system ||
-        `You are the Global Academy Hub AI, an expert academic and visa consultant for Schengen and European higher education. Be concise, professional, warm, and practical. Help students with university recommendations, visa suitability, and preparation.`;
-
-      const fullMessages = [{ role: 'system', content: systemContent }, ...messages];
-
-      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          model: 'llama-3.3-70b-versatile',
-          messages: fullMessages,
-          stream: true,
-          temperature: 0.7,
-          max_tokens: 1024
-        })
-      });
-
-      if (!response.ok) {
-        const errText = await response.text();
-        throw new Error(`Groq API error ${response.status}: ${errText}`);
-      }
-
-      const reader = response.body ? response.body.getReader() : null;
-      if (!reader) {
-        throw new Error("Response body is not readable");
-      }
-      const decoder = new TextDecoder();
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        const chunk = decoder.decode(value, { stream: true });
-        for (const line of chunk.split('\n')) {
-          if (!line.startsWith('data:')) continue;
-          const payload = line.slice(5).trim();
-          if (!payload) continue;
-          if (payload === '[DONE]') {
-            res.write('data: [DONE]\n\n');
-            res.end();
-            return;
-          }
-          res.write(`data: ${payload}\n\n`);
-          if (typeof (res as any).flush === 'function') (res as any).flush();
-        }
-      }
-
-      res.write('data: [DONE]\n\n');
-      res.end();
-
-    } catch (err: any) {
-      console.error('[Global Academy Hub Error]', err.message);
-      res.write(`data: ${JSON.stringify({ error: err.message })}\n\n`);
-      res.end();
-    }
-  });
+  app.post("/api/chat", handleChat);
 
   // Analytics Endpoints
   app.get("/api/analytics", (req, res) => {
