@@ -386,6 +386,8 @@ export default function App() {
     }
   });
   const [checklistFilter, setChecklistFilter] = useState<"all" | "mandatory" | "financial" | "academic" | "optional">("all");
+  const [showMobileSessions, setShowMobileSessions] = useState(false);
+  const [showMobileTemplates, setShowMobileTemplates] = useState(false);
 
   useEffect(() => {
     localStorage.setItem("checked_documents", JSON.stringify(checkedDocs));
@@ -1532,7 +1534,7 @@ But I can tell you that for ${profile.targetCountry} higher study:
       </nav>
 
       {/* Main Container Grid */}
-      <div className="flex-1 flex flex-col md:flex-row overflow-hidden max-w-[1600px] w-full mx-auto">
+      <div className="flex-1 flex flex-col md:flex-row md:overflow-hidden max-w-[1600px] w-full mx-auto">
         
         {/* Navigation Sidebar */}
         <aside className="w-full md:w-60 bg-slate-900 border-b md:border-b-0 md:border-r border-slate-800 p-2 md:p-3 flex flex-row md:flex-col gap-1 overflow-x-auto shrink-0 md:sticky md:top-14 md:h-[calc(100vh-56px)] scrollbar-none">
@@ -1667,7 +1669,7 @@ But I can tell you that for ${profile.targetCountry} higher study:
         </aside>
 
         {/* Dynamic Content Area */}
-        <main className="flex-1 p-4 md:p-8 overflow-y-auto max-h-[calc(100vh-120px)] md:max-h-[calc(100vh-64px)]">
+        <main className="flex-1 p-4 md:p-8 md:overflow-y-auto md:max-h-[calc(100vh-56px)]">
           <AnimatePresence mode="wait">
             
             {/* 1. CHAT TAB */}
@@ -1679,8 +1681,42 @@ But I can tell you that for ${profile.targetCountry} higher study:
                 exit={{ opacity: 0, y: -10 }}
                 className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full min-h-[550px] items-start"
               >
+                {/* Mobile Quick Panel Toggles */}
+                <div className="lg:hidden col-span-1 flex gap-2 w-full mb-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowMobileSessions(!showMobileSessions);
+                      setShowMobileTemplates(false);
+                    }}
+                    className={`flex-1 py-2 px-3 rounded-xl text-[10.5px] font-bold tracking-wider uppercase border flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                      showMobileSessions
+                        ? "bg-violet-600 text-white border-violet-600 shadow-xs"
+                        : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                    }`}
+                  >
+                    <MessageSquare className="h-3.5 w-3.5" />
+                    <span>{showMobileSessions ? "Hide Sessions" : "Advisory Sessions"}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowMobileTemplates(!showMobileTemplates);
+                      setShowMobileSessions(false);
+                    }}
+                    className={`flex-1 py-2 px-3 rounded-xl text-[10.5px] font-bold tracking-wider uppercase border flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                      showMobileTemplates
+                        ? "bg-violet-600 text-white border-violet-600 shadow-xs"
+                        : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+                    }`}
+                  >
+                    <BookOpen className="h-3.5 w-3.5" />
+                    <span>{showMobileTemplates ? "Hide Templates" : "SOP Templates"}</span>
+                  </button>
+                </div>
+
                 {/* Conversations Navigation List */}
-                <div className="lg:col-span-3 bg-white border border-slate-200/80 rounded-2xl p-4 flex flex-col gap-3 h-full max-h-[500px] overflow-y-auto">
+                <div className={`${showMobileSessions ? "flex" : "hidden lg:flex"} lg:col-span-3 bg-white border border-slate-200/80 rounded-2xl p-4 flex flex-col gap-3 h-full max-h-[500px] overflow-y-auto w-full`}>
                   <div className="flex justify-between items-center pb-2 border-b border-slate-100">
                     <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Advisory Sessions</span>
                     <button
@@ -1986,7 +2022,7 @@ But I can tell you that for ${profile.targetCountry} higher study:
                 </div>
 
                 {/* SOP Templates Library */}
-                <div className="lg:col-span-3 bg-white border border-slate-200/80 rounded-2xl p-4 flex flex-col gap-4 h-[550px] overflow-hidden">
+                <div className={`${showMobileTemplates ? "flex" : "hidden lg:flex"} lg:col-span-3 bg-white border border-slate-200/80 rounded-2xl p-4 flex flex-col gap-4 h-[550px] overflow-hidden w-full`}>
                   <div className="flex flex-col gap-1 pb-2 border-b border-slate-100 shrink-0">
                     <div className="flex items-center gap-2">
                       <BookOpen className="h-4.5 w-4.5 text-violet-600" />
