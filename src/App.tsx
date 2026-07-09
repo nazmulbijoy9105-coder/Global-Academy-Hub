@@ -11,7 +11,7 @@ import {
   HelpCircle, GraduationCap, DollarSign, Calendar, ChevronDown, Info,
   Facebook, Instagram, Youtube, Twitter, Linkedin,
   LogOut, Download, Phone, Mail, Award, Loader2, Send, Plus, Trash2, Edit3, Check, Copy, MessageCircle,
-  Mic, Square, Play, Volume2, Clock, BookOpen, RefreshCw, FileText, Filter
+  Mic, Square, Play, Volume2, Clock, BookOpen, RefreshCw, FileText, Filter, Search, X
 } from "lucide-react";
 import { User, Conversation, Message, Payment, ServiceTier, StudentProfile } from "./types";
 import AuthModal from "./components/AuthModal";
@@ -442,6 +442,7 @@ export default function App() {
     }
   });
   const [checklistFilter, setChecklistFilter] = useState<"all" | "mandatory" | "financial" | "academic" | "optional">("all");
+  const [checklistSearchQuery, setChecklistSearchQuery] = useState<string>("");
   const [targetIntake, setTargetIntake] = useState<string>("october_2026");
   const [showMobileSessions, setShowMobileSessions] = useState(false);
   const [showMobileTemplates, setShowMobileTemplates] = useState(false);
@@ -3321,8 +3322,15 @@ But I can tell you that for ${profile.targetCountry} higher study:
               });
 
               const filteredDocs = applicableDocs.filter(doc => {
-                if (checklistFilter === "all") return true;
-                return doc.category === checklistFilter;
+                const matchesCategory = checklistFilter === "all" || doc.category === checklistFilter;
+                const searchLower = checklistSearchQuery.toLowerCase().trim();
+                const matchesSearch = !searchLower || 
+                  doc.titleEn.toLowerCase().includes(searchLower) || 
+                  doc.titleBn.toLowerCase().includes(searchLower) ||
+                  doc.descEn.toLowerCase().includes(searchLower) ||
+                  doc.descBn.toLowerCase().includes(searchLower);
+                
+                return matchesCategory && matchesSearch;
               });
 
               const totalCount = applicableDocs.length;
@@ -3893,8 +3901,30 @@ But I can tell you that for ${profile.targetCountry} higher study:
                       </div>
                     </div>
 
-                    {/* Category Filter Tabs */}
-                    <div className="flex overflow-x-auto gap-1 pb-1 scrollbar-none border-b border-slate-100">
+                    {/* Search and Category Filters Row */}
+                    <div className="space-y-4">
+                      {/* Search Bar */}
+                      <div className="relative group">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-violet-500 transition-colors" />
+                        <input
+                          type="text"
+                          value={checklistSearchQuery}
+                          onChange={(e) => setChecklistSearchQuery(e.target.value)}
+                          placeholder={language === "bn" ? "ডকুমেন্টের নাম বা কীওয়ার্ড দিয়ে খুঁজুন..." : "Search documents by name or keyword..."}
+                          className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all"
+                        />
+                        {checklistSearchQuery && (
+                          <button
+                            onClick={() => setChecklistSearchQuery("")}
+                            className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-slate-200 rounded-full text-slate-400 transition-all"
+                          >
+                            <X className="h-3.5 w-3.5" />
+                          </button>
+                        )}
+                      </div>
+
+                      {/* Category Filter Tabs */}
+                      <div className="flex overflow-x-auto gap-1 pb-1 scrollbar-none border-b border-slate-100">
                       {[
                         { id: "all", labelEn: "All Documents", labelBn: "সকল কাগজপত্র" },
                         { id: "mandatory", labelEn: "Identity & Mandatory", labelBn: "বাধ্যতামূলক ও আইডেন্টিটি" },
@@ -3915,74 +3945,99 @@ But I can tell you that for ${profile.targetCountry} higher study:
                         </button>
                       ))}
                     </div>
+                  </div>
 
-                    {/* Document list */}
+                  {/* Document list */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {filteredDocs.map((docItem) => {
-                        const isChecked = !!checkedDocs[docItem.id];
-                        return (
-                          <div
-                            key={docItem.id}
-                            onClick={() => handleToggleDoc(docItem.id)}
-                            className={`p-4 rounded-2xl border transition-all cursor-pointer flex gap-3.5 select-none ${
-                              isChecked 
-                                ? "bg-emerald-50/20 border-emerald-300 shadow-xs" 
-                                : "bg-white border-slate-150 hover:border-slate-250 hover:bg-slate-50/20"
-                            }`}
-                          >
-                            {/* Checkbox circle */}
-                            <div className="shrink-0 mt-0.5">
-                              <div className={`w-5.5 h-5.5 rounded-full border flex items-center justify-center transition-all ${
+                      {filteredDocs.length > 0 ? (
+                        filteredDocs.map((docItem) => {
+                          const isChecked = !!checkedDocs[docItem.id];
+                          return (
+                            <div
+                              key={docItem.id}
+                              onClick={() => handleToggleDoc(docItem.id)}
+                              className={`p-4 rounded-2xl border transition-all cursor-pointer flex gap-3.5 select-none ${
                                 isChecked 
-                                  ? "bg-emerald-500 border-emerald-500 text-white" 
-                                  : "border-slate-300 bg-white text-transparent hover:border-violet-500"
-                              }`}>
-                                <Check className="w-3.5 h-3.5 stroke-[3px]" />
-                              </div>
-                            </div>
-
-                            {/* Text and description details */}
-                            <div className="space-y-1 flex-1">
-                              <div className="flex items-center justify-between gap-2">
-                                <h4 className={`text-[12.5px] font-bold ${isChecked ? "text-slate-800 line-through opacity-75" : "text-slate-900"}`}>
-                                  {language === "bn" ? docItem.titleBn : docItem.titleEn}
-                                </h4>
-                                <span className={`px-2 py-0.5 rounded text-[8px] font-bold tracking-wider uppercase shrink-0 ${
-                                  docItem.category === "mandatory" 
-                                    ? "bg-rose-50 text-rose-700 border border-rose-100" 
-                                    : docItem.category === "financial" 
-                                    ? "bg-amber-50 text-amber-700 border border-amber-100" 
-                                    : docItem.category === "academic" 
-                                    ? "bg-indigo-50 text-indigo-700 border border-indigo-100" 
-                                    : "bg-slate-100 text-slate-600"
+                                  ? "bg-emerald-50/20 border-emerald-300 shadow-xs" 
+                                  : "bg-white border-slate-150 hover:border-slate-250 hover:bg-slate-50/20"
+                              }`}
+                            >
+                              {/* Checkbox circle */}
+                              <div className="shrink-0 mt-0.5">
+                                <div className={`w-5.5 h-5.5 rounded-full border flex items-center justify-center transition-all ${
+                                  isChecked 
+                                    ? "bg-emerald-500 border-emerald-500 text-white" 
+                                    : "border-slate-300 bg-white text-transparent hover:border-violet-500"
                                 }`}>
-                                  {docItem.category}
-                                </span>
+                                  <Check className="w-3.5 h-3.5 stroke-[3px]" />
+                                </div>
                               </div>
-                              <p className="text-xs text-slate-500 leading-relaxed font-medium">
-                                {language === "bn" ? formatText(docItem.descBn) : formatText(docItem.descEn)}
-                              </p>
 
-                              {/* Minor translated language subtitle */}
-                              <p className="text-[10px] text-slate-400 italic">
-                                {language === "bn" ? `En: ${formatText(docItem.descEn)}` : `বাংলা: ${formatText(docItem.descBn)}`}
-                              </p>
-
-                              {/* Country Specific Deadline Attestation Warning */}
-                              {ATTESTATION_DEADLINES[profile.targetCountry]?.[docItem.id] && (
-                                <div className="mt-2.5 p-2 rounded-lg bg-amber-500/5 border border-amber-200/40 text-[10.5px] text-amber-800 font-semibold flex items-center gap-1.5 leading-snug">
-                                  <Clock className="h-3.5 w-3.5 text-amber-600 shrink-0 animate-pulse" />
-                                  <span>
-                                    {language === "bn" 
-                                      ? ATTESTATION_DEADLINES[profile.targetCountry][docItem.id].alertBn 
-                                      : ATTESTATION_DEADLINES[profile.targetCountry][docItem.id].alertEn}
+                              {/* Text and description details */}
+                              <div className="space-y-1 flex-1">
+                                <div className="flex items-center justify-between gap-2">
+                                  <h4 className={`text-[12.5px] font-bold ${isChecked ? "text-slate-800 line-through opacity-75" : "text-slate-900"}`}>
+                                    {language === "bn" ? docItem.titleBn : docItem.titleEn}
+                                  </h4>
+                                  <span className={`px-2 py-0.5 rounded text-[8px] font-bold tracking-wider uppercase shrink-0 ${
+                                    docItem.category === "mandatory" 
+                                      ? "bg-rose-50 text-rose-700 border border-rose-100" 
+                                      : docItem.category === "financial" 
+                                      ? "bg-amber-50 text-amber-700 border border-amber-100" 
+                                      : docItem.category === "academic" 
+                                      ? "bg-indigo-50 text-indigo-700 border border-indigo-100" 
+                                      : "bg-slate-100 text-slate-600"
+                                  }`}>
+                                    {docItem.category}
                                   </span>
                                 </div>
-                              )}
+                                <p className="text-xs text-slate-500 leading-relaxed font-medium">
+                                  {language === "bn" ? formatText(docItem.descBn) : formatText(docItem.descEn)}
+                                </p>
+
+                                {/* Minor translated language subtitle */}
+                                <p className="text-[10px] text-slate-400 italic">
+                                  {language === "bn" ? `En: ${formatText(docItem.descEn)}` : `বাংলা: ${formatText(docItem.descBn)}`}
+                                </p>
+
+                                {/* Country Specific Deadline Attestation Warning */}
+                                {ATTESTATION_DEADLINES[profile.targetCountry]?.[docItem.id] && (
+                                  <div className="mt-2.5 p-2 rounded-lg bg-amber-500/5 border border-amber-200/40 text-[10.5px] text-amber-800 font-semibold flex items-center gap-1.5 leading-snug">
+                                    <Clock className="h-3.5 w-3.5 text-amber-600 shrink-0 animate-pulse" />
+                                    <span>
+                                      {language === "bn" 
+                                        ? ATTESTATION_DEADLINES[profile.targetCountry][docItem.id].alertBn 
+                                        : ATTESTATION_DEADLINES[profile.targetCountry][docItem.id].alertEn}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
                             </div>
+                          );
+                        })
+                      ) : (
+                        <div className="col-span-full py-12 flex flex-col items-center justify-center text-center space-y-3 bg-slate-50 rounded-3xl border border-dashed border-slate-200">
+                          <div className="p-3 bg-white rounded-full shadow-sm">
+                            <Search className="h-6 w-6 text-slate-300" />
                           </div>
-                        );
-                      })}
+                          <div className="space-y-1">
+                            <p className="text-sm font-bold text-slate-900">
+                              {language === "bn" ? "কোনো ডকুমেন্ট খুঁজে পাওয়া যায়নি" : "No documents found"}
+                            </p>
+                            <p className="text-xs text-slate-500 max-w-xs mx-auto">
+                              {language === "bn" 
+                                ? `"${checklistSearchQuery}" এর সাথে মিলে এমন কোনো ফাইল নেই। দয়া করে ভিন্ন কীওয়ার্ড দিয়ে ট্রাই করুন।`
+                                : `We couldn't find any documents matching "${checklistSearchQuery}". Try a different keyword.`}
+                            </p>
+                            <button
+                              onClick={() => setChecklistSearchQuery("")}
+                              className="mt-2 text-xs font-bold text-violet-600 hover:text-violet-700 transition-colors"
+                            >
+                              {language === "bn" ? "সার্চ ক্লিয়ার করুন" : "Clear search results"}
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     {/* SOP Assistance Hook */}
