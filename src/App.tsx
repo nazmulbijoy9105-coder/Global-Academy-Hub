@@ -3258,159 +3258,257 @@ But I can tell you that for ${profile.targetCountry} higher study:
 
                   const pageWidth = doc.internal.pageSize.getWidth();
                   const pageHeight = doc.internal.pageSize.getHeight();
-                  const margin = 20;
+                  const margin = 15;
                   const contentWidth = pageWidth - (margin * 2);
-
-                  let y = margin;
-
-                  // Header bar
-                  doc.setFillColor(124, 58, 237);
-                  doc.rect(0, 0, pageWidth, 15, "F");
-                  
-                  doc.setTextColor(255, 255, 255);
-                  doc.setFont("helvetica", "bold");
-                  doc.setFontSize(10);
-                  doc.text("GLOBAL ACADEMY HUB • SCHENGEN STUDY VISA CHECKLIST", margin, 9.5);
-
                   const todayStr = new Date().toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "short",
                     day: "numeric"
                   });
-                  doc.text(todayStr, pageWidth - margin, 9.5, { align: "right" });
 
-                  y += 12;
+                  let y = margin + 12;
 
-                  // Document Title
+                  const drawHeaderAndFooter = () => {
+                    // Header thin bar
+                    doc.setFillColor(124, 58, 237); // violet-600
+                    doc.rect(0, 0, pageWidth, 10, "F");
+                    
+                    doc.setTextColor(255, 255, 255);
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(8);
+                    doc.text("GLOBAL ACADEMY HUB  •  SCHENGEN STUDY VISA BLUEPRINT", margin, 6.5);
+                    doc.text(todayStr, pageWidth - margin, 6.5, { align: "right" });
+
+                    // Footer text on every page
+                    doc.setFont("helvetica", "normal");
+                    doc.setFontSize(7.5);
+                    doc.setTextColor(148, 163, 184);
+                    doc.text("© 2026 Global Academy Hub. Developed by Md Nazmul Islam, NB TECH BD", margin, pageHeight - 8);
+                    doc.text("Confidential Visa Planner", pageWidth - margin, pageHeight - 8, { align: "right" });
+                  };
+
+                  const checkPageSpace = (heightNeeded: number) => {
+                    if (y + heightNeeded > pageHeight - margin - 8) {
+                      doc.addPage();
+                      y = margin + 12;
+                      drawHeaderAndFooter();
+                    }
+                  };
+
+                  // Initial header call
+                  drawHeaderAndFooter();
+
+                  // Document Title Block
                   doc.setTextColor(124, 58, 237);
                   doc.setFont("helvetica", "bold");
-                  doc.setFontSize(16);
-                  y += 8;
-                  doc.text("Visa Application Document Checklist", margin, y);
+                  doc.setFontSize(15);
+                  doc.text("Study Visa Document Checklist & Blueprint", margin, y);
+                  y += 5.5;
 
-                  // Profile Stats Header
+                  doc.setTextColor(71, 85, 105);
+                  doc.setFont("helvetica", "normal");
+                  doc.setFontSize(8.5);
+                  doc.text("A customized, structured checklist designed to ensure zero visa rejection rates.", margin, y);
+                  y += 8;
+
+                  // Section: Student Profile Summary
+                  checkPageSpace(32);
                   doc.setFillColor(248, 250, 252);
-                  doc.rect(margin, y + 4, contentWidth, 24, "F");
+                  doc.rect(margin, y, contentWidth, 28, "F");
                   doc.setDrawColor(226, 232, 240);
-                  doc.rect(margin, y + 4, contentWidth, 24, "S");
+                  doc.rect(margin, y, contentWidth, 28, "S");
 
                   doc.setTextColor(30, 41, 59);
                   doc.setFont("helvetica", "bold");
-                  doc.setFontSize(9);
-                  doc.text("STUDENT APPLICANT PROFILE", margin + 5, y + 10);
+                  doc.setFontSize(9.5);
+                  doc.text("APPLICANT STUDENT PROFILE SUMMARY", margin + 5, y + 6);
 
                   doc.setFont("helvetica", "normal");
                   doc.setFontSize(8.5);
-                  doc.text(`Target Country: ${profile.targetCountry}`, margin + 5, y + 15);
-                  doc.text(`Target Degree: ${profile.targetDegree}`, margin + 5, y + 20);
-                  doc.text(`Subject: ${profile.targetSubject}`, margin + 5, y + 25);
+                  doc.setTextColor(71, 85, 105);
+                  doc.text(`Target Country: ${profile.targetCountry}`, margin + 5, y + 12);
+                  doc.text(`Target Degree: ${profile.targetDegree}`, margin + 5, y + 17);
+                  doc.text(`Chosen Subject: ${profile.targetSubject}`, margin + 5, y + 22);
 
-                  doc.text(`GPA: ${profile.gpa} / 4.00`, margin + 85, y + 15);
-                  doc.text(`IELTS Score: ${profile.ielts}`, margin + 85, y + 20);
-                  doc.text(`Budget Tier: ${profile.budget.toUpperCase()}`, margin + 85, y + 25);
+                  // Middle column profile data
+                  doc.text(`Academic GPA: ${profile.gpa} / 4.00`, margin + 65, y + 12);
+                  doc.text(`IELTS Band Score: ${profile.ielts}`, margin + 65, y + 17);
+                  doc.text(`Financial Budget Track: ${profile.budget.toUpperCase()}`, margin + 65, y + 22);
 
-                  // Progress Stats
+                  // Progress right indicator box
                   doc.setFillColor(124, 58, 237);
-                  doc.rect(margin + 135, y + 8, 30, 14, "F");
+                  doc.rect(margin + contentWidth - 35, y + 4, 30, 20, "F");
                   doc.setTextColor(255, 255, 255);
                   doc.setFont("helvetica", "bold");
-                  doc.setFontSize(11);
-                  doc.text(`${percentComplete}%`, margin + 150, y + 14, { align: "center" });
-                  doc.setFontSize(7.5);
-                  doc.text(`${completedCount} of ${totalCount} Ready`, margin + 150, y + 19, { align: "center" });
+                  doc.setFontSize(14);
+                  doc.text(`${percentComplete}%`, margin + contentWidth - 20, y + 12, { align: "center" });
+                  doc.setFontSize(7);
+                  doc.text("PREPARATION", margin + contentWidth - 20, y + 17, { align: "center" });
+                  doc.text(`${completedCount} of ${totalCount} READY`, margin + contentWidth - 20, y + 21, { align: "center" });
 
-                  y += 36;
+                  y += 34;
 
-                  doc.setTextColor(100, 116, 139);
+                  // Section: Country-Specific Critical Visa Notes
+                  checkPageSpace(38);
+                  
+                  let embassyNotes = "";
+                  if (profile.targetCountry === "Germany") {
+                    embassyNotes = "A German study visa requires activating a Blocked Account (Sperrkonto) with precisely EUR 11,904 in an approved provider (such as Expatrio/Fintiba). Ensure to secure your visa slot at the Dhaka German Embassy 3-4 months in advance as slots are extremely competitive. All your academic certificates and transcripts must undergo legal verification and physical attestation from the Education Board, Education Ministry, and Ministry of Foreign Affairs (MoFA) of Bangladesh before your interview.";
+                  } else if (profile.targetCountry === "Sweden") {
+                    embassyNotes = "For Swedish student residence permits, you must demonstrate a minimum of SEK 10,314 per month (approx SEK 103,140 for a standard 10-month school year) inside your personal, single-owner bank account. Sweden's application is processed completely online via the Swedish Migration Agency. Ensure you do not deposit sudden large amounts of cash without clear, documented tax sources of sponsor income.";
+                  } else if (profile.targetCountry === "Finland") {
+                    embassyNotes = "Finland requires demonstrating a minimum of EUR 800 per month (EUR 9,600 for a 1-year study permit) in the student's personal bank account (joint accounts, third-party sponsors, or distant relatives are strictly rejected). You must also present the original paid tuition fee receipt from your Finnish university and buy a comprehensive private health insurance policy spanning your entire study duration.";
+                  } else if (profile.targetCountry === "Poland") {
+                    embassyNotes = "Poland student visas require paying your full first-year tuition fee upfront. Because Poland does not run an active student visa office in Dhaka, Bangladeshi students must travel and apply through the Embassy of Poland in New Delhi, India. Flawless professional sponsorship files, travel insurance coverage, and official academic board attestations are essential to prevent rejection.";
+                  } else {
+                    embassyNotes = "Ensure all your academic certificates, mark sheets, and transcripts are physically attested by the Ministry of Education and Ministry of Foreign Affairs (MoFA) in Dhaka, Bangladesh. Ensure your sponsoring bank account is maintained at a trusted commercial bank with clear, traceable sources of income such as tax certificates, salary slips, or trade licenses.";
+                  }
+
+                  const formattedNotes = embassyNotes;
+                  const notesLines = doc.splitTextToSize(formattedNotes, contentWidth - 10);
+                  const notesBoxHeight = 10 + (notesLines.length * 4);
+
+                  checkPageSpace(notesBoxHeight);
+                  doc.setFillColor(239, 246, 255); // light-blue background
+                  doc.setDrawColor(191, 219, 254);
+                  doc.rect(margin, y, contentWidth, notesBoxHeight, "F");
+                  doc.rect(margin, y, contentWidth, notesBoxHeight, "S");
+
+                  doc.setTextColor(30, 58, 138); // dark blue
                   doc.setFont("helvetica", "bold");
-                  doc.setFontSize(10);
-                  doc.text("REQUIRED DOCUMENTS DIRECTIVE", margin, y);
-                  y += 4;
-                  doc.setDrawColor(226, 232, 240);
-                  doc.setLineWidth(0.5);
-                  doc.line(margin, y, pageWidth - margin, y);
-                  y += 6;
+                  doc.setFontSize(8.5);
+                  doc.text(`CRITICAL EMBASSY ADVICE & FINANCIAL MANDATES FOR ${profile.targetCountry.toUpperCase()}`, margin + 5, y + 5);
 
-                  applicableDocs.forEach((docItem, index) => {
-                    const isChecked = !!checkedDocs[docItem.id];
+                  doc.setFont("helvetica", "normal");
+                  doc.setFontSize(8);
+                  doc.setTextColor(30, 41, 59);
+                  let noteY = y + 10;
+                  notesLines.forEach((line: string) => {
+                    doc.text(line, margin + 5, noteY);
+                    noteY += 4;
+                  });
+
+                  y += notesBoxHeight + 8;
+
+                  // Helper function to render a document item beautifully
+                  const drawDocItem = (docItem: any, index: number, isChecked: boolean) => {
                     const statusText = isChecked ? "[X] READY" : "[ ] PENDING";
-                    const statusColor = isChecked ? [16, 185, 129] : [100, 116, 139]; // Emerald vs Slate
+                    const statusColor = isChecked ? [16, 185, 129] : [100, 116, 139]; // Green vs Gray
 
-                    if (y > pageHeight - 35) {
-                      doc.addPage();
-                      // Header bar
-                      doc.setFillColor(124, 58, 237);
-                      doc.rect(0, 0, pageWidth, 15, "F");
-                      doc.setTextColor(255, 255, 255);
-                      doc.setFont("helvetica", "bold");
-                      doc.setFontSize(10);
-                      doc.text("GLOBAL ACADEMY HUB • SCHENGEN STUDY VISA CHECKLIST", margin, 9.5);
-                      doc.text(todayStr, pageWidth - margin, 9.5, { align: "right" });
-                      y = margin + 15;
-                    }
+                    const formattedDesc = formatText(docItem.descEn);
+                    const descLines = doc.splitTextToSize(formattedDesc, contentWidth - 25);
+                    const itemHeight = 6 + (descLines.length * 4.2) + 3;
 
-                    // Status block
+                    checkPageSpace(itemHeight);
+
+                    // Checkbox/Status
                     doc.setFont("helvetica", "bold");
-                    doc.setFontSize(8.5);
+                    doc.setFontSize(8);
                     doc.setTextColor(statusColor[0], statusColor[1], statusColor[2]);
                     doc.text(statusText, margin, y);
 
                     // Document Title
                     doc.setFont("helvetica", "bold");
-                    doc.setFontSize(9.5);
+                    doc.setFontSize(9);
                     doc.setTextColor(15, 23, 42);
-                    doc.text(`${index + 1}. ${docItem.titleEn}`, margin + 25, y);
+                    doc.text(`${index}. ${docItem.titleEn}`, margin + 20, y);
 
                     // Category tag
                     doc.setFont("helvetica", "bold");
                     doc.setFontSize(7);
                     doc.setTextColor(124, 58, 237);
-                    doc.text(`(${docItem.category.toUpperCase()})`, margin + 135, y, { align: "right" });
+                    doc.text(`(${docItem.category.toUpperCase()})`, margin + contentWidth - 5, y, { align: "right" });
 
                     y += 4.5;
 
                     // Description text
                     doc.setFont("helvetica", "normal");
-                    doc.setFontSize(8.5);
+                    doc.setFontSize(8);
                     doc.setTextColor(71, 85, 105);
 
-                    const formattedDesc = formatText(docItem.descEn);
-                    const lines = doc.splitTextToSize(formattedDesc, contentWidth - 25);
-                    const lineHeight = 4.5;
-
-                    lines.forEach((line: string) => {
-                      doc.text(line, margin + 25, y);
-                      y += lineHeight;
+                    descLines.forEach((line: string) => {
+                      doc.text(line, margin + 20, y);
+                      y += 4.2;
                     });
 
-                    y += 4; // Spacing after item
-                  });
+                    y += 3; // Space after item
+                  };
 
-                  if (y > pageHeight - 25) {
-                    doc.addPage();
-                    // Header bar
-                    doc.setFillColor(124, 58, 237);
-                    doc.rect(0, 0, pageWidth, 15, "F");
-                    doc.setTextColor(255, 255, 255);
-                    doc.setFont("helvetica", "bold");
-                    doc.setFontSize(10);
-                    doc.text("GLOBAL ACADEMY HUB • SCHENGEN STUDY VISA CHECKLIST", margin, 9.5);
-                    y = margin + 15;
-                  }
+                  // Filter the checked and unchecked documents
+                  const checkedList = applicableDocs.filter(d => checkedDocs[d.id]);
+                  const uncheckedList = applicableDocs.filter(d => !checkedDocs[d.id]);
 
-                  y += 2;
-                  doc.setDrawColor(226, 232, 240);
+                  // Draw SECTION: COMPLETED DOCUMENTS
+                  checkPageSpace(15);
+                  doc.setTextColor(16, 185, 129); // Green
+                  doc.setFont("helvetica", "bold");
+                  doc.setFontSize(10.5);
+                  doc.text("II. READY & COMPLETED DOCUMENTS", margin, y);
+                  y += 4;
+                  doc.setDrawColor(16, 185, 129);
+                  doc.setLineWidth(0.4);
                   doc.line(margin, y, pageWidth - margin, y);
                   y += 6;
 
+                  if (checkedList.length === 0) {
+                    doc.setFont("helvetica", "italic");
+                    doc.setFontSize(8.5);
+                    doc.setTextColor(148, 163, 184);
+                    doc.text("No documents marked as ready yet. Begin gathering files below.", margin + 5, y);
+                    y += 8;
+                  } else {
+                    checkedList.forEach((docItem, idx) => {
+                      drawDocItem(docItem, idx + 1, true);
+                    });
+                  }
+
+                  // Draw SECTION: PENDING / REQUIRED DOCUMENTS
+                  y += 4;
+                  checkPageSpace(15);
+                  doc.setTextColor(219, 39, 119); // Rose-600 / Pink
+                  doc.setFont("helvetica", "bold");
+                  doc.setFontSize(10.5);
+                  doc.text("III. PENDING / REQUIRED DOCUMENTS IN-PROGRESS", margin, y);
+                  y += 4;
+                  doc.setDrawColor(219, 39, 119);
+                  doc.setLineWidth(0.4);
+                  doc.line(margin, y, pageWidth - margin, y);
+                  y += 6;
+
+                  if (uncheckedList.length === 0) {
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(9);
+                    doc.setTextColor(16, 185, 129);
+                    doc.text("Congratulations! You have completed all required documentation for your Schengen Visa.", margin + 5, y);
+                    y += 8;
+                  } else {
+                    uncheckedList.forEach((docItem, idx) => {
+                      drawDocItem(docItem, idx + 1, false);
+                    });
+                  }
+
+                  // Final closing recommendations and footer details
+                  y += 4;
+                  checkPageSpace(22);
+                  doc.setDrawColor(226, 232, 240);
+                  doc.setLineWidth(0.3);
+                  doc.line(margin, y, pageWidth - margin, y);
+                  y += 6;
+
+                  doc.setFont("helvetica", "bold");
+                  doc.setFontSize(8.5);
+                  doc.setTextColor(30, 41, 59);
+                  doc.text("GLOBAL ACADEMY HUB DHAKA CONSULTANCY OFFICE", margin, y);
+                  y += 4;
+
                   doc.setFont("helvetica", "normal");
                   doc.setFontSize(7.5);
-                  doc.setTextColor(148, 163, 184);
-                  doc.text("Officially compiled by Global Academy Hub based on current Schengen immigration rules.", margin, y);
+                  doc.setTextColor(100, 116, 139);
+                  doc.text("Office: Building 2, Mullick Villa, House-519 Road No-01, Dhanmondi, Dhaka 1205. Phone: +8801346582060", margin, y);
                   y += 3.5;
-                  doc.text("Ensure all academic files are physically attested in Dhaka prior to booking your Embassy visa appointment.", margin, y);
+                  doc.text("Disclaimer: GAH provides visa checklist advice based on official immigration guidelines. Final decisions lie with the respective Embassies.", margin, y);
 
-                  doc.save(`GAH_Schengen_Visa_Checklist_${profile.targetCountry}.pdf`);
+                  doc.save(`GAH_Schengen_Visa_Blueprint_${profile.targetCountry}.pdf`);
                   addToast("Checklist successfully exported to PDF!", "success");
                 } catch (err: any) {
                   console.error("PDF generation failed:", err);
