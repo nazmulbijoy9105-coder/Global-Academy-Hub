@@ -9,6 +9,37 @@ interface AuthModalProps {
   onSuccess: (user: User) => void;
 }
 
+const PRESETS = {
+  "superadmin@globalacademyhub.com": {
+    name: "Super Admin",
+    role: "superadmin" as const,
+    tier: "elite" as const,
+    avatar: "https://ui-avatars.com/api/?name=Super+Admin&background=ef4444&color=fff",
+    phone: "+8801346582060"
+  },
+  "admin@globalacademyhub.com": {
+    name: "Elite Advisor (Admin)",
+    role: "admin" as const,
+    tier: "premium" as const,
+    avatar: "https://ui-avatars.com/api/?name=Admin&background=10b981&color=fff",
+    phone: "+8801841800841"
+  },
+  "student@globalacademyhub.com": {
+    name: "IELTS Student",
+    role: "student" as const,
+    tier: "structured" as const,
+    avatar: "https://ui-avatars.com/api/?name=Student&background=3b82f6&color=fff",
+    phone: "+8801700000001"
+  },
+  "user@globalacademyhub.com": {
+    name: "General Aspirant",
+    role: "user" as const,
+    tier: "free" as const,
+    avatar: "https://ui-avatars.com/api/?name=User&background=6b7280&color=fff",
+    phone: "+8801700000002"
+  }
+};
+
 export default function AuthModal({ onClose, onSuccess }: AuthModalProps) {
   const [tab, setTab] = useState<"email" | "phone" | "google">("email");
   const [email, setEmail] = useState("");
@@ -25,6 +56,40 @@ export default function AuthModal({ onClose, onSuccess }: AuthModalProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
+
+  // Handler for preset quick logins
+  const triggerPresetLogin = (presetEmail: string) => {
+    setError("");
+    setLoading(true);
+    const cleanEmail = presetEmail.toLowerCase();
+    const preset = PRESETS[cleanEmail as keyof typeof PRESETS];
+    if (!preset) return;
+
+    setEmail(presetEmail);
+    setPassword(presetEmail.split("@")[0]);
+    setIsSignUp(false);
+
+    setTimeout(() => {
+      const loggedUser: User = {
+        id: "usr-" + Math.floor(Math.random() * 1000000),
+        name: preset.name,
+        email: cleanEmail,
+        phone: preset.phone,
+        method: "email",
+        avatar: preset.avatar,
+        tier: preset.tier,
+        role: preset.role,
+        createdAt: Date.now(),
+      };
+
+      localStorage.setItem("user", JSON.stringify(loggedUser));
+      setSuccessMsg(`Welcome, logged in as ${preset.name}!`);
+      setTimeout(() => {
+        onSuccess(loggedUser);
+        onClose();
+      }, 1000);
+    }, 1000);
+  };
 
   // Handler for Email sign-in / sign-up
   const handleEmailAuth = (e: React.FormEvent) => {
@@ -49,15 +114,32 @@ export default function AuthModal({ onClose, onSuccess }: AuthModalProps) {
         return;
       }
 
+      const cleanEmail = email.trim().toLowerCase();
+      let userRole: "superadmin" | "admin" | "student" | "user" = "user";
+      let userTier: "free" | "entry" | "structured" | "premium" | "elite" = "free";
+      let displayName = isSignUp ? name : email.split("@")[0].toUpperCase();
+      let userAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(isSignUp ? name : email.split("@")[0])}&background=7c3aed&color=fff`;
+      let userPhone = "";
+
+      if (!isSignUp && PRESETS[cleanEmail as keyof typeof PRESETS]) {
+        const preset = PRESETS[cleanEmail as keyof typeof PRESETS];
+        displayName = preset.name;
+        userRole = preset.role;
+        userTier = preset.tier;
+        userAvatar = preset.avatar;
+        userPhone = preset.phone;
+      }
+
       // Successful simulation
       const loggedUser: User = {
         id: "usr-" + Math.floor(Math.random() * 1000000),
-        name: isSignUp ? name : email.split("@")[0].toUpperCase(),
-        email: email,
-        phone: "",
+        name: displayName,
+        email: cleanEmail,
+        phone: userPhone,
         method: "email",
-        avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(isSignUp ? name : email.split("@")[0])}&background=7c3aed&color=fff`,
-        tier: "free",
+        avatar: userAvatar,
+        tier: userTier,
+        role: userRole,
         createdAt: Date.now(),
       };
 
@@ -293,6 +375,55 @@ export default function AuthModal({ onClose, onSuccess }: AuthModalProps) {
                   {isSignUp ? "Already registered? Sign In" : "New to Global Academy Hub? Sign Up"}
                 </button>
               </div>
+
+              {!isSignUp && (
+                <div className="mt-5 pt-4 border-t border-slate-100 space-y-2.5">
+                  <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-slate-400 block text-center">
+                    ⚡ DEMO ACCOUNTS QUICK LOGIN
+                  </span>
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    <button
+                      type="button"
+                      onClick={() => triggerPresetLogin("superadmin@globalacademyhub.com")}
+                      disabled={loading}
+                      className="p-2.5 rounded-xl border border-rose-200 bg-rose-50/50 hover:bg-rose-50 hover:border-rose-300 text-slate-700 font-bold transition-all text-[11px] flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+                      Super Admin
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => triggerPresetLogin("admin@globalacademyhub.com")}
+                      disabled={loading}
+                      className="p-2.5 rounded-xl border border-emerald-200 bg-emerald-50/50 hover:bg-emerald-50 hover:border-emerald-300 text-slate-700 font-bold transition-all text-[11px] flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                      Admin / Advisor
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => triggerPresetLogin("student@globalacademyhub.com")}
+                      disabled={loading}
+                      className="p-2.5 rounded-xl border border-blue-200 bg-blue-50/50 hover:bg-blue-50 hover:border-blue-300 text-slate-700 font-bold transition-all text-[11px] flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+                      IELTS Student
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => triggerPresetLogin("user@globalacademyhub.com")}
+                      disabled={loading}
+                      className="p-2.5 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-bold transition-all text-[11px] flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <span className="w-2 h-2 rounded-full bg-slate-400"></span>
+                      General User
+                    </button>
+                  </div>
+                  <div className="text-[10px] text-slate-400 text-center font-medium leading-relaxed">
+                    These demo accounts have tailored dashboards, pre-populated logs, and distinct privileges.
+                  </div>
+                </div>
+              )}
             </form>
           )}
 

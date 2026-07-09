@@ -8,6 +8,7 @@ export interface User {
   method: "email" | "phone" | "google";
   avatar: string;
   tier: ServiceTier;
+  role?: "superadmin" | "admin" | "student" | "user";
   createdAt: number;
 }
 

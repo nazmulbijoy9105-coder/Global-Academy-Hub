@@ -1562,7 +1562,19 @@ But I can tell you that for ${profile.targetCountry} higher study:
           {user ? (
             <div className="flex items-center gap-2.5">
               <div className="text-right hidden sm:block">
-                <p className="text-[11px] font-bold text-slate-850">{user.name}</p>
+                <div className="flex items-center gap-1.5 justify-end">
+                  {user.role && (
+                    <span className={`px-1.5 py-0.5 rounded text-[8px] font-bold tracking-wide uppercase ${
+                      user.role === "superadmin" ? "bg-rose-100 text-rose-700 border border-rose-200" :
+                      user.role === "admin" ? "bg-emerald-100 text-emerald-700 border border-emerald-200" :
+                      user.role === "student" ? "bg-blue-100 text-blue-700 border border-blue-200" :
+                      "bg-slate-100 text-slate-600 border border-slate-200"
+                    }`}>
+                      {user.role}
+                    </span>
+                  )}
+                  <p className="text-[11px] font-bold text-slate-850">{user.name}</p>
+                </div>
                 <p className="text-[8px] uppercase font-mono tracking-wider font-bold text-violet-600">
                   {user.tier.toUpperCase()} TIER
                 </p>
@@ -4319,7 +4331,7 @@ But I can tell you that for ${profile.targetCountry} higher study:
 
       <footer className="bg-white border-t border-slate-200 py-6 px-8 text-center text-xs text-slate-400 shrink-0">
         <p className="font-semibold">© 2026 Global Academy Hub. All Rights Reserved.</p>
-        <p className="mt-1">Headquarters: Panthapath, Dhaka, Bangladesh | Hotline: +880 01841800841</p>
+        <p className="mt-1">Office: Building 2, Mullick Villa, House-519 Road No-01, Dhanmondi, Dhaka 1205 | Hotline: +8801346582060 | Email: contact@globalacademyhubbd.com</p>
         <p className="mt-2 text-[10px] text-slate-300 font-mono tracking-wider">Developed by Md Nazmul Islam, NB TECH BD</p>
       </footer>
 
