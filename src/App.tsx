@@ -319,6 +319,62 @@ const ALL_DOCUMENTS = [
   }
 ];
 
+const ATTESTATION_DEADLINES: Record<string, Record<string, { days: string; alertEn: string; alertBn: string }>> = {
+  Germany: {
+    academic_certificates: {
+      days: "15-20 days",
+      alertEn: "⚠️ German Embassy strictly requires physical stamps from Board, Ministry of Education, and MoFA of Bangladesh (takes 15-20 days). Secure this before attempting to book a visa slot in Dhaka.",
+      alertBn: "⚠️ জার্মানির জন্য বোর্ড, শিক্ষা মন্ত্রণালয় ও পররাষ্ট্র মন্ত্রণালয় (MoFA) থেকে ফিজিক্যাল সত্যায়ন আবশ্যক (১৫-২০ দিন)। ঢাকার ভিসা স্লট খোঁজার আগেই এটি শেষ করুন।"
+    },
+    germany_blocked_account: {
+      days: "5-10 days",
+      alertEn: "⚠️ Blocked Account (€11,904) bank transfers from Bangladesh take 5-10 business days via student file. Must complete at least 2 months prior to your visa interview.",
+      alertBn: "⚠️ বাংলাদেশ থেকে স্টুডেন্ট ফাইলের মাধ্যমে ১১,৯০৪ ইউরো ব্লকড অ্যাকাউন্টে ট্রান্সফার হতে ৫-১০ কার্যদিবস সময় লাগে। ইন্টারভিউয়ের অন্তত ২ মাস আগে করুন।"
+    },
+    passport: {
+      days: "30+ days",
+      alertEn: "⚠️ German Embassy checks passport names against academic certificates meticulously. Any spelling corrections in Dhaka take 30+ days.",
+      alertBn: "⚠️ পাসপোর্টের নামের বানান সার্টিফিকেটের সাথে হুবহু মিলতে হবে। সংশোধন করতে হলে ঢাকার অফিসে ৩০+ দিন সময় লাগতে পারে।"
+    }
+  },
+  Sweden: {
+    academic_certificates: {
+      days: "10-15 days",
+      alertEn: "⚠️ High-resolution original color PDF scans must be uploaded to UniversityAdmissions.se. Ensure you get these ready 15 days before the submission deadline.",
+      alertBn: "⚠️ সুইডেন আবেদনের জন্য মূল মার্কশিট ও সনদের রঙিন হাই-রেজোলিউশন পিডিএফ স্ক্যান সাবমিট করতে হবে। ডেডলাইনের ১৫ দিন আগেই প্রস্তুত রাখুন।"
+    },
+    sweden_financials: {
+      days: "90 days",
+      alertEn: "⚠️ Sweden inspects personal funding origins. Keep the SEK 103,140 in your personal bank account untouched for 90 days to avoid instant rejection.",
+      alertBn: "⚠️ সুইডিশ মাইগ্রেশন বোর্ড হুট করে জমা দেওয়া বড় অ্যামাউন্ট সন্দেহ করে। কমপক্ষে ৯০ দিন ব্যাংকে টাকা স্থির রাখুন।"
+    }
+  },
+  Finland: {
+    academic_certificates: {
+      days: "15-20 days",
+      alertEn: "⚠️ Finland requires your academic certificates legalized by the Bangladesh Foreign Ministry (MoFA) before submitting student permit files.",
+      alertBn: "⚠️ ফিনল্যান্ডের রেসিডেন্স পারমিট আবেদনের জন্য একাডেমিক পেপারস বাংলাদেশ পররাষ্ট্র মন্ত্রণালয় (MoFA) থেকে সত্যায়িত হওয়া বাধ্যতামূলক।"
+    },
+    finland_financials: {
+      days: "30-60 days",
+      alertEn: "⚠️ Sponsor balance (€9,600) must remain strictly inside student's personal individual bank account (no joint accounts allowed). Keep funds matured for 30-60 days.",
+      alertBn: "⚠️ স্পন্সর ব্যালেন্স অবশ্যই শিক্ষার্থীর একক ব্যক্তিগত অ্যাকাউন্টে থাকতে হবে (যৌথ অ্যাকাউন্ট গ্রহণযোগ্য নয়)। অন্তত ৩০-৬০ দিন টাকা রাখুন।"
+    }
+  },
+  Poland: {
+    academic_certificates: {
+      days: "30-45 days",
+      alertEn: "⚠️ Poland student documents require super-legalization/Apostille. Since Poland has no active student visa office in Dhaka, you must send certificates to New Delhi (30-45 days).",
+      alertBn: "⚠️ পোল্যান্ডের জন্য অ্যাপোস্টিল বা সুপার-লিগালাইজেশন প্রয়োজন। ঢাকায় দূতাবাস না থাকায় এটি দিল্লি পাঠিয়ে করাতে হয় (৩০-৪৫ দিন সময় লাগে)।"
+    },
+    poland_financials: {
+      days: "30-45 days",
+      alertEn: "⚠️ Poland requires first-year tuition paid upfront, plus secure double-entry Indian visa to attend interview in New Delhi. Allow 30-45 days for Indian visa.",
+      alertBn: "⚠️ পোল্যান্ডে প্রথম বছরের টিউশন ফি আগেই দিতে হয় এবং দিল্লিতে ইন্টারভিউ দেওয়ার জন্য ভারতের ডাবল-এন্ট্রি ভিসা রেডি করতে ৩০-৪৫ দিন সময় লাগে।"
+    }
+  }
+};
+
 export default function App() {
   // --- States ---
   const [user, setUser] = useState<User | null>(null);
@@ -386,6 +442,7 @@ export default function App() {
     }
   });
   const [checklistFilter, setChecklistFilter] = useState<"all" | "mandatory" | "financial" | "academic" | "optional">("all");
+  const [targetIntake, setTargetIntake] = useState<string>("october_2026");
   const [showMobileSessions, setShowMobileSessions] = useState(false);
   const [showMobileTemplates, setShowMobileTemplates] = useState(false);
 
@@ -3433,7 +3490,16 @@ But I can tell you that for ${profile.targetCountry} higher study:
 
                     const formattedDesc = formatText(docItem.descEn);
                     const descLines = doc.splitTextToSize(formattedDesc, contentWidth - 25);
-                    const itemHeight = 6 + (descLines.length * 4.2) + 3;
+                    
+                    const deadlineAlert = ATTESTATION_DEADLINES[profile.targetCountry]?.[docItem.id];
+                    let extraHeight = 0;
+                    let alertLines: string[] = [];
+                    if (deadlineAlert) {
+                      alertLines = doc.splitTextToSize(`ATTESTATION WARNING: ${deadlineAlert.alertEn}`, contentWidth - 25);
+                      extraHeight = (alertLines.length * 3.8) + 2;
+                    }
+
+                    const itemHeight = 6 + (descLines.length * 4.2) + extraHeight + 3;
 
                     checkPageSpace(itemHeight);
 
@@ -3466,6 +3532,19 @@ But I can tell you that for ${profile.targetCountry} higher study:
                       doc.text(line, margin + 20, y);
                       y += 4.2;
                     });
+
+                    // Draw Attestation Alert if present
+                    if (deadlineAlert) {
+                      y += 1;
+                      doc.setFont("helvetica", "bold");
+                      doc.setFontSize(7.5);
+                      doc.setTextColor(180, 83, 9); // Amber-700
+                      
+                      alertLines.forEach((line: string) => {
+                        doc.text(line, margin + 20, y);
+                        y += 3.8;
+                      });
+                    }
 
                     y += 3; // Space after item
                   };
@@ -3683,6 +3762,92 @@ But I can tell you that for ${profile.targetCountry} higher study:
                     </div>
                   </div>
 
+                  {/* Interactive Attestation & Submission Timeline Planner */}
+                  <div className="bg-amber-50/40 border border-amber-200/70 rounded-3xl p-5 md:p-6 shadow-sm space-y-4">
+                    <div className="flex items-center justify-between flex-wrap gap-4 pb-3 border-b border-amber-100">
+                      <div className="flex items-center gap-2">
+                        <Clock className="h-5 w-5 text-amber-600 animate-pulse" />
+                        <div>
+                          <h4 className="font-display font-bold text-xs text-slate-950 uppercase tracking-wider">
+                            {language === "bn" ? "ইন্টারেক্টিভ লিগালাইজেশন ও ডেডলাইন প্ল্যানার" : "Interactive Attestation & Submission Timeline Planner"}
+                          </h4>
+                          <p className="text-[10px] text-slate-500 font-medium mt-0.5">
+                            {language === "bn" ? `টার্গেট দেশ: ${profile.targetCountry} (প্রোফাইল থেকে পরিবর্তনযোগ্য)` : `Target Destination: ${profile.targetCountry} (Syncs with Profile)`}
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center gap-1.5 shrink-0 bg-white px-3 py-1.5 rounded-xl border border-amber-200">
+                        <span className="text-[11px] text-slate-600 font-bold">
+                          {language === "bn" ? "টার্গেট ইনটেক সেমিস্টার:" : "Target Intake:"}
+                        </span>
+                        <select
+                          value={targetIntake}
+                          onChange={(e) => setTargetIntake(e.target.value)}
+                          className="text-xs p-1 rounded-lg bg-transparent font-bold text-slate-800 focus:outline-none cursor-pointer"
+                        >
+                          <option value="october_2026">🍂 Winter Intake (Oct 2026)</option>
+                          <option value="april_2027">🌸 Summer Intake (Apr 2027)</option>
+                          <option value="october_2027">🍂 Winter Intake (Oct 2027)</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    {/* Calculated Dates Timeline */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <div className="p-4 bg-white rounded-2xl border border-amber-100 flex flex-col justify-between space-y-1">
+                        <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-amber-700 block mb-1">
+                          {language === "bn" ? "১. বোর্ড ও পররাষ্ট্র মন্ত্রণালয় (MoFA) সত্যায়ন" : "1. Board & MoFA Attestation"}
+                        </span>
+                        <span className="text-sm font-extrabold text-amber-900 font-mono block">
+                          {targetIntake === "october_2026" ? "June 15, 2026" : targetIntake === "april_2027" ? "December 15, 2026" : "June 15, 2027"}
+                        </span>
+                        <p className="text-[11px] text-slate-500 leading-normal pt-1 border-t border-slate-50 mt-1">
+                          {language === "bn" 
+                            ? "সনদপত্র বোর্ড, শিক্ষা এবং পররাষ্ট্র মন্ত্রণালয় থেকে সত্যায়ন করার প্রস্তাবিত শেষ সময়।" 
+                            : "Physical attestation stamps must be processed through Dhaka Board & MoFA before this."}
+                        </p>
+                      </div>
+
+                      <div className="p-4 bg-white rounded-2xl border border-amber-100 flex flex-col justify-between space-y-1">
+                        <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-amber-700 block mb-1">
+                          {language === "bn" ? "২. ব্লকড অ্যাকাউন্ট / আর্থিক ব্যালেন্স" : "2. Funds Setup & Transfer"}
+                        </span>
+                        <span className="text-sm font-extrabold text-amber-900 font-mono block">
+                          {targetIntake === "october_2026" ? "July 01, 2026" : targetIntake === "april_2027" ? "January 15, 2027" : "July 01, 2027"}
+                        </span>
+                        <p className="text-[11px] text-slate-500 leading-normal pt-1 border-t border-slate-50 mt-1">
+                          {language === "bn" 
+                            ? "ব্যাংক স্টেটমেন্ট ম্যাচিউর করা বা ব্লকড অ্যাকাউন্ট ফান্ড হস্তান্তরের চূড়ান্ত সময়।" 
+                            : "Complete bank deposit transfers or let sponsor savings mature in full."}
+                        </p>
+                      </div>
+
+                      <div className="p-4 bg-white rounded-2xl border border-amber-100 flex flex-col justify-between space-y-1">
+                        <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-amber-700 block mb-1">
+                          {language === "bn" ? "৩. ভিসা ইন্টারভিউ ও স্লট সাবমিশন" : "3. Dhaka Visa Submission"}
+                        </span>
+                        <span className="text-sm font-extrabold text-amber-900 font-mono block">
+                          {targetIntake === "october_2026" ? "August 01, 2026" : targetIntake === "april_2027" ? "February 01, 2027" : "August 01, 2027"}
+                        </span>
+                        <p className="text-[11px] text-slate-500 leading-normal pt-1 border-t border-slate-50 mt-1">
+                          {language === "bn" 
+                            ? "দূতাবাসে ফাইল জমা দেওয়ার প্রস্তাবিত সময় যাতে ক্লাস শুরুর আগেই ভিসা হাতে পান।" 
+                            : "Submit your final visa paperwork to avoid missing your class start date."}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-2 text-[11px] text-amber-800 bg-amber-500/5 p-3 rounded-xl border border-amber-200/30">
+                      <Info className="h-4 w-4 mt-0.5 shrink-0 text-amber-600" />
+                      <p className="leading-relaxed">
+                        {language === "bn"
+                          ? `সতর্কতা: ${profile.targetCountry} এর জন্য উপরোক্ত ডেডলাইনগুলো ঢাকা দূতাবাসের ফাইল জট এবং প্রসেসিং টাইমের গড় হিসেব অনুযায়ী নির্ধারণ করা হয়েছে। নির্দিষ্ট সময়ে কাজ শেষ করার চেষ্টা করুন।`
+                          : `Timeline Note: These recommended attestation and deposit deadlines for ${profile.targetCountry} take Dhaka visa backlogs into account. Proceeding with these avoids late entry rejections.`}
+                      </p>
+                    </div>
+                  </div>
+
                   {/* Main Checklist Card and Filters */}
                   <div className="bg-white border border-slate-200/80 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-slate-100">
@@ -3790,6 +3955,18 @@ But I can tell you that for ${profile.targetCountry} higher study:
                               <p className="text-[10px] text-slate-400 italic">
                                 {language === "bn" ? `En: ${formatText(docItem.descEn)}` : `বাংলা: ${formatText(docItem.descBn)}`}
                               </p>
+
+                              {/* Country Specific Deadline Attestation Warning */}
+                              {ATTESTATION_DEADLINES[profile.targetCountry]?.[docItem.id] && (
+                                <div className="mt-2.5 p-2 rounded-lg bg-amber-500/5 border border-amber-200/40 text-[10.5px] text-amber-800 font-semibold flex items-center gap-1.5 leading-snug">
+                                  <Clock className="h-3.5 w-3.5 text-amber-600 shrink-0 animate-pulse" />
+                                  <span>
+                                    {language === "bn" 
+                                      ? ATTESTATION_DEADLINES[profile.targetCountry][docItem.id].alertBn 
+                                      : ATTESTATION_DEADLINES[profile.targetCountry][docItem.id].alertEn}
+                                  </span>
+                                </div>
+                              )}
                             </div>
                           </div>
                         );
