@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  --color-brand-primary: #7c3aed; /* Violet 600 */
+  --color-brand-secondary: #4f46e5; /* Indigo 600 */
+
+  --font-weight-medium: 500;
+  --font-weight-semibold: 500;
+  --font-weight-bold: 500;
+  --font-weight-extrabold: 500;
+  --font-weight-black: 500;
+}
+
+/* Custom global styles for smooth scrolls and scrollbars */
+html, body {
+  font-family: var(--font-sans);
+  background-color: #f8fafc; /* Slate 50 */
+}
+
+/* Default all body elements and text elements to Regular (400) */
+body, p, span, li, input, textarea, select, button, td, div {
+  font-weight: 400;
+}
+
+/* Ensure all headers, bold tags, table headers, and emphasis classes strictly use Medium (500) weight */
+h1, h2, h3, h4, h5, h6, th, strong, b, 
+.font-medium, .font-semibold, .font-bold, .font-extrabold, .font-black {
+  font-weight: 500 !important;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Global Academy Hub",
+  "description": "Your consultancy command hub for Schengen higher education, offering customized university recommendations, visa suitability reports, and automated interactive prep.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
