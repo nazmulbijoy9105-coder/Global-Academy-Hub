@@ -11,7 +11,7 @@ import {
   HelpCircle, GraduationCap, DollarSign, Calendar, ChevronDown, Info,
   Facebook, Instagram, Youtube, Twitter, Linkedin,
   LogOut, Download, Phone, Mail, Award, Loader2, Send, Plus, Trash2, Edit3, Check, Copy, MessageCircle,
-  Mic, Square, Play, Volume2, Clock, BookOpen, RefreshCw, FileText, Filter, Search, X, Shield, Users
+  Mic, Square, Play, Volume2, Clock, BookOpen, RefreshCw, FileText, Filter, Search, X, Shield, Users, Bot
 } from "lucide-react";
 import { User, Conversation, Message, Payment, ServiceTier, StudentProfile } from "./types";
 import AuthModal from "./components/AuthModal";
@@ -606,7 +606,7 @@ export default function App() {
         {
           id: "msg-welcome",
           role: "assistant",
-          content: "Assalamu Alaikum! Welcome to Global Academy Hub. I am Peopole AI, your dedicated Europe study and visa expert.\n\nI can help you shortlist universities, estimate blocked accounts, format SOPs, and prepare for interviews. \n\nHow can I help you take your first step towards Europe today?",
+          content: "Assalamu Alaikum! Welcome to Global Academy Hub. I am Global Academy Hub AI, your dedicated Europe study and visa expert.\n\nI can help you shortlist universities, estimate blocked accounts, format SOPs, and prepare for interviews. \n\nHow can I help you take your first step towards Europe today?",
           timestamp: Date.now()
         }
       ],
@@ -1619,32 +1619,32 @@ But I can tell you that for ${profile.targetCountry} higher study:
       <div className="flex-1 flex flex-col md:flex-row md:overflow-hidden max-w-[1600px] w-full mx-auto">
         
         {/* Navigation Sidebar */}
-        <aside className="w-full md:w-60 bg-white border-b md:border-b-0 md:border-r border-slate-200 p-2 md:p-3 flex flex-row md:flex-col gap-1 overflow-x-auto shrink-0 md:sticky md:top-14 md:h-[calc(100vh-56px)] scrollbar-none">
-          <div className="hidden md:block text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2 px-3">
-            Navigation Menu
+        <aside className="w-full md:w-64 bg-slate-50/40 border-b md:border-b-0 md:border-r border-slate-200 p-3 md:p-4 flex flex-row md:flex-col gap-1.5 overflow-x-auto shrink-0 md:sticky md:top-14 md:h-[calc(100vh-56px)] scrollbar-none">
+          <div className="hidden md:block text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em] mb-3 px-3">
+            Core Navigation
           </div>
           
           <button
             onClick={() => setActiveTab("chat")}
-            className={`flex items-center gap-2.5 px-3 py-2 rounded text-[11px] font-medium tracking-wider uppercase shrink-0 transition-all ${
+            className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-wide uppercase shrink-0 transition-all duration-200 ${
               activeTab === "chat" 
-                ? "bg-violet-50 text-violet-600 border-l-2 border-violet-600 font-bold" 
-                : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
+                ? "bg-violet-600 text-white shadow-lg shadow-violet-100 font-bold translate-x-1" 
+                : "text-slate-500 hover:text-slate-900 hover:bg-white hover:shadow-sm"
             }`}
           >
-            <MessageSquare className="w-3.5 h-3.5" />
+            <MessageSquare className="w-4 h-4" />
             AI Consultancy Chat
           </button>
 
           <button
             onClick={() => setActiveTab("channels")}
-            className={`flex items-center gap-2.5 px-3 py-2 rounded text-[11px] font-medium tracking-wider uppercase shrink-0 transition-all ${
+            className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-wide uppercase shrink-0 transition-all duration-200 ${
               activeTab === "channels" 
-                ? "bg-violet-50 text-violet-600 border-l-2 border-violet-600 font-bold" 
-                : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
+                ? "bg-violet-600 text-white shadow-lg shadow-violet-100 font-bold translate-x-1" 
+                : "text-slate-500 hover:text-slate-900 hover:bg-white hover:shadow-sm"
             }`}
           >
-            <MessageCircle className="w-3.5 h-3.5" />
+            <MessageCircle className="w-4 h-4" />
             WhatsApp & Messenger
           </button>
 
@@ -1841,16 +1841,22 @@ But I can tell you that for ${profile.targetCountry} higher study:
                 </div>
 
                 {/* Main Advisory chat container */}
-                <div className="lg:col-span-6 bg-white border border-slate-200/80 rounded-3xl shadow-sm flex flex-col h-[550px] overflow-hidden">
-                  <div className="px-5 py-3.5 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center shrink-0">
-                    <div className="flex items-center gap-3">
-                      <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                <div className="lg:col-span-6 bg-white border border-slate-200 shadow-xl shadow-slate-100 rounded-[2rem] flex flex-col h-[650px] overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-violet-50">
+                  <div className="px-6 py-4.5 border-b border-slate-100 bg-white flex justify-between items-center shrink-0">
+                    <div className="flex items-center gap-3.5">
+                      <div className="relative">
+                        <div className="w-10 h-10 rounded-full bg-violet-100 flex items-center justify-center text-violet-600 border border-violet-200">
+                          <Bot className="w-5 h-5" />
+                        </div>
+                        <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white animate-pulse" />
+                      </div>
                       <div>
-                        <h3 className="text-xs font-bold text-slate-800">
-                          Peopole AI Specialist
+                        <h3 className="text-[13px] font-bold text-slate-900 tracking-tight">
+                          Global Academy Hub AI
                         </h3>
-                        <p className="text-[10px] text-slate-400">
-                          Active GAH Chatbot • English & বাংলা
+                        <p className="text-[10px] font-semibold text-emerald-600 flex items-center gap-1">
+                          <span className="w-1 h-1 rounded-full bg-emerald-500" />
+                          Online • Study Expert
                         </p>
                       </div>
                     </div>
@@ -1859,18 +1865,18 @@ But I can tell you that for ${profile.targetCountry} higher study:
                       {activeConv && activeConv.messages.length > 0 && (
                         <button
                           onClick={handleDownloadChat}
-                          className="flex items-center gap-1.5 px-2.5 py-1.5 bg-violet-50 hover:bg-violet-100 text-violet-700 rounded-xl text-[11px] font-medium transition-colors"
+                          className="flex items-center gap-2 px-3.5 py-2 bg-slate-50 hover:bg-violet-50 text-slate-600 hover:text-violet-700 rounded-2xl text-[11px] font-bold border border-slate-100 transition-all"
                           title="Download Chat Log as PDF"
                         >
                           <Download className="h-3.5 w-3.5" />
-                          <span>Download Chat</span>
+                          <span>Export PDF</span>
                         </button>
                       )}
                     </div>
                   </div>
 
                   {/* Messages list */}
-                  <div className="flex-1 p-6 overflow-y-auto space-y-4 bg-slate-50/20">
+                  <div className="flex-1 p-6 overflow-y-auto space-y-6 bg-slate-50/30">
                     {activeConv?.messages.map((msg, index) => {
                       const isVoice = !!msg.audioUrl;
                       const isPlaying = playingAudioId === msg.id;
@@ -1882,48 +1888,50 @@ But I can tell you that for ${profile.targetCountry} higher study:
                           className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                         >
                           <div
-                            className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
+                            className={`max-w-[88%] rounded-2xl px-5 py-4 text-sm leading-relaxed ${
                               msg.role === "user"
-                                ? "bg-gradient-to-br from-violet-600 to-indigo-700 text-white shadow-lg border border-violet-500/10"
-                                : "bg-white border border-slate-200/80 text-slate-800 shadow-sm relative group"
+                                ? "bg-violet-600 text-white shadow-lg shadow-violet-100 border border-violet-500 rounded-tr-none"
+                                : "bg-white border border-slate-200 text-slate-800 shadow-sm rounded-tl-none relative group"
                             }`}
                           >
                             {msg.role !== "user" && (
-                              <div className="flex justify-between items-center mb-1.5 border-b border-slate-100 pb-1">
-                                <p className="text-[10px] uppercase tracking-widest font-mono text-violet-600 font-bold">
-                                  GAH AI • Academic Agent
+                              <div className="flex justify-between items-center mb-2.5 border-b border-slate-50 pb-1.5">
+                                <p className="text-[10px] uppercase tracking-widest font-mono text-violet-600 font-bold flex items-center gap-1.5">
+                                  <Shield className="w-2.5 h-2.5" />
+                                  Verified Consultant
                                 </p>
                                 
                                 <button
                                   onClick={() => handleSpeakMessage(msg.id, msg.content)}
-                                  className={`p-1 rounded-md transition-colors flex items-center gap-1 text-[9px] font-mono ${
+                                  className={`p-1.5 rounded-lg transition-all flex items-center gap-1.5 text-[10px] font-bold ${
                                     isSpeaking 
-                                      ? "bg-emerald-50 text-emerald-600 border border-emerald-200 animate-pulse" 
-                                      : "hover:bg-slate-100 text-slate-400 hover:text-slate-600"
+                                      ? "bg-violet-100 text-violet-700 border border-violet-200 animate-pulse" 
+                                      : "hover:bg-slate-50 text-slate-400 hover:text-violet-600 opacity-0 group-hover:opacity-100"
                                   }`}
                                   title="Read Aloud"
                                 >
                                   <Volume2 className={`h-3 w-3 ${isSpeaking ? "animate-bounce" : ""}`} />
-                                  <span>{isSpeaking ? "MUTE" : "READ ALOUD"}</span>
+                                  <span>{isSpeaking ? "STOP" : "VOICE"}</span>
                                 </button>
                               </div>
                             )}
 
                             {isVoice ? (
-                              <div className="space-y-2 py-1">
-                                <div className="flex items-center gap-3.5 bg-violet-50/30 p-2.5 rounded-xl border border-violet-100/50">
+                              <div className="space-y-3 py-1">
+                                <div className={`flex items-center gap-4 p-3 rounded-2xl border ${msg.role === "user" ? "bg-white/10 border-white/20" : "bg-violet-50/50 border-violet-100/50"}`}>
                                   <button
                                     onClick={() => handleToggleAudioMessage(msg.id, msg.audioUrl!)}
-                                    className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${
+                                    className={`w-10 h-10 rounded-full flex items-center justify-center transition-all shrink-0 ${
                                       msg.role === "user"
                                         ? "bg-white text-violet-700 hover:scale-105"
-                                        : "bg-violet-600 text-white hover:bg-violet-700 hover:scale-105 shadow-md"
+                                        : "bg-violet-600 text-white hover:bg-violet-700 hover:scale-105 shadow-md shadow-violet-200"
                                     }`}
                                   >
                                     {isPlaying ? (
                                       <span className="flex gap-1 items-end h-3">
                                         <span className="w-0.5 bg-current animate-bounce h-2" />
                                         <span className="w-0.5 bg-current animate-bounce h-3 delay-100" />
+                                        <span className="w-0.5 bg-current animate-bounce h-2 delay-200" />
                                       </span>
                                     ) : (
                                       <Play className="h-4 w-4 fill-current ml-0.5" />
@@ -1931,21 +1939,21 @@ But I can tell you that for ${profile.targetCountry} higher study:
                                   </button>
 
                                   <div className="flex-1">
-                                    <div className="flex items-center justify-between mb-1">
+                                    <div className="flex items-center justify-between mb-1.5">
                                       <span className={`text-[10px] font-bold uppercase tracking-wider ${msg.role === "user" ? "text-violet-100" : "text-violet-700"}`}>
-                                        🎙️ Voice Memo
+                                        🎙️ Voice Note
                                       </span>
-                                      <span className={`text-[9px] font-mono ${msg.role === "user" ? "text-violet-200" : "text-slate-400"}`}>
+                                      <span className={`text-[9px] font-mono font-bold ${msg.role === "user" ? "text-violet-200" : "text-slate-400"}`}>
                                         {msg.durationSec ? `${msg.durationSec}s` : "0:08"}
                                       </span>
                                     </div>
-                                    <div className="flex items-end gap-0.5 h-4 pt-1">
-                                      {[...Array(16)].map((_, i) => {
-                                        const h = Math.abs(Math.sin((i + 1) * 0.5)) * 100;
+                                    <div className="flex items-end gap-0.5 h-5 pt-1">
+                                      {[...Array(20)].map((_, i) => {
+                                        const h = Math.abs(Math.sin((i + 1) * 0.4)) * 100;
                                         return (
                                           <span
                                             key={i}
-                                            style={{ height: `${Math.max(15, h)}%` }}
+                                            style={{ height: `${Math.max(20, h)}%` }}
                                             className={`w-1 rounded-full transition-all ${msg.role === "user" ? "bg-white/40" : "bg-violet-200"}`}
                                           />
                                         );
@@ -1954,19 +1962,22 @@ But I can tell you that for ${profile.targetCountry} higher study:
                                   </div>
                                 </div>
 
-                                <div className={`p-2 rounded-lg text-xs ${
-                                  msg.role === "user" ? "bg-violet-750/30 text-violet-100" : "bg-slate-50 text-slate-600 border border-slate-100"
+                                <div className={`p-3 rounded-xl text-xs leading-relaxed ${
+                                  msg.role === "user" ? "bg-black/10 text-white/90 border border-white/10" : "bg-slate-50/80 text-slate-600 border border-slate-100"
                                 }`}>
-                                  <span className="font-semibold block text-[10px] uppercase tracking-wider mb-0.5 opacity-80">Transcribed text:</span>
+                                  <div className="flex items-center gap-1.5 mb-1 opacity-70">
+                                    <FileText className="w-3 h-3" />
+                                    <span className="font-bold text-[9px] uppercase tracking-wider">Transcription</span>
+                                  </div>
                                   <p className="italic">"{msg.content}"</p>
                                 </div>
                               </div>
                             ) : (
-                              <p className="whitespace-pre-line text-xs md:text-sm">{msg.content}</p>
+                              <p className="whitespace-pre-line text-[13px] md:text-sm font-medium">{msg.content}</p>
                             )}
 
-                            <div className="flex justify-end mt-1 pt-1">
-                              <span className={`text-[9px] font-mono ${msg.role === "user" ? "text-violet-200" : "text-slate-400"}`}>
+                            <div className="flex justify-end mt-2 pt-1.5 opacity-60">
+                              <span className={`text-[9px] font-bold font-mono tracking-tighter ${msg.role === "user" ? "text-violet-100" : "text-slate-400"}`}>
                                 {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                               </span>
                             </div>
@@ -2002,25 +2013,25 @@ But I can tell you that for ${profile.targetCountry} higher study:
                   )}
 
                   {/* Input controls */}
-                  <div className="p-4 bg-white border-t border-slate-150 shrink-0">
+                  <div className="p-5 bg-white border-t border-slate-100 shrink-0">
                     {isChatRecording ? (
-                      <div className="bg-rose-50/50 border border-rose-100 rounded-2xl p-3 flex items-center justify-between gap-4">
+                      <div className="bg-rose-50/80 border border-rose-100 rounded-[1.5rem] p-4 flex items-center justify-between gap-4 shadow-sm">
                         <div className="flex items-center gap-3">
                           <span className="relative flex h-3.5 w-3.5">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
                             <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-rose-600"></span>
                           </span>
-                          <span className="text-xs font-mono font-bold text-rose-700 uppercase tracking-widest">
-                            Recording ({chatVoiceLanguage === "en" ? "EN" : "BN"})
+                          <span className="text-[10px] font-mono font-bold text-rose-700 uppercase tracking-widest">
+                            Listening ({chatVoiceLanguage === "en" ? "EN" : "BN"})
                           </span>
                         </div>
 
-                        <div className="flex items-center justify-center gap-1.5 font-mono text-xs font-bold text-rose-600">
-                          <Clock className="h-3.5 w-3.5" />
+                        <div className="flex items-center justify-center gap-2 font-mono text-[13px] font-bold text-rose-600">
+                          <Clock className="h-4 w-4" />
                           <span>0:{chatRecordingDuration < 10 ? `0${chatRecordingDuration}` : chatRecordingDuration}</span>
                         </div>
 
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2.5">
                           <button
                             onClick={() => {
                               setIsChatRecording(false);
@@ -2031,14 +2042,14 @@ But I can tell you that for ${profile.targetCountry} higher study:
                               if (chatSpeechRecognitionRef.current) chatSpeechRecognitionRef.current.stop();
                               addToast("Recording canceled.", "info");
                             }}
-                            className="px-3 py-1.5 hover:bg-slate-100 rounded-xl text-slate-500 hover:text-slate-700 text-xs font-semibold"
+                            className="px-4 py-2 hover:bg-white rounded-xl text-slate-500 hover:text-slate-700 text-[11px] font-bold transition-all"
                           >
                             Cancel
                           </button>
 
                           <button
                             onClick={handleStopChatRecording}
-                            className="bg-rose-600 hover:bg-rose-700 text-white px-3.5 py-1.5 rounded-xl text-xs font-bold shadow-md shadow-rose-100 flex items-center gap-1.5 transition-colors"
+                            className="bg-rose-600 hover:bg-rose-700 text-white px-5 py-2 rounded-xl text-[11px] font-bold shadow-lg shadow-rose-200 flex items-center gap-2 transition-all active:scale-95"
                           >
                             <Square className="h-3 w-3 fill-current" />
                             <span>Done & Send</span>
@@ -2046,15 +2057,15 @@ But I can tell you that for ${profile.targetCountry} higher study:
                         </div>
                       </div>
                     ) : (
-                      <div className="flex items-center gap-2">
-                        <div className="flex bg-slate-100 p-0.5 rounded-xl border border-slate-200/40 shrink-0">
+                      <div className="flex items-center gap-3">
+                        <div className="flex bg-slate-100 p-1 rounded-2xl border border-slate-200/60 shrink-0 shadow-inner">
                           <button
                             onClick={() => {
                               setChatVoiceLanguage("en");
                               addToast("Transcription: English", "success");
                             }}
-                            className={`px-2.5 py-1.5 rounded-lg text-[10px] font-bold tracking-wider transition-all uppercase ${
-                              chatVoiceLanguage === "en" ? "bg-white text-violet-700 shadow-sm" : "text-slate-400"
+                            className={`px-3 py-2 rounded-xl text-[10px] font-bold tracking-wider transition-all uppercase ${
+                              chatVoiceLanguage === "en" ? "bg-white text-violet-700 shadow-md" : "text-slate-400 hover:text-slate-600"
                             }`}
                           >
                             🇬🇧 EN
@@ -2064,39 +2075,44 @@ But I can tell you that for ${profile.targetCountry} higher study:
                               setChatVoiceLanguage("bn");
                               addToast("Transcription: Bengali", "success");
                             }}
-                            className={`px-2.5 py-1.5 rounded-lg text-[10px] font-bold tracking-wider transition-all uppercase ${
-                              chatVoiceLanguage === "bn" ? "bg-white text-violet-700 shadow-sm" : "text-slate-400"
+                            className={`px-3 py-2 rounded-xl text-[10px] font-bold tracking-wider transition-all uppercase ${
+                              chatVoiceLanguage === "bn" ? "bg-white text-violet-700 shadow-md" : "text-slate-400 hover:text-slate-600"
                             }`}
                           >
                             🇧🇩 BN
                           </button>
                         </div>
 
-                        <input
-                          type="text"
-                          placeholder={chatVoiceLanguage === "bn" ? "ভিসা প্রসেস, ব্লক অ্যাকাউন্ট বা SOP নিয়ে জিজ্ঞেস করুন..." : "Ask about SOP drafting, university pathways, or block accounts..."}
-                          value={inputMessage}
-                          onChange={(e) => setInputMessage(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter") handleSendMessage(inputMessage);
-                          }}
-                          className="flex-1 bg-slate-50 border border-slate-200/80 rounded-xl px-4 py-3 text-xs md:text-sm focus:ring-2 focus:ring-violet-500/25 outline-none"
-                        />
+                        <div className="flex-1 relative flex items-center group">
+                          <input
+                            type="text"
+                            placeholder={chatVoiceLanguage === "bn" ? "ভিসা প্রসেস বা SOP নিয়ে জিজ্ঞেস করুন..." : "Ask about SOP, pathways, or block accounts..."}
+                            value={inputMessage}
+                            onChange={(e) => setInputMessage(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") handleSendMessage(inputMessage);
+                            }}
+                            className="w-full bg-slate-50/80 border border-slate-200/80 rounded-2xl pl-5 pr-12 py-3.5 text-xs md:text-sm font-medium focus:ring-4 focus:ring-violet-500/10 focus:border-violet-500/50 focus:bg-white transition-all outline-none"
+                          />
+                          <button
+                            onClick={() => handleSendMessage(inputMessage)}
+                            disabled={!inputMessage.trim() || chatLoading}
+                            className={`absolute right-2 p-2 rounded-xl transition-all ${
+                              inputMessage.trim() && !chatLoading
+                                ? "bg-violet-600 text-white shadow-lg shadow-violet-200 hover:scale-105 active:scale-95"
+                                : "bg-slate-200 text-slate-400 opacity-50 cursor-not-allowed"
+                            }`}
+                          >
+                            <Send className="w-4 h-4" />
+                          </button>
+                        </div>
 
                         <button
                           onClick={handleStartChatRecording}
-                          className="p-3 bg-violet-50 hover:bg-violet-100 text-violet-600 rounded-xl shrink-0"
+                          className="p-3.5 bg-slate-50 hover:bg-violet-50 text-slate-400 hover:text-violet-600 rounded-2xl border border-slate-200/60 transition-all active:scale-95 shrink-0"
                           title="Record Voice Note"
                         >
-                          <Mic className="w-4 h-4" />
-                        </button>
-
-                        <button
-                          onClick={() => handleSendMessage(inputMessage)}
-                          disabled={!inputMessage.trim() || chatLoading}
-                          className="bg-violet-600 hover:bg-violet-700 text-white p-3 rounded-xl disabled:opacity-50 shrink-0"
-                        >
-                          <Send className="w-4 h-4" />
+                          <Mic className="w-5 h-5" />
                         </button>
                       </div>
                     )}
@@ -2104,37 +2120,42 @@ But I can tell you that for ${profile.targetCountry} higher study:
                 </div>
 
                 {/* SOP Templates Library */}
-                <div className={`${showMobileTemplates ? "flex" : "hidden lg:flex"} lg:col-span-3 bg-white border border-slate-200/80 rounded-2xl p-4 flex flex-col gap-4 h-[550px] overflow-hidden w-full`}>
-                  <div className="flex flex-col gap-1 pb-2 border-b border-slate-100 shrink-0">
-                    <div className="flex items-center gap-2">
-                      <BookOpen className="h-4.5 w-4.5 text-violet-600" />
-                      <h4 className="font-display font-bold text-xs text-slate-900">SOP Templates Library</h4>
+                <div className={`${showMobileTemplates ? "flex" : "hidden lg:flex"} lg:col-span-3 bg-white border border-slate-200 shadow-sm rounded-[2rem] p-5 flex flex-col gap-5 h-[650px] overflow-hidden w-full`}>
+                  <div className="flex flex-col gap-1.5 pb-3 border-b border-slate-100 shrink-0">
+                    <div className="flex items-center gap-2.5">
+                      <div className="p-2 bg-violet-50 rounded-xl text-violet-600 border border-violet-100">
+                        <BookOpen className="h-5 w-5" />
+                      </div>
+                      <h4 className="font-display font-bold text-[13px] text-slate-900 tracking-tight">SOP Frameworks</h4>
                     </div>
-                    <p className="text-[10px] text-slate-400 leading-normal">
-                      Select and load proven structures based on your field of study to draft with AI.
+                    <p className="text-[11px] text-slate-500 leading-relaxed font-medium">
+                      Proven structures to draft with AI based on your target study field.
                     </p>
                   </div>
 
                   {/* Search and Category Filter */}
-                  <div className="space-y-2 shrink-0">
-                    <input
-                      type="text"
-                      placeholder="Search structures..."
-                      value={searchSopQuery}
-                      onChange={(e) => setSearchSopQuery(e.target.value)}
-                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-[11px] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500/20 bg-slate-50/50"
-                    />
+                  <div className="space-y-3 shrink-0">
+                    <div className="relative group">
+                      <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 group-focus-within:text-violet-500 transition-colors" />
+                      <input
+                        type="text"
+                        placeholder="Search frameworks..."
+                        value={searchSopQuery}
+                        onChange={(e) => setSearchSopQuery(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-2xl text-[11px] font-medium placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-violet-500/10 focus:border-violet-500/50 bg-slate-50/50 transition-all"
+                      />
+                    </div>
 
                     {/* Category pills */}
-                    <div className="flex flex-wrap gap-1">
+                    <div className="flex flex-wrap gap-1.5">
                       {["all", "STEM", "Business", "Humanities", "Creative"].map((cat) => (
                         <button
                           key={cat}
                           onClick={() => setSelectedSopCategory(cat.toLowerCase())}
-                          className={`px-2 py-1 rounded-lg text-[9px] font-bold tracking-wider uppercase transition-all uppercase cursor-pointer ${
+                          className={`px-2.5 py-1.5 rounded-xl text-[9px] font-bold tracking-[0.05em] uppercase transition-all cursor-pointer border ${
                             selectedSopCategory === cat.toLowerCase()
-                              ? "bg-violet-600 text-white shadow-sm"
-                              : "bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-200/40"
+                              ? "bg-violet-600 text-white shadow-md shadow-violet-100 border-violet-600"
+                              : "bg-white text-slate-500 hover:text-slate-800 border-slate-200"
                           }`}
                         >
                           {cat}
