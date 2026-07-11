@@ -41,7 +41,7 @@ const PRESETS = {
 };
 
 export default function AuthModal({ onClose, onSuccess }: AuthModalProps) {
-  const [tab, setTab] = useState<"email" | "phone" | "google">("email");
+  const [tab, setTab] = useState<"email" | "phone" | "social">("email");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -221,7 +221,7 @@ export default function AuthModal({ onClose, onSuccess }: AuthModalProps) {
       };
 
       localStorage.setItem("user", JSON.stringify(loggedUser));
-      setSuccessMsg("Google OAuth connected successfully!");
+      setSuccessMsg("Account sync connected successfully!");
       setTimeout(() => {
         onSuccess(loggedUser);
         onClose();
@@ -282,7 +282,7 @@ export default function AuthModal({ onClose, onSuccess }: AuthModalProps) {
             }`}
           >
             <Globe className="inline-block h-3.5 w-3.5 mr-1" />
-            Google
+            Social
           </button>
         </div>
 
@@ -526,9 +526,9 @@ export default function AuthModal({ onClose, onSuccess }: AuthModalProps) {
                 <ShieldCheck className="h-8 w-8" />
               </div>
               <div className="space-y-1 max-w-xs mx-auto">
-                <h3 className="font-display font-semibold text-slate-800 text-sm">Instant Google Account Sync</h3>
+                <h3 className="font-display font-semibold text-slate-800 text-sm">Instant Account Sync</h3>
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Connect quickly using your pre-authorized Gmail account for immediate access to reports and chat records.
+                  Connect quickly using your pre-authorized account for immediate access to reports and chat records.
                 </p>
               </div>
 
@@ -556,7 +556,7 @@ export default function AuthModal({ onClose, onSuccess }: AuthModalProps) {
                     d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                   />
                 </svg>
-                {loading ? "Authenticating..." : "Connect with Google"}
+                {loading ? "Authenticating..." : "Continue with Social"}
               </button>
             </div>
           )}
