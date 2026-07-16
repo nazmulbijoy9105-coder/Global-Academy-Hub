@@ -44,10 +44,21 @@ export interface Payment {
 }
 
 export interface StudentProfile {
-  targetCountry: string;
+  fullName: string;
+  previousDegree: string;
+  previousInstitution?: string;
+  targetCountry: string; // Left for compatibility
+  preferredCountries: string[]; // List of preferred countries
   targetDegree: string;
-  targetSubject: string;
+  targetSubject: string; // Left for compatibility
+  desiredFields: string[]; // List of fields of study
   gpa: string;
-  budget: string; // "low" | "medium" | "high"
   ielts: string;
+  budget: string; // "low" | "medium" | "high"
+  budgetAmount?: string; // Specific budget e.g., "৳10L - ৳12L / year"
+  cvFileName?: string;
+  cvFileSize?: string;
+  cvParsed?: boolean;
+  cvSkills?: string[];
+  lastUpdated?: number;
 }

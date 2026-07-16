@@ -4,6 +4,8 @@ import fs from "fs";
 import { createServer as createViteServer } from "vite";
 import "dotenv/config";
 import { handleChat } from "./src/server/chat";
+import { handleDestinationInfo } from "./src/server/destinationInfo";
+import { handleDestinationAcademic } from "./src/server/destinationAcademic";
 
 async function startServer() {
   const app = express();
@@ -53,6 +55,8 @@ async function startServer() {
 
   // API Routes
   app.post("/api/chat", handleChat);
+  app.post("/api/destination-info", handleDestinationInfo);
+  app.post("/api/destination-academic", handleDestinationAcademic);
 
   // Analytics Endpoints
   app.get("/api/analytics", (req, res) => {

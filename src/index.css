@@ -56,3 +56,64 @@ h1, h2, h3, h4, h5, h6, th, strong, b,
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
+/* Perfect Vector PDF & Print Layout Formatting */
+@media print {
+  /* Hide every background page, modal wrapper, and dashboard element */
+  body * {
+    visibility: hidden;
+  }
+  
+  /* Make only the printable report card container visible */
+  #printable-report, #printable-report * {
+    visibility: visible;
+  }
+  
+  /* Reset layout position to top-left for the printer */
+  #printable-report {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0mm !important;
+    margin: 0mm !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: white !important;
+    color: #0f172a !important;
+  }
+
+  /* Force printers to preserve background shading and accents */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Specific element coloring overrides for clean prints */
+  .bg-slate-50 {
+    background-color: #f8fafc !important;
+  }
+  .bg-violet-50 {
+    background-color: #f5f3ff !important;
+  }
+  .bg-violet-50\/50 {
+    background-color: rgba(245, 243, 255, 0.5) !important;
+  }
+  .bg-slate-900 {
+    background-color: #0f172a !important;
+    color: #ffffff !important;
+  }
+  .text-violet-700 {
+    color: #6d28d9 !important;
+  }
+  .text-violet-400 {
+    color: #a78bfa !important;
+  }
+  
+  /* Hide the modal top header and print triggers during actual print execution */
+  .print\:hidden {
+    display: none !important;
+  }
+}
+

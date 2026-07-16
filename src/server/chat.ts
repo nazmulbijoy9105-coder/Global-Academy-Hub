@@ -43,6 +43,11 @@ export async function handleChat(req: Request, res: Response) {
     }
 
     if (stream) {
+      // Set streaming headers
+      res.setHeader('Content-Type', 'text/event-stream');
+      res.setHeader('Cache-Control', 'no-cache');
+      res.setHeader('Connection', 'keep-alive');
+
       // Handle streaming response
       const reader = response.body?.getReader();
       if (!reader) throw new Error('Response body is not readable');
@@ -63,6 +68,9 @@ export async function handleChat(req: Request, res: Response) {
 
   } catch (err: any) {
     console.error('[Chat Handler Error]', err.message);
+    if (!res.headersSent) {
+      res.setHeader('Content-Type', 'text/event-stream');
+    }
     res.write(`data: ${JSON.stringify({ error: err.message })}\n\n`);
     res.end();
   }
