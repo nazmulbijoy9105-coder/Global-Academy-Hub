@@ -4011,9 +4011,9 @@ But I can tell you that for ${profile.targetCountry} higher study:
                     </p>
                   </div>
 
-                  {/* FAQ Search Bar */}
-                  <div className="max-w-md mx-auto pt-2">
-                    <div className="relative rounded-2xl shadow-xs">
+                  {/* FAQ Search Bar & Sorting */}
+                  <div className="max-w-2xl mx-auto pt-2 flex flex-col md:flex-row gap-3">
+                    <div className="relative flex-1 rounded-2xl shadow-xs">
                       <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
                         <Search className="h-4 w-4 text-slate-400" />
                       </div>
@@ -4022,7 +4022,7 @@ But I can tell you that for ${profile.targetCountry} higher study:
                         value={faqSearchQuery}
                         onChange={(e) => {
                           setFaqSearchQuery(e.target.value);
-                          setExpandedFaq(null);
+                          setExpandedFaqId(null);
                         }}
                         placeholder={language === "bn" ? "প্রশ্ন বা উত্তর খুঁজুন..." : "Search FAQs by question or answer..."}
                         className="block w-full rounded-2xl border border-slate-200/80 bg-white py-2.5 pl-10 pr-10 text-xs text-slate-800 placeholder-slate-400 focus:border-violet-500 focus:ring-1 focus:ring-violet-500/20 focus:outline-hidden transition-all shadow-xs"
@@ -4036,11 +4036,25 @@ But I can tell you that for ${profile.targetCountry} higher study:
                         </button>
                       )}
                     </div>
+
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0">Sort By:</span>
+                      <select
+                        value={faqSortOrder}
+                        onChange={(e) => setFaqSortOrder(e.target.value)}
+                        className="bg-white border border-slate-200/80 rounded-xl px-3 py-2 text-xs font-medium text-slate-700 focus:outline-none focus:border-violet-500 cursor-pointer shadow-xs"
+                      >
+                        <option value="default">{language === "bn" ? "ডিফল্ট" : "Default"}</option>
+                        <option value="az">{language === "bn" ? "অ আ ক খ (A-Z)" : "Alphabetical (A-Z)"}</option>
+                        <option value="za">{language === "bn" ? "খ ক আ অ (Z-A)" : "Alphabetical (Z-A)"}</option>
+                        <option value="popular">{language === "bn" ? "সর্বাধিক পঠিত" : "Most Popular"}</option>
+                      </select>
+                    </div>
                   </div>
                   
                   <div className="max-w-3xl mx-auto space-y-2.5 pt-4">
                     {(() => {
-                      const filteredFaqs = FAQ_ITEMS.filter(faq => {
+                      let filteredFaqs = FAQ_ITEMS.filter(faq => {
                         const query = faqSearchQuery.toLowerCase().trim();
                         if (!query) return true;
                         return (
@@ -4048,6 +4062,15 @@ But I can tell you that for ${profile.targetCountry} higher study:
                           faq.answer.toLowerCase().includes(query)
                         );
                       });
+
+                      // Apply Sorting
+                      if (faqSortOrder === "az") {
+                        filteredFaqs = [...filteredFaqs].sort((a, b) => a.question.localeCompare(b.question));
+                      } else if (faqSortOrder === "za") {
+                        filteredFaqs = [...filteredFaqs].sort((a, b) => b.question.localeCompare(a.question));
+                      } else if (faqSortOrder === "popular") {
+                        filteredFaqs = [...filteredFaqs].sort((a, b) => (b.views || 0) - (a.views || 0));
+                      }
 
                       if (filteredFaqs.length === 0) {
                         return (
@@ -4063,17 +4086,20 @@ But I can tell you that for ${profile.targetCountry} higher study:
                         );
                       }
 
-                      return filteredFaqs.map((faq, idx) => {
-                        const isExpanded = expandedFaq === idx;
+                      return filteredFaqs.map((faq) => {
+                        const isExpanded = expandedFaqId === faq.id;
                         return (
-                          <div key={idx} className="bg-white border border-slate-200/60 rounded-xl overflow-hidden shadow-xs hover:border-slate-300/80 transition-all">
+                          <div key={faq.id} className="bg-white border border-slate-200/60 rounded-xl overflow-hidden shadow-xs hover:border-slate-300/80 transition-all">
                             <button
-                              onClick={() => setExpandedFaq(isExpanded ? null : idx)}
+                              onClick={() => setExpandedFaqId(isExpanded ? null : faq.id)}
                               className="w-full text-left px-5 py-3.5 flex items-center justify-between gap-4 hover:bg-slate-50/40 cursor-pointer"
                             >
-                              <span className="text-xs font-medium text-slate-800 leading-snug">
-                                {faq.question}
-                              </span>
+                              <div className="flex flex-col gap-1">
+                                <span className="text-[9px] font-bold text-violet-600 uppercase tracking-widest">{faq.category}</span>
+                                <span className="text-xs font-medium text-slate-800 leading-snug">
+                                  {faq.question}
+                                </span>
+                              </div>
                               <span className="shrink-0 p-1 bg-slate-50 rounded-lg text-slate-400">
                                 <ChevronDown className={`h-4 w-4 transform transition-transform duration-200 ${isExpanded ? "rotate-180 text-violet-600" : ""}`} />
                               </span>
@@ -4090,12 +4116,15 @@ But I can tell you that for ${profile.targetCountry} higher study:
                                     <p className="text-xs text-slate-600 leading-relaxed">
                                       {faq.answer}
                                     </p>
-                                    <div className="flex justify-end">
+                                    <div className="flex items-center justify-between">
+                                      <span className="text-[9px] text-slate-400 font-medium">
+                                        {faq.views?.toLocaleString()} views • Schengen Advisor Verified
+                                      </span>
                                       <button
-                                        onClick={() => handleCopyFaq(faq.answer, idx)}
+                                        onClick={() => handleCopyFaq(faq.answer, faq.id)}
                                         className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white border border-slate-200/60 rounded-lg text-[10px] font-medium text-slate-600 hover:bg-slate-50 cursor-pointer transition-colors"
                                       >
-                                        {copiedFaqIdx === idx ? "Copied!" : "Copy Answer"}
+                                        {copiedFaqId === faq.id ? "Copied!" : "Copy Answer"}
                                       </button>
                                     </div>
                                   </div>
