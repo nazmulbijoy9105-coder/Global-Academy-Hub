@@ -29,28 +29,46 @@ const QUICK_QUESTIONS = [
 
 const FAQ_ITEMS = [
   {
+    id: "blocked-account",
     question: "What is a German Blocked Account (Sperrkonto) and how does it work?",
-    answer: "A blocked account is a mandatory special bank account for the German student visa. You must deposit €11,904 (required for the current academic years) to prove you can cover your living costs. Each month, €992 is released to your standard bank account once you arrive in Germany."
+    answer: "A blocked account is a mandatory special bank account for the German student visa. You must deposit €11,904 (required for the current academic years) to prove you can cover your living costs. Each month, €992 is released to your standard bank account once you arrive in Germany.",
+    views: 1850,
+    category: "Finance"
   },
   {
+    id: "visa-requirements",
     question: "What are the general visa requirements for Schengen countries?",
-    answer: "The key requirements include: (1) An official university Admission Letter, (2) Proof of sufficient financial funds (e.g. Blocked account, scholarships, or sponsor), (3) Valid travel and health insurance, (4) Academic transcripts/certificates, (5) English proficiency proof (IELTS or Medium of Instruction), and (6) A well-structured Statement of Purpose (SOP)."
+    answer: "The key requirements include: (1) An official university Admission Letter, (2) Proof of sufficient financial funds (e.g. Blocked account, scholarships, or sponsor), (3) Valid travel and health insurance, (4) Academic transcripts/certificates, (5) English proficiency proof (IELTS or Medium of Instruction), and (6) A well-structured Statement of Purpose (SOP).",
+    views: 1420,
+    category: "Visa Requirements"
   },
   {
+    id: "processing-times",
     question: "How long does student visa processing take from Bangladesh?",
-    answer: "Visa processing times vary: Germany takes 6 to 12 weeks (requires physical interview at the Embassy in Dhaka). Sweden takes 4 to 8 weeks (processed online via the Swedish Migration Agency, biometric collection required). Finland/Estonia takes 4 to 6 weeks. Always begin applications at least 3 months in advance."
+    answer: "Visa processing times vary: Germany takes 6 to 12 weeks (requires physical interview at the Embassy in Dhaka). Sweden takes 4 to 8 weeks (processed online via the Swedish Migration Agency, biometric collection required). Finland/Estonia takes 4 to 6 weeks. Always begin applications at least 3 months in advance.",
+    views: 2150,
+    category: "Timeline"
   },
   {
+    id: "ielts-vs-moi",
     question: "Is IELTS mandatory or is a Medium of Instruction (MOI) certificate sufficient?",
-    answer: "While some universities accept an MOI if your Bachelor's degree was fully taught in English, major Schengen Embassies (specifically Germany, Sweden, and Denmark) strongly prefer or require an official IELTS score (minimum 6.0 or 6.5) to issue visas. Having an IELTS score significantly boosts your success rate."
+    answer: "While some universities accept an MOI if your Bachelor's degree was fully taught in English, major Schengen Embassies (specifically Germany, Sweden, and Denmark) strongly prefer or require an official IELTS score (minimum 6.0 or 6.5) to issue visas. Having an IELTS score significantly boosts your success rate.",
+    views: 1980,
+    category: "Academic Requirements"
   },
   {
+    id: "part-time-work",
     question: "Can I work part-time while studying in Europe?",
-    answer: "Yes, international students are legally permitted to work part-time: Germany allows 140 full days or 280 half days per year. Sweden has no official hourly cap, but maintaining studies is required (20 hours/week is typical). Most other Schengen states permit up to 20 hours per week."
+    answer: "Yes, international students are legally permitted to work part-time: Germany allows 140 full days or 280 half days per year. Sweden has no official hourly cap, but maintaining studies is required (20 hours/week is typical). Most other Schengen states permit up to 20 hours per week.",
+    views: 1350,
+    category: "Student Life"
   },
   {
+    id: "interview-prep",
     question: "What questions should I expect in the German/Schengen visa interview?",
-    answer: "Embassies focus on: (1) Your specific reasons for choosing Europe instead of Bangladesh, (2) Your knowledge about your course modules and selected university, (3) Your funding plan (how you will support your studies), and (4) Your future career plans. Speak clearly and confidently in English."
+    answer: "Embassies focus on: (1) Your specific reasons for choosing Europe instead of Bangladesh, (2) Your knowledge about your course modules and selected university, (3) Your funding plan (how you will support your studies), and (4) Your future career plans. Speak clearly and confidently in English.",
+    views: 2450,
+    category: "Interview Preparation"
   }
 ];
 
@@ -433,6 +451,159 @@ export default function App() {
   });
   const [isEditingProfile, setIsEditingProfile] = useState(false);
 
+  // --- Email Alerts State & Handlers ---
+  const [emailAlerts, setEmailAlerts] = useState<Record<string, boolean>>({});
+  const [emailAlertEmails, setEmailAlertEmails] = useState<Record<string, string>>({});
+  const [emailAlertInputVal, setEmailAlertInputVal] = useState<string>("");
+  const [emailAlertLogs, setEmailAlertLogs] = useState<any[]>([]);
+  const [emailSubscriptions, setEmailSubscriptions] = useState<any[]>([]);
+
+  // Initialize email alert input value when user changes or loads
+  useEffect(() => {
+    if (user?.email) {
+      setEmailAlertInputVal(user.email);
+    } else {
+      setEmailAlertInputVal("student@globalacademyhub.com"); // default for testing/demo
+    }
+  }, [user]);
+
+  // Sync data on load and whenever tab switches to checklist
+  useEffect(() => {
+    fetchEmailAlertData();
+  }, [activeTab]);
+
+  const fetchEmailAlertData = async () => {
+    try {
+      const subRes = await fetch("/api/email-alerts/subscriptions");
+      if (subRes.ok) {
+        const subs = await subRes.json();
+        setEmailSubscriptions(subs);
+        
+        const activeAlerts: Record<string, boolean> = {};
+        const activeEmails: Record<string, string> = {};
+        subs.forEach((s: any) => {
+          activeAlerts[s.docId] = true;
+          activeEmails[s.docId] = s.email;
+        });
+        setEmailAlerts(activeAlerts);
+        setEmailAlertEmails(activeEmails);
+      }
+
+      const logRes = await fetch("/api/email-alerts/logs");
+      if (logRes.ok) {
+        const logs = await logRes.json();
+        setEmailAlertLogs(logs);
+      }
+    } catch (e) {
+      console.error("Error fetching email alert data:", e);
+    }
+  };
+
+  const handleToggleEmailAlert = async (docItem: any, deadlineInfo: any) => {
+    const isCurrentlyEnabled = emailAlerts[docItem.id];
+    
+    // If we're enabling, we need an email address.
+    const emailToUse = emailAlertEmails[docItem.id] || emailAlertInputVal;
+
+    if (!isCurrentlyEnabled && !emailToUse) {
+      addToast(language === "bn" ? "দয়া করে একটি সঠিক ইমেইল এড্রেস প্রদান করুন।" : "Please enter a valid email address.", "error");
+      setEmailAlerts(prev => ({ ...prev, [docItem.id]: true }));
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/email-alerts/toggle", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: emailToUse,
+          docId: docItem.id,
+          enabled: !isCurrentlyEnabled,
+          docTitle: docItem.titleEn,
+          docTitleBn: docItem.titleBn,
+          country: profile.targetCountry,
+          days: deadlineInfo.days,
+          alertEn: deadlineInfo.alertEn,
+          alertBn: deadlineInfo.alertBn
+        })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        addToast(data.message, "success");
+        fetchEmailAlertData();
+      } else {
+        addToast(language === "bn" ? "এলার্ট আপডেট করতে সমস্যা হয়েছে।" : "Failed to update email alert.", "error");
+      }
+    } catch (e) {
+      console.error(e);
+      addToast(language === "bn" ? "সার্ভার কানেকশন এরর।" : "Server connection error.", "error");
+    }
+  };
+
+  const handleEmailAlertAddressChange = (docId: string, value: string) => {
+    setEmailAlertInputVal(value);
+    setEmailAlertEmails(prev => ({ ...prev, [docId]: value }));
+  };
+
+  const handleSaveEmailAlertAddress = async (docItem: any, deadlineInfo: any) => {
+    const emailToUse = emailAlertEmails[docItem.id] || emailAlertInputVal;
+    if (!emailToUse || !emailToUse.includes("@")) {
+      addToast(language === "bn" ? "দয়া করে একটি সঠিক ইমেইল এড্রেস প্রদান করুন।" : "Please enter a valid email address.", "error");
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/email-alerts/toggle", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: emailToUse,
+          docId: docItem.id,
+          enabled: true,
+          docTitle: docItem.titleEn,
+          docTitleBn: docItem.titleBn,
+          country: profile.targetCountry,
+          days: deadlineInfo.days,
+          alertEn: deadlineInfo.alertEn,
+          alertBn: deadlineInfo.alertBn
+        })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        addToast(data.message, "success");
+        fetchEmailAlertData();
+      } else {
+        addToast("Failed to save email address.", "error");
+      }
+    } catch (e) {
+      console.error(e);
+      addToast("Server error.", "error");
+    }
+  };
+
+  const handleTriggerTestEmail = async (docId: string, email: string) => {
+    try {
+      const res = await fetch("/api/email-alerts/test", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ docId, email })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        addToast(data.message, "success");
+        fetchEmailAlertData();
+      } else {
+        addToast("Failed to trigger test email.", "error");
+      }
+    } catch (e) {
+      console.error(e);
+      addToast("Server connection error during test email dispatch.", "error");
+    }
+  };
+
   // --- Visa intelligence and Destination Info States ---
   const [selectedDestinationCountry, setSelectedDestinationCountry] = useState<string>("");
   const [destinationInfoCache, setDestinationInfoCache] = useState<Record<string, { text: string; sources: { title: string; url: string }[] }>>({});
@@ -646,9 +817,10 @@ export default function App() {
   const [cvIsScanning, setCvIsScanning] = useState(false);
   const [cvScanProgress, setCvScanProgress] = useState(0);
   const [cvScanStep, setCvScanStep] = useState("");
-  const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
+  const [expandedFaqId, setExpandedFaqId] = useState<string | null>(null);
   const [faqSearchQuery, setFaqSearchQuery] = useState<string>("");
-  const [copiedFaqIdx, setCopiedFaqIdx] = useState<number | null>(null);
+  const [copiedFaqId, setCopiedFaqId] = useState<string | null>(null);
+  const [faqSortOrder, setFaqSortOrder] = useState<string>("default");
   const [gpaError, setGpaError] = useState<string | null>(null);
   const [ieltsError, setIeltsError] = useState<string | null>(null);
   
@@ -1235,12 +1407,12 @@ But I can tell you that for ${profile.targetCountry} higher study:
     }
   };
 
-  const handleCopyFaq = (text: string, idx: number) => {
+  const handleCopyFaq = (text: string, id: string) => {
     navigator.clipboard.writeText(text).then(() => {
-      setCopiedFaqIdx(idx);
+      setCopiedFaqId(id);
       addToast("Answer copied to clipboard!", "success");
       setTimeout(() => {
-        setCopiedFaqIdx(null);
+        setCopiedFaqId(null);
       }, 2000);
     }).catch(() => {
       addToast("Failed to copy answer.", "error");
@@ -1904,22 +2076,105 @@ But I can tell you that for ${profile.targetCountry} higher study:
         </div>
 
         {/* Global Controls & Auth */}
-        <div className="flex items-center gap-3 md:gap-6">
+        <div className="flex items-center gap-3 md:gap-5">
+          {/* Quick Demo Switcher */}
+          <div className="hidden lg:flex items-center gap-1 bg-slate-100/80 p-1 rounded-full border border-slate-200/60 shadow-xs">
+            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider pl-2.5 pr-1.5 select-none flex items-center gap-1">
+              <Sparkles className="w-2.5 h-2.5 text-violet-500 animate-pulse" />
+              <span>Role Switcher</span>
+            </span>
+            <button 
+              onClick={() => {
+                const loggedUser: User = {
+                  id: "usr-admin",
+                  name: "Elite Advisor (Admin)",
+                  email: "admin@globalacademyhub.com",
+                  phone: "+8801841800841",
+                  method: "email",
+                  avatar: "https://ui-avatars.com/api/?name=Admin&background=10b981&color=fff",
+                  tier: "premium",
+                  role: "admin",
+                  createdAt: Date.now(),
+                };
+                localStorage.setItem("user", JSON.stringify(loggedUser));
+                setUser(loggedUser);
+                addToast("Switched to Admin Dashboard & Advising Mode", "success");
+              }}
+              className={`px-3 py-1 text-[10px] font-bold rounded-full transition-all cursor-pointer ${
+                user?.role === "admin" 
+                  ? "bg-violet-600 text-white shadow-sm shadow-violet-100" 
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
+            >
+              {language === "bn" ? "এডমিন" : "Admin"}
+            </button>
+            <button 
+              onClick={() => {
+                const loggedUser: User = {
+                  id: "usr-student",
+                  name: "IELTS Student",
+                  email: "student@globalacademyhub.com",
+                  phone: "+8801700000001",
+                  method: "email",
+                  avatar: "https://ui-avatars.com/api/?name=Student&background=3b82f6&color=fff",
+                  tier: "structured",
+                  role: "student",
+                  createdAt: Date.now(),
+                };
+                localStorage.setItem("user", JSON.stringify(loggedUser));
+                setUser(loggedUser);
+                addToast("Switched to Student (Structured Tier) View", "success");
+              }}
+              className={`px-3 py-1 text-[10px] font-bold rounded-full transition-all cursor-pointer ${
+                user?.role === "student" 
+                  ? "bg-violet-600 text-white shadow-sm shadow-violet-100" 
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
+            >
+              {language === "bn" ? "স্টুডেন্ট" : "Student"}
+            </button>
+            <button 
+              onClick={() => {
+                const loggedUser: User = {
+                  id: "usr-user",
+                  name: "General Aspirant",
+                  email: "user@globalacademyhub.com",
+                  phone: "+8801700000002",
+                  method: "email",
+                  avatar: "https://ui-avatars.com/api/?name=User&background=6b7280&color=fff",
+                  tier: "free",
+                  role: "user",
+                  createdAt: Date.now(),
+                };
+                localStorage.setItem("user", JSON.stringify(loggedUser));
+                setUser(loggedUser);
+                addToast("Switched to Guest (Free Tier) View", "success");
+              }}
+              className={`px-3 py-1 text-[10px] font-bold rounded-full transition-all cursor-pointer ${
+                user?.role === "user" || !user 
+                  ? "bg-violet-600 text-white shadow-sm shadow-violet-100" 
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
+            >
+              {language === "bn" ? "ফ্রি ইউজার" : "Guest"}
+            </button>
+          </div>
+
           <a
             href="https://wa.me/8801841800841"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden md:flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-md text-[10px] font-semibold hover:bg-emerald-100 transition-colors"
+            className="hidden md:flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-full text-[10px] font-semibold border border-emerald-100/50 hover:bg-emerald-100 hover:border-emerald-200 transition-all shadow-xs"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
             {language === "bn" ? "সহায়তা: +৮৮০ ০১৮৪১৮০০৮৪১" : "Support: +880 01841800841"}
           </a>
 
           {/* Language Switcher */}
-          <div className="flex bg-slate-100 rounded p-0.5 border border-slate-200/60">
+          <div className="flex bg-slate-100 rounded-full p-0.5 border border-slate-200/60 shadow-xs">
             <button 
               onClick={() => { setLanguage("en"); addToast("Switched system language to English", "info"); }}
-              className={`px-2 py-0.5 text-[9px] md:text-[10px] font-semibold rounded transition-all ${
+              className={`px-2.5 py-0.5 text-[9px] md:text-[10px] font-semibold rounded-full transition-all cursor-pointer ${
                 language === "en" ? "bg-white text-violet-750 shadow-xs" : "text-slate-500 hover:text-slate-800"
               }`}
             >
@@ -1927,7 +2182,7 @@ But I can tell you that for ${profile.targetCountry} higher study:
             </button>
             <button 
               onClick={() => { setLanguage("bn"); addToast("বাংলা ভাষায় স্বাগতম!", "info"); }}
-              className={`px-2 py-0.5 text-[9px] md:text-[10px] font-semibold rounded transition-all ${
+              className={`px-2.5 py-0.5 text-[9px] md:text-[10px] font-semibold rounded-full transition-all cursor-pointer ${
                 language === "bn" ? "bg-white text-violet-750 shadow-xs" : "text-slate-500 hover:text-slate-800"
               }`}
             >
@@ -2109,20 +2364,54 @@ But I can tell you that for ${profile.targetCountry} higher study:
           </button>
 
           {/* Interactive Tier Widget */}
-          <div className="hidden md:block mt-auto p-3.5 bg-violet-50/50 border border-violet-100/50 rounded-xl">
-            <p className="text-[9px] uppercase font-mono tracking-widest text-slate-500 mb-0.5">Current Standing</p>
-            <p className="font-display font-semibold text-xs mb-1.5 capitalize text-violet-700">{user ? `${user.tier} Pathway` : "Free Pathway"}</p>
-            <div className="w-full bg-slate-200 h-1 rounded-full mb-1.5">
-              <div 
-                className="bg-violet-500 h-full rounded-full transition-all duration-500" 
-                style={{ width: user?.tier === "free" || !user ? "25%" : user.tier === "entry" ? "50%" : user.tier === "structured" ? "70%" : "95%" }}
-              />
+          <div className="hidden md:block mt-auto p-4 bg-gradient-to-br from-violet-600 to-indigo-700 text-white rounded-2xl shadow-md shadow-violet-100 border border-violet-500/10 relative overflow-hidden group">
+            {/* Absolute background visual accent */}
+            <div className="absolute -right-6 -bottom-6 w-20 h-20 bg-white/10 rounded-full blur-xl group-hover:bg-white/15 transition-all duration-500" />
+            
+            <div className="relative z-10 space-y-2.5">
+              <div className="flex items-center justify-between">
+                <span className="text-[9px] font-mono uppercase tracking-widest text-violet-200 font-bold">
+                  {language === "bn" ? "বর্তমান স্ট্যাটাস" : "Portal Status"}
+                </span>
+                <span className="flex h-2 w-2 relative">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+              </div>
+              
+              <div className="space-y-0.5">
+                <p className="text-[10px] text-violet-100 font-medium">
+                  {user ? user.name : (language === "bn" ? "অতিথি শিক্ষার্থী" : "Guest Student")}
+                </p>
+                <p className="font-display font-black text-sm tracking-wide capitalize text-white flex items-center gap-1">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-pulse shrink-0" />
+                  <span>
+                    {user ? `${user.tier.toUpperCase()} ${language === "bn" ? "পাথওয়ে" : "PATHWAY"}` : (language === "bn" ? "ফ্রি পাথওয়ে" : "FREE PATHWAY")}
+                  </span>
+                </p>
+              </div>
+
+              <div className="space-y-1">
+                <div className="w-full bg-black/20 h-1.5 rounded-full overflow-hidden p-0.5">
+                  <div 
+                    className="bg-gradient-to-r from-amber-300 to-emerald-400 h-full rounded-full transition-all duration-500" 
+                    style={{ width: user?.tier === "free" || !user ? "25%" : user.tier === "entry" ? "50%" : user.tier === "structured" ? "70%" : "95%" }}
+                  />
+                </div>
+                <div className="flex justify-between text-[8px] font-mono text-violet-200">
+                  <span>{language === "bn" ? "যোগ্যতা" : "COMPATIBILITY"}</span>
+                  <span className="font-bold">
+                    {user?.tier === "free" || !user ? "25%" : user.tier === "entry" ? "50%" : user.tier === "structured" ? "75%" : "100%"}
+                  </span>
+                </div>
+              </div>
+
+              <p className="text-[9.5px] leading-relaxed text-violet-100 font-medium opacity-90">
+                {user?.tier === "free" || !user 
+                  ? (language === "bn" ? "প্রোফাইল মূল্যায়ন আনলক করতে প্ল্যান আপগ্রেড করুন।" : "Unlock Suitability Map evaluations by upgrading.")
+                  : (language === "bn" ? "অভিনন্দন! আপনার প্রফেশনাল পাথওয়ে সক্রিয়।" : "Elite visa advising tools fully activated.")}
+              </p>
             </div>
-            <p className="text-[10px] leading-relaxed text-slate-500">
-              {user?.tier === "free" || !user 
-                ? "Unlock suitability Evaluations by upgrading plan."
-                : "Professional pathways active."}
-            </p>
           </div>
         </aside>
 
@@ -3487,134 +3776,220 @@ But I can tell you that for ${profile.targetCountry} higher study:
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="space-y-6"
+                className="space-y-8"
               >
-                <div className="text-center space-y-2 max-w-xl mx-auto mb-4">
-                  <h3 className="font-display text-2xl font-bold text-slate-900">
-                    Our Study Abroad Consultancy Tiers
+                <div className="text-center space-y-2 max-w-xl mx-auto mb-6">
+                  <h3 className="font-display text-2xl font-black text-slate-900 tracking-tight flex items-center justify-center gap-2">
+                    <Sparkles className="w-5 h-5 text-violet-600 animate-pulse" />
+                    <span>Our Study Abroad Consultancy Tiers</span>
                   </h3>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-slate-500 leading-relaxed font-medium">
                     Transparent, value-focused service models crafted specifically for Bangladesh applicants to Schengen Zone universities.
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-6 items-start">
+                <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-6 items-stretch">
                   
                   {/* Free */}
-                  <div className="bg-white border border-slate-200 rounded-2xl p-5 hover:border-violet-300 transition-all space-y-4">
-                    <div className="space-y-1">
-                      <span className="text-[9px] font-mono uppercase tracking-widest text-slate-400 font-bold">Tier 01</span>
-                      <h4 className="font-display font-bold text-base text-slate-800">FREE Pathway</h4>
-                      <p className="text-slate-500 text-[10px]">Unlimited AI chatbot interactions.</p>
+                  <div className="bg-white border border-slate-200/80 rounded-2xl p-6 hover:border-violet-400 hover:shadow-lg hover:shadow-violet-50/50 transition-all duration-300 flex flex-col justify-between space-y-6 group cursor-pointer hover:-translate-y-1">
+                    <div className="space-y-4">
+                      <div className="space-y-1">
+                        <span className="px-2 py-0.5 bg-slate-100 text-slate-500 rounded text-[9px] font-mono tracking-widest uppercase font-bold">Tier 01</span>
+                        <h4 className="font-display font-black text-base text-slate-900 tracking-tight group-hover:text-violet-700 transition-colors">FREE Pathway</h4>
+                        <p className="text-slate-500 text-[10px] leading-relaxed">Unlimited AI chatbot interactions.</p>
+                      </div>
+                      <div className="text-2xl font-display font-black text-slate-900">
+                        ৳0 <span className="text-xs text-slate-400 font-normal">/ forever</span>
+                      </div>
+                      <ul className="space-y-2.5 text-[11px] text-slate-650 font-medium">
+                        <li className="flex items-center gap-2">
+                          <span className="p-0.5 bg-emerald-50 rounded text-emerald-600 border border-emerald-100/50">
+                            <Check className="w-3 h-3" />
+                          </span>
+                          <span>Unlimited AI chat</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <span className="p-0.5 bg-emerald-50 rounded text-emerald-600 border border-emerald-100/50">
+                            <Check className="w-3 h-3" />
+                          </span>
+                          <span>Step-by-step guideline</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <span className="p-0.5 bg-emerald-50 rounded text-emerald-600 border border-emerald-100/50">
+                            <Check className="w-3 h-3" />
+                          </span>
+                          <span>Bangla + English support</span>
+                        </li>
+                      </ul>
                     </div>
-                    <div className="text-2xl font-display font-bold text-slate-900">
-                      ৳0 <span className="text-xs text-slate-400 font-normal">/ forever</span>
-                    </div>
-                    <ul className="space-y-2 text-[11px] text-slate-600">
-                      <li className="flex items-center gap-2">✓ Unlimited AI chat</li>
-                      <li className="flex items-center gap-2">✓ Step-by-step guideline</li>
-                      <li className="flex items-center gap-2">✓ Bangla + English</li>
-                    </ul>
                     <button 
                       onClick={() => { setActiveTab("chat"); addToast("Start chatting!", "info"); }}
-                      className="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl"
+                      className="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition-all active:scale-95 cursor-pointer"
                     >
                       Access Chat
                     </button>
                   </div>
 
                   {/* Entry */}
-                  <div className="bg-white border-2 border-violet-100 rounded-2xl p-5 hover:border-violet-300 transition-all space-y-4 shadow-sm shadow-violet-50 relative">
-                    <span className="absolute -top-3 right-4 px-2 py-0.5 bg-violet-600 text-white rounded-full text-[8px] font-mono tracking-widest uppercase font-bold">
-                      POPULAR PDF
+                  <div className="bg-white border-2 border-violet-500/80 rounded-2xl p-6 hover:shadow-xl hover:shadow-violet-100/50 transition-all duration-300 flex flex-col justify-between space-y-6 relative group cursor-pointer hover:-translate-y-1">
+                    <span className="absolute -top-3 right-4 px-2.5 py-1 bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-full text-[8px] font-mono tracking-widest uppercase font-bold shadow-sm shadow-violet-200">
+                      POPULAR REPORT
                     </span>
-                    <div className="space-y-1">
-                      <span className="text-[9px] font-mono uppercase tracking-widest text-violet-600 font-bold">Tier 02</span>
-                      <h4 className="font-display font-bold text-base text-slate-800">ENTRY-Level</h4>
-                      <p className="text-slate-500 text-[10px]">Instant Suitability Map report.</p>
+                    <div className="space-y-4">
+                      <div className="space-y-1">
+                        <span className="px-2 py-0.5 bg-violet-100 text-violet-700 rounded text-[9px] font-mono tracking-widest uppercase font-bold">Tier 02</span>
+                        <h4 className="font-display font-black text-base text-slate-900 tracking-tight group-hover:text-violet-700 transition-colors">ENTRY-Level</h4>
+                        <p className="text-slate-500 text-[10px] leading-relaxed">Instant Suitability Map report.</p>
+                      </div>
+                      <div className="text-2xl font-display font-black text-slate-900">
+                        ৳30 <span className="text-xs text-slate-400 font-normal">/ instant</span>
+                      </div>
+                      <ul className="space-y-2.5 text-[11px] text-slate-650 font-medium">
+                        <li className="flex items-center gap-2">
+                          <span className="p-0.5 bg-emerald-50 rounded text-emerald-600 border border-emerald-100/50">
+                            <Check className="w-3 h-3" />
+                          </span>
+                          <span>Suitability evaluation</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <span className="p-0.5 bg-emerald-50 rounded text-emerald-600 border border-emerald-100/50">
+                            <Check className="w-3 h-3" />
+                          </span>
+                          <span>University Shortlists Map</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <span className="p-0.5 bg-emerald-50 rounded text-emerald-600 border border-emerald-100/50">
+                            <Check className="w-3 h-3" />
+                          </span>
+                          <span>Downloadable PDF</span>
+                        </li>
+                      </ul>
                     </div>
-                    <div className="text-2xl font-display font-bold text-slate-900">
-                      ৳30 <span className="text-xs text-slate-400 font-normal">/ instant</span>
-                    </div>
-                    <ul className="space-y-2 text-[11px] text-slate-600">
-                      <li className="flex items-center gap-2">✓ Suitability evaluation report</li>
-                      <li className="flex items-center gap-2">✓ University Shortlists Map</li>
-                      <li className="flex items-center gap-2">✓ Instant downloadable PDF</li>
-                    </ul>
                     <button 
                       onClick={() => handleTriggerPayment("entry")}
-                      className="w-full py-2 bg-violet-600 hover:bg-violet-700 text-white text-xs font-bold rounded-xl"
+                      className="w-full py-2.5 bg-gradient-to-r from-violet-600 to-indigo-600 hover:opacity-95 text-white text-xs font-bold rounded-xl shadow-md shadow-violet-200 transition-all active:scale-95 cursor-pointer"
                     >
                       {user?.tier === "entry" ? "View Report" : "Get Report"}
                     </button>
                   </div>
 
                   {/* Structured */}
-                  <div className="bg-white border border-slate-200 rounded-2xl p-5 hover:border-violet-300 transition-all space-y-4">
-                    <div className="space-y-1">
-                      <span className="text-[9px] font-mono uppercase tracking-widest text-slate-400 font-bold">Tier 03</span>
-                      <h4 className="font-display font-bold text-base text-slate-800">STRUCTURED</h4>
-                      <p className="text-slate-500 text-[10px]">AI with human advisor validation.</p>
+                  <div className="bg-white border border-slate-200/80 rounded-2xl p-6 hover:border-violet-400 hover:shadow-lg hover:shadow-violet-50/50 transition-all duration-300 flex flex-col justify-between space-y-6 group cursor-pointer hover:-translate-y-1">
+                    <div className="space-y-4">
+                      <div className="space-y-1">
+                        <span className="px-2 py-0.5 bg-slate-100 text-slate-500 rounded text-[9px] font-mono tracking-widest uppercase font-bold">Tier 03</span>
+                        <h4 className="font-display font-black text-base text-slate-900 tracking-tight group-hover:text-violet-700 transition-colors">STRUCTURED</h4>
+                        <p className="text-slate-500 text-[10px] leading-relaxed">AI with human advisor validation.</p>
+                      </div>
+                      <div className="text-2xl font-display font-black text-slate-900">
+                        ৳100 - ৳500
+                      </div>
+                      <ul className="space-y-2.5 text-[11px] text-slate-650 font-medium">
+                        <li className="flex items-center gap-2">
+                          <span className="p-0.5 bg-emerald-50 rounded text-emerald-600 border border-emerald-100/50">
+                            <Check className="w-3 h-3" />
+                          </span>
+                          <span>Human expert evaluation</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <span className="p-0.5 bg-emerald-50 rounded text-emerald-600 border border-emerald-100/50">
+                            <Check className="w-3 h-3" />
+                          </span>
+                          <span>Admission risk analysis</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <span className="p-0.5 bg-emerald-50 rounded text-emerald-600 border border-emerald-100/50">
+                            <Check className="w-3 h-3" />
+                          </span>
+                          <span>Checklists review</span>
+                        </li>
+                      </ul>
                     </div>
-                    <div className="text-2xl font-display font-bold text-slate-900">
-                      ৳100 - ৳500
-                    </div>
-                    <ul className="space-y-2 text-[11px] text-slate-600">
-                      <li className="flex items-center gap-2">✓ Human expert evaluation</li>
-                      <li className="flex items-center gap-2">✓ AI admission risk analysis</li>
-                      <li className="flex items-center gap-2">✓ Document checklists review</li>
-                    </ul>
                     <button 
                       onClick={() => handleTriggerPayment("structured")}
-                      className="w-full py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold rounded-xl"
+                      className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition-all active:scale-95 cursor-pointer"
                     >
                       Upgrade Structured
                     </button>
                   </div>
 
                   {/* Premium */}
-                  <div className="bg-white border border-slate-200 rounded-2xl p-5 hover:border-violet-300 transition-all space-y-4">
-                    <div className="space-y-1">
-                      <span className="text-[9px] font-mono uppercase tracking-widest text-slate-400 font-bold">Tier 04</span>
-                      <h4 className="font-display font-bold text-base text-slate-800">PREMIUM Mentorship</h4>
-                      <p className="text-slate-500 text-[10px]">End-to-end advisory backup.</p>
+                  <div className="bg-white border border-slate-200/80 rounded-2xl p-6 hover:border-violet-400 hover:shadow-lg hover:shadow-violet-50/50 transition-all duration-300 flex flex-col justify-between space-y-6 group cursor-pointer hover:-translate-y-1">
+                    <div className="space-y-4">
+                      <div className="space-y-1">
+                        <span className="px-2 py-0.5 bg-slate-100 text-slate-500 rounded text-[9px] font-mono tracking-widest uppercase font-bold">Tier 04</span>
+                        <h4 className="font-display font-black text-base text-slate-900 tracking-tight group-hover:text-violet-700 transition-colors">PREMIUM Mentorship</h4>
+                        <p className="text-slate-500 text-[10px] leading-relaxed">End-to-end advisory backup.</p>
+                      </div>
+                      <div className="text-2xl font-display font-black text-slate-900">
+                        ৳5,500 <span className="text-xs text-slate-400 font-normal">/ complete</span>
+                      </div>
+                      <ul className="space-y-2.5 text-[11px] text-slate-650 font-medium">
+                        <li className="flex items-center gap-2">
+                          <span className="p-0.5 bg-emerald-50 rounded text-emerald-600 border border-emerald-100/50">
+                            <Check className="w-3 h-3" />
+                          </span>
+                          <span>Matched alumni mentor</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <span className="p-0.5 bg-emerald-50 rounded text-emerald-600 border border-emerald-100/50">
+                            <Check className="w-3 h-3" />
+                          </span>
+                          <span>Professional SOP writing</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <span className="p-0.5 bg-emerald-50 rounded text-emerald-600 border border-emerald-100/50">
+                            <Check className="w-3 h-3" />
+                          </span>
+                          <span>Visa mock interviews</span>
+                        </li>
+                      </ul>
                     </div>
-                    <div className="text-2xl font-display font-bold text-slate-900">
-                      ৳5,500 <span className="text-xs text-slate-400 font-normal">/ complete</span>
-                    </div>
-                    <ul className="space-y-2 text-[11px] text-slate-600">
-                      <li className="flex items-center gap-2">✓ Matched alumni mentor</li>
-                      <li className="flex items-center gap-2">✓ Professional SOP writing</li>
-                      <li className="flex items-center gap-2">✓ Visa mock interviews</li>
-                    </ul>
                     <button 
                       onClick={() => handleTriggerPayment("premium")}
-                      className="w-full py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold rounded-xl"
+                      className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition-all active:scale-95 cursor-pointer"
                     >
                       Purchase Premium
                     </button>
                   </div>
 
                   {/* Elite */}
-                  <div className="bg-violet-50 text-slate-900 border border-violet-100 rounded-2xl p-5 space-y-4">
-                    <div className="space-y-1">
-                      <span className="text-[9px] font-mono uppercase tracking-widest text-violet-600 font-bold">Tier 05</span>
-                      <h4 className="font-display font-bold text-base text-slate-900">ELITE Board</h4>
-                      <p className="text-slate-500 text-[10px]">Full board management.</p>
+                  <div className="bg-gradient-to-br from-violet-50 to-indigo-50 border border-violet-150 rounded-2xl p-6 hover:shadow-lg hover:shadow-violet-100/40 transition-all duration-300 flex flex-col justify-between space-y-6 group cursor-pointer hover:-translate-y-1">
+                    <div className="space-y-4">
+                      <div className="space-y-1">
+                        <span className="px-2 py-0.5 bg-violet-150 text-violet-700 rounded text-[9px] font-mono tracking-widest uppercase font-bold">Tier 05</span>
+                        <h4 className="font-display font-black text-base text-slate-900 tracking-tight group-hover:text-violet-700 transition-colors">ELITE Board</h4>
+                        <p className="text-slate-500 text-[10px] leading-relaxed">Full board management.</p>
+                      </div>
+                      <div className="text-xl font-display font-black text-slate-900">
+                        Call for Details
+                      </div>
+                      <ul className="space-y-2.5 text-[11px] text-slate-650 font-medium">
+                        <li className="flex items-center gap-2">
+                          <span className="p-0.5 bg-emerald-50 rounded text-emerald-600 border border-emerald-100/50">
+                            <Check className="w-3 h-3" />
+                          </span>
+                          <span>Professor outreach</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <span className="p-0.5 bg-emerald-50 rounded text-emerald-600 border border-emerald-100/50">
+                            <Check className="w-3 h-3" />
+                          </span>
+                          <span>Scholarship negotiations</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <span className="p-0.5 bg-emerald-50 rounded text-emerald-600 border border-emerald-100/50">
+                            <Check className="w-3 h-3" />
+                          </span>
+                          <span>Direct representation</span>
+                        </li>
+                      </ul>
                     </div>
-                    <div className="text-xl font-display font-bold text-slate-900">
-                      Call for Details
-                    </div>
-                    <ul className="space-y-2 text-[11px] text-slate-600">
-                      <li className="flex items-center gap-2">✓ Professor research outreach</li>
-                      <li className="flex items-center gap-2">✓ Scholarship negotiation</li>
-                      <li className="flex items-center gap-2">✓ Direct Board representation</li>
-                    </ul>
                     <a 
                       href="https://wa.me/8801841800841"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="block w-full py-2 bg-violet-600 hover:bg-violet-700 text-white text-xs text-center font-bold rounded-xl"
+                      className="block w-full py-2.5 bg-violet-600 hover:bg-violet-750 text-white text-xs text-center font-bold rounded-xl shadow-md shadow-violet-100 transition-all active:scale-95"
                     >
                       WhatsApp Us
                     </a>
@@ -4862,7 +5237,7 @@ But I can tell you that for ${profile.targetCountry} higher study:
                                   {language === "bn" ? `En: ${formatText(docItem.descEn)}` : `বাংলা: ${formatText(docItem.descBn)}`}
                                 </p>
 
-                                {/* Country Specific Deadline Attestation Warning */}
+                                 {/* Country Specific Deadline Attestation Warning */}
                                 {ATTESTATION_DEADLINES[profile.targetCountry]?.[docItem.id] && (
                                   <div className="mt-2.5 p-2 rounded-lg bg-amber-500/5 border border-amber-200/40 text-[10.5px] text-amber-800 font-semibold flex items-center gap-1.5 leading-snug">
                                     <Clock className="h-3.5 w-3.5 text-amber-600 shrink-0 animate-pulse" />
@@ -4871,6 +5246,69 @@ But I can tell you that for ${profile.targetCountry} higher study:
                                         ? ATTESTATION_DEADLINES[profile.targetCountry][docItem.id].alertBn 
                                         : ATTESTATION_DEADLINES[profile.targetCountry][docItem.id].alertEn}
                                     </span>
+                                  </div>
+                                )}
+
+                                {/* Email Alerts Toggle */}
+                                {ATTESTATION_DEADLINES[profile.targetCountry]?.[docItem.id] && (
+                                  <div className="mt-2.5 p-3 rounded-xl bg-violet-50/40 border border-violet-100/50 flex flex-col gap-2">
+                                    <div className="flex items-center justify-between">
+                                      <div className="flex items-center gap-2">
+                                        <Mail className="w-3.5 h-3.5 text-violet-600 animate-pulse" />
+                                        <span className="text-xs font-bold text-slate-800">
+                                          {language === "bn" ? "ডেডলাইন ইমেইল এলার্ট" : "Get Email Alerts"}
+                                        </span>
+                                      </div>
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          handleToggleEmailAlert(docItem, ATTESTATION_DEADLINES[profile.targetCountry][docItem.id]);
+                                        }}
+                                        className={`w-10 h-6 flex items-center rounded-full p-1 cursor-pointer transition-all duration-300 ${
+                                          emailAlerts[docItem.id] ? "bg-violet-600 justify-end" : "bg-slate-300 justify-start"
+                                        }`}
+                                      >
+                                        <div className="bg-white w-4 h-4 rounded-full shadow-md" />
+                                      </button>
+                                    </div>
+                                    
+                                    {emailAlerts[docItem.id] && (
+                                      <div className="flex items-center gap-2 mt-1">
+                                        <input
+                                          type="email"
+                                          placeholder={language === "bn" ? "আপনার ইমেইল দিন" : "Enter your email"}
+                                          value={emailAlertEmails[docItem.id] !== undefined ? emailAlertEmails[docItem.id] : emailAlertInputVal}
+                                          onChange={(e) => handleEmailAlertAddressChange(docItem.id, e.target.value)}
+                                          onClick={(e) => e.stopPropagation()}
+                                          className="flex-1 px-2.5 py-1 text-xs border border-slate-200 rounded-lg bg-white focus:outline-none focus:border-violet-500 font-medium"
+                                        />
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleSaveEmailAlertAddress(docItem, ATTESTATION_DEADLINES[profile.targetCountry][docItem.id]);
+                                          }}
+                                          className="px-2.5 py-1 bg-violet-600 text-white rounded-lg text-[10px] font-bold hover:bg-violet-700 transition-colors cursor-pointer shrink-0"
+                                        >
+                                          {language === "bn" ? "সংরক্ষণ" : "Save"}
+                                        </button>
+                                      </div>
+                                    )}
+
+                                    {emailAlerts[docItem.id] && emailAlertEmails[docItem.id] && (
+                                      <div className="flex items-center justify-between text-[10px] text-slate-500 font-medium bg-slate-100/50 px-2 py-1 rounded-md">
+                                        <span className="truncate">Active for: {emailAlertEmails[docItem.id]}</span>
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleTriggerTestEmail(docItem.id, emailAlertEmails[docItem.id]);
+                                          }}
+                                          className="text-violet-600 hover:text-violet-700 font-bold hover:underline shrink-0 flex items-center gap-0.5"
+                                        >
+                                          <Send className="w-2.5 h-2.5" />
+                                          <span>{language === "bn" ? "টেস্ট পাঠান" : "Test Now"}</span>
+                                        </button>
+                                      </div>
+                                    )}
                                   </div>
                                 )}
 
@@ -4961,11 +5399,130 @@ But I can tell you that for ${profile.targetCountry} higher study:
                         <ArrowRight className="w-3 h-3" />
                       </button>
                     </div>
+
+                    {/* Email Alert Manager & Dispatch Logs Panel */}
+                    <div className="mt-8 pt-8 border-t border-slate-200">
+                      <div className="bg-white rounded-3xl border border-slate-200 p-6 md:p-8 space-y-6 shadow-sm">
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                          <div className="space-y-1">
+                            <h3 className="font-display text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
+                              <Mail className="w-5 h-5 text-violet-600" />
+                              <span>{language === "bn" ? "ডকুমেন্ট এলার্ট এবং নোটিফিকেশন হাব" : "Deadline Notifications Hub"}</span>
+                            </h3>
+                            <p className="text-xs text-slate-500 font-medium leading-relaxed">
+                              {language === "bn"
+                                ? "আপনার সক্রিয় ডেডলাইন এলার্ট ট্র্যাকার এবং ইমেইল ডিসপ্যাচ হিস্ট্রি।"
+                                : "Manage your active subscription notifications and review sandbox email dispatch logs."}
+                            </p>
+                          </div>
+                          
+                          <button
+                            onClick={fetchEmailAlertData}
+                            className="flex items-center gap-1.5 px-3 py-2 bg-violet-50 text-violet-700 hover:bg-violet-105 font-bold rounded-xl text-xs transition-all cursor-pointer shrink-0"
+                          >
+                            <RefreshCw className="w-3.5 h-3.5" />
+                            <span>{language === "bn" ? "রিফ্রেশ" : "Refresh Hub"}</span>
+                          </button>
+                        </div>
+
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                          {/* Active Subscriptions */}
+                          <div className="space-y-4">
+                            <h4 className="text-xs font-black uppercase text-slate-400 tracking-widest font-mono">
+                              {language === "bn" ? "সক্রিয় সাবস্ক্রিপশনসমূহ" : "Active Alert Subscriptions"}
+                            </h4>
+                            {emailSubscriptions.length === 0 ? (
+                              <div className="p-6 text-center border border-dashed border-slate-200 rounded-2xl bg-slate-50/50 text-slate-500 text-xs">
+                                {language === "bn"
+                                  ? "কোনো ডেডলাইন এলার্ট চালু নেই।"
+                                  : "No active deadline email subscriptions. Toggle 'Get Email Alerts' on any checklist items above!"}
+                              </div>
+                            ) : (
+                              <div className="space-y-3 max-h-[300px] overflow-y-auto pr-1">
+                                {emailSubscriptions.map((sub: any) => (
+                                  <div key={sub.id} className="p-3.5 bg-slate-50 border border-slate-200/60 rounded-xl flex items-start justify-between gap-3 text-xs">
+                                    <div className="space-y-1">
+                                      <div className="font-bold text-slate-800">
+                                        {language === "bn" ? sub.docTitleBn : sub.docTitle}
+                                      </div>
+                                      <div className="text-[10px] text-slate-500 flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                                        <span className="bg-violet-100 text-violet-800 font-bold px-1.5 py-0.5 rounded text-[9px] uppercase">{sub.country}</span>
+                                        <span>•</span>
+                                        <span className="font-medium">Buffer: {sub.days}</span>
+                                        <span>•</span>
+                                        <span className="font-mono text-slate-600">{sub.email}</span>
+                                      </div>
+                                    </div>
+                                    <button
+                                      onClick={() => handleToggleEmailAlert({ id: sub.docId, titleEn: sub.docTitle, titleBn: sub.docTitleBn }, { days: sub.days })}
+                                      className="text-rose-600 hover:text-rose-700 font-bold text-[10px] uppercase tracking-wider hover:underline shrink-0 cursor-pointer"
+                                    >
+                                      {language === "bn" ? "বাতিল" : "Unsubscribe"}
+                                    </button>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Email Dispatch History Logs */}
+                          <div className="space-y-4">
+                            <h4 className="text-xs font-black uppercase text-slate-400 tracking-widest font-mono">
+                              {language === "bn" ? "ইমেইল ডিসপ্যাচ হিস্ট্রি" : "Email Dispatch History"}
+                            </h4>
+                            {emailAlertLogs.length === 0 ? (
+                              <div className="p-6 text-center border border-dashed border-slate-200 rounded-2xl bg-slate-50/50 text-slate-500 text-xs">
+                                {language === "bn"
+                                  ? "কোনো ইমেইল পাঠানোর লগ নেই।"
+                                  : "No email dispatch history found. When you activate or test alerts, logs will appear here."}
+                              </div>
+                            ) : (
+                              <div className="space-y-3 max-h-[300px] overflow-y-auto pr-1">
+                                {emailAlertLogs.map((log: any) => (
+                                  <div key={log.id} className="p-3 bg-slate-50 border border-slate-200/50 rounded-xl space-y-2 text-xs">
+                                    <div className="flex items-center justify-between gap-2">
+                                      <span className="font-mono text-[9px] text-slate-400 bg-slate-150 px-1 py-0.5 rounded">
+                                        {new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                      </span>
+                                      <span className={`px-2 py-0.5 rounded text-[9.5px] font-bold ${
+                                        log.status.includes("Sent Successfully")
+                                          ? "bg-emerald-50 text-emerald-700 border border-emerald-100"
+                                          : "bg-blue-50 text-blue-700 border border-blue-100"
+                                      }`}>
+                                        {log.status}
+                                      </span>
+                                    </div>
+                                    <div className="space-y-1">
+                                      <div className="font-semibold text-slate-800 line-clamp-1">{log.subject}</div>
+                                      <div className="text-[10px] text-slate-500">
+                                        Recipient: <strong className="font-mono text-slate-600">{log.email}</strong>
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Informational Note */}
+                        <div className="p-3 bg-amber-500/5 border border-amber-200/30 rounded-2xl text-[11px] text-amber-800 flex items-start gap-2 font-medium">
+                          <Info className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                          <div className="space-y-0.5">
+                            <span className="font-bold">{language === "bn" ? "সার্ভার কনফিগারেশন নোট:" : "Integration Sandbox Details:"}</span>
+                            <p className="text-slate-650 leading-relaxed text-[10px]">
+                              {language === "bn"
+                                ? "অ্যাপটি রিয়েল-টাইম SMTP ইমেইল ডেলিভারি সমর্থন করে। আপনি যদি আপনার জিমেইল বা ডোমেইন মেইল দিয়ে আসল ইমেইল পেতে চান, তবে আপনার `.env` ফাইলে SMTP_HOST, SMTP_USER এবং SMTP_PASS ভ্যালুগুলো যোগ করুন। কনফিগারেশন না থাকলে এটি সিকিউর স্যান্ডবক্স লগ হিসেবে উপরে হিস্ট্রি রেকর্ড করবে।"
+                                : "This app fully integrates standard SMTP servers using nodemailer. To receive real emails, set up SMTP_HOST, SMTP_USER, and SMTP_PASS in your environment's Secrets panel. If SMTP is not defined, alerts are safely preserved in our backend database and logged above."}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </motion.div>
-              )}
-
-            )}
+              );
+            })()}
 
             {/* ABOUT US TAB */}
             {activeTab === "about" && (
