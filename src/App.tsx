@@ -647,6 +647,7 @@ export default function App() {
   const [cvScanProgress, setCvScanProgress] = useState(0);
   const [cvScanStep, setCvScanStep] = useState("");
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
+  const [faqSearchQuery, setFaqSearchQuery] = useState<string>("");
   const [copiedFaqIdx, setCopiedFaqIdx] = useState<number | null>(null);
   const [gpaError, setGpaError] = useState<string | null>(null);
   const [ieltsError, setIeltsError] = useState<string | null>(null);
@@ -1894,10 +1895,10 @@ But I can tell you that for ${profile.targetCountry} higher study:
           <Logo size={32} className="shrink-0" />
           <div className="flex flex-col">
             <span className="text-sm font-semibold text-slate-800 tracking-tight">
-              Global Academy Hub
+              {language === "bn" ? "গ্লোবাল একাডেমি হাব" : "Global Academy Hub"}
             </span>
             <span className="text-[8px] uppercase tracking-widest text-slate-400 font-bold">
-              Visa & Study Platform
+              {language === "bn" ? "ভিসা ও শিক্ষা প্ল্যাটফর্ম" : "Visa & Study Platform"}
             </span>
           </div>
         </div>
@@ -1905,13 +1906,13 @@ But I can tell you that for ${profile.targetCountry} higher study:
         {/* Global Controls & Auth */}
         <div className="flex items-center gap-3 md:gap-6">
           <a
-            href="https://wa.me/88001841800841"
+            href="https://wa.me/8801841800841"
             target="_blank"
             rel="noopener noreferrer"
             className="hidden md:flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-md text-[10px] font-semibold hover:bg-emerald-100 transition-colors"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            Support: +880 01841800841
+            {language === "bn" ? "সহায়তা: +৮৮০ ০১৮৪১৮০০৮৪১" : "Support: +880 01841800841"}
           </a>
 
           {/* Language Switcher */}
@@ -1948,13 +1949,23 @@ But I can tell you that for ${profile.targetCountry} higher study:
                       user.role === "student" ? "bg-blue-100 text-blue-700 border border-blue-200" :
                       "bg-slate-100 text-slate-600 border border-slate-200"
                     }`}>
-                      {user.role}
+                      {language === "bn" ? (
+                        user.role === "superadmin" ? "সুপার এডমিন" :
+                        user.role === "admin" ? "এডমিন" :
+                        user.role === "student" ? "স্টুডেন্ট" :
+                        "ইউজার"
+                      ) : user.role}
                     </span>
                   )}
                   <p className="text-[11px] font-bold text-slate-850">{user.name}</p>
                 </div>
                 <p className="text-[8px] uppercase font-mono tracking-wider font-bold text-violet-600">
-                  {user.tier.toUpperCase()} TIER
+                  {language === "bn" ? (
+                    user.tier === "elite" ? "এলিট টিয়ার" :
+                    user.tier === "premium" ? "প্রিমিয়াম টিয়ার" :
+                    user.tier === "structured" ? "স্ট্রাকচার্ড টিয়ার" :
+                    "ফ্রি টিয়ার"
+                  ) : `${user.tier.toUpperCase()} TIER`}
                 </p>
               </div>
               <div className="w-7 h-7 rounded-full border border-violet-150 p-0.5 shrink-0">
@@ -1986,7 +1997,7 @@ But I can tell you that for ${profile.targetCountry} higher study:
         {/* Navigation Sidebar */}
         <aside className="w-full md:w-64 bg-slate-50/40 border-b md:border-b-0 md:border-r border-slate-200 p-3 md:p-4 flex flex-row md:flex-col gap-1.5 overflow-x-auto shrink-0 md:sticky md:top-14 md:h-[calc(100vh-56px)] scrollbar-none">
           <div className="hidden md:block text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em] mb-3 px-3">
-            Core Navigation
+            {language === "bn" ? "প্রধান নেভিগেশন" : "Core Navigation"}
           </div>
           
           <button
@@ -1997,8 +2008,8 @@ But I can tell you that for ${profile.targetCountry} higher study:
                 : "text-slate-500 hover:text-slate-900 hover:bg-white hover:shadow-sm"
             }`}
           >
-            <MessageSquare className="w-4 h-4" />
-            AI Consultancy Chat
+            <MessageSquare className="w-4 h-4 shrink-0" />
+            {language === "bn" ? "এআই পরামর্শ চ্যাট" : "AI Consultancy Chat"}
           </button>
 
           <button
@@ -2009,92 +2020,92 @@ But I can tell you that for ${profile.targetCountry} higher study:
                 : "text-slate-500 hover:text-slate-900 hover:bg-white hover:shadow-sm"
             }`}
           >
-            <MessageCircle className="w-4 h-4" />
-            WhatsApp & Messenger
+            <MessageCircle className="w-4 h-4 shrink-0" />
+            {language === "bn" ? "হোয়াটসঅ্যাপ ও মেসেঞ্জার" : "WhatsApp & Messenger"}
           </button>
 
           <button
             onClick={() => setActiveTab("simulator")}
-            className={`flex items-center gap-2.5 px-3 py-2 rounded text-[11px] font-medium tracking-wider uppercase shrink-0 transition-all ${
+            className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-wide uppercase shrink-0 transition-all duration-200 ${
               activeTab === "simulator" 
-                ? "bg-violet-50 text-violet-600 border-l-2 border-violet-600 font-bold" 
-                : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
+                ? "bg-violet-600 text-white shadow-lg shadow-violet-100 font-bold translate-x-1" 
+                : "text-slate-500 hover:text-slate-900 hover:bg-white hover:shadow-sm"
             }`}
           >
-            <Mic className="w-3.5 h-3.5" />
-            Interview Simulator
+            <Mic className="w-4 h-4 shrink-0" />
+            {language === "bn" ? "ইন্টারভিউ সিমুলেটর" : "Interview Simulator"}
           </button>
 
           <button
             onClick={() => setActiveTab("dashboard")}
-            className={`flex items-center gap-2.5 px-3 py-2 rounded text-[11px] font-medium tracking-wider uppercase shrink-0 transition-all ${
+            className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-wide uppercase shrink-0 transition-all duration-200 ${
               activeTab === "dashboard" 
-                ? "bg-violet-50 text-violet-600 border-l-2 border-violet-600 font-bold" 
-                : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
+                ? "bg-violet-600 text-white shadow-lg shadow-violet-100 font-bold translate-x-1" 
+                : "text-slate-500 hover:text-slate-900 hover:bg-white hover:shadow-sm"
             }`}
           >
-            <LayoutDashboard className="w-3.5 h-3.5" />
-            Student Dashboard
+            <LayoutDashboard className="w-4 h-4 shrink-0" />
+            {language === "bn" ? "স্টুডেন্ট ড্যাশবোর্ড" : "Student Dashboard"}
           </button>
 
           <button
             onClick={() => setActiveTab("pricing")}
-            className={`flex items-center gap-2.5 px-3 py-2 rounded text-[11px] font-medium tracking-wider uppercase shrink-0 transition-all ${
+            className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-wide uppercase shrink-0 transition-all duration-200 ${
               activeTab === "pricing" 
-                ? "bg-violet-50 text-violet-600 border-l-2 border-violet-600 font-bold" 
-                : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
+                ? "bg-violet-600 text-white shadow-lg shadow-violet-100 font-bold translate-x-1" 
+                : "text-slate-500 hover:text-slate-900 hover:bg-white hover:shadow-sm"
             }`}
           >
-            <Compass className="w-3.5 h-3.5" />
-            Visa & Study Plans
+            <Compass className="w-4 h-4 shrink-0" />
+            {language === "bn" ? "ভিসা ও শিক্ষা পরিকল্পনা" : "Visa & Study Plans"}
           </button>
 
-  <button
+          <button
             onClick={() => setActiveTab("checklist")}
-            className={`flex items-center gap-2.5 px-3 py-2 rounded text-[11px] font-medium tracking-wider uppercase shrink-0 transition-all ${
+            className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-wide uppercase shrink-0 transition-all duration-200 ${
               activeTab === "checklist" 
-                ? "bg-violet-50 text-violet-600 border-l-2 border-violet-600 font-bold" 
-                : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
+                ? "bg-violet-600 text-white shadow-lg shadow-violet-100 font-bold translate-x-1" 
+                : "text-slate-500 hover:text-slate-900 hover:bg-white hover:shadow-sm"
             }`}
           >
-            <FileText className="w-3.5 h-3.5" />
-            Document Checklist
+            <FileText className="w-4 h-4 shrink-0" />
+            {language === "bn" ? "নথিপত্র চেকলিস্ট" : "Document Checklist"}
           </button>
 
           <button
             onClick={() => setActiveTab("tracker")}
-            className={`flex items-center gap-2.5 px-3 py-2 rounded text-[11px] font-medium tracking-wider uppercase shrink-0 transition-all ${
+            className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-wide uppercase shrink-0 transition-all duration-200 ${
               activeTab === "tracker" 
-                ? "bg-violet-50 text-violet-600 border-l-2 border-violet-600 font-bold" 
-                : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
+                ? "bg-violet-600 text-white shadow-lg shadow-violet-100 font-bold translate-x-1" 
+                : "text-slate-500 hover:text-slate-900 hover:bg-white hover:shadow-sm"
             }`}
           >
-            <CheckCircle2 className="w-3.5 h-3.5" />
-            Progress Tracker
+            <CheckCircle2 className="w-4 h-4 shrink-0" />
+            {language === "bn" ? "অগ্রগতি ট্র্যাকার" : "Progress Tracker"}
           </button>
 
           <button
             onClick={() => setActiveTab("payments")}
-            className={`flex items-center gap-2.5 px-3 py-2 rounded text-[11px] font-medium tracking-wider uppercase shrink-0 transition-all ${
+            className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-wide uppercase shrink-0 transition-all duration-200 ${
               activeTab === "payments" 
-                ? "bg-violet-50 text-violet-600 border-l-2 border-violet-600 font-bold" 
-                : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
+                ? "bg-violet-600 text-white shadow-lg shadow-violet-100 font-bold translate-x-1" 
+                : "text-slate-500 hover:text-slate-900 hover:bg-white hover:shadow-sm"
             }`}
           >
-            <CreditCard className="w-3.5 h-3.5" />
-            Payment Ledger
+            <CreditCard className="w-4 h-4 shrink-0" />
+            {language === "bn" ? "পেমেন্ট লেজার" : "Payment Ledger"}
           </button>
 
           <button
             onClick={() => setActiveTab("about")}
-            className={`flex items-center gap-2.5 px-3 py-2 rounded text-[11px] font-medium tracking-wider uppercase shrink-0 transition-all ${
+            className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-wide uppercase shrink-0 transition-all duration-200 ${
               activeTab === "about" 
-                ? "bg-violet-50 text-violet-600 border-l-2 border-violet-600 font-bold" 
-                : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
+                ? "bg-violet-600 text-white shadow-lg shadow-violet-100 font-bold translate-x-1" 
+                : "text-slate-500 hover:text-slate-900 hover:bg-white hover:shadow-sm"
             }`}
           >
-            <Info className="w-3.5 h-3.5" />
-            About Us & Contact
+            <Info className="w-4 h-4 shrink-0" />
+            {language === "bn" ? "আমাদের সম্পর্কে ও যোগাযোগ" : "About Us & Contact"}
           </button>
 
           {/* Interactive Tier Widget */}
@@ -3600,7 +3611,7 @@ But I can tell you that for ${profile.targetCountry} higher study:
                       <li className="flex items-center gap-2">✓ Direct Board representation</li>
                     </ul>
                     <a 
-                      href="https://wa.me/88001841800841"
+                      href="https://wa.me/8801841800841"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="block w-full py-2 bg-violet-600 hover:bg-violet-700 text-white text-xs text-center font-bold rounded-xl"
@@ -3616,56 +3627,110 @@ But I can tell you that for ${profile.targetCountry} higher study:
                   <div className="text-center space-y-2 max-w-xl mx-auto">
                     <h3 className="font-display text-lg font-medium text-slate-900 flex items-center justify-center gap-2">
                       <HelpCircle className="h-4.5 w-4.5 text-violet-600" />
-                      Schengen Visa & Process FAQs
+                      {language === "bn" ? "সেনজেন ভিসা ও প্রসেস প্রশ্নোত্তর" : "Schengen Visa & Process FAQs"}
                     </h3>
                     <p className="text-xs text-slate-500">
-                      Get instant answers to the most common questions about Blocked Accounts, document checklists, and embassy timelines.
+                      {language === "bn" 
+                        ? "ব্লকড অ্যাকাউন্ট, প্রয়োজনীয় নথিপত্র এবং এম্বেসির সময়সীমা সংক্রান্ত সাধারণ প্রশ্নগুলোর সহজ উত্তর।"
+                        : "Get instant answers to the most common questions about Blocked Accounts, document checklists, and embassy timelines."}
                     </p>
+                  </div>
+
+                  {/* FAQ Search Bar */}
+                  <div className="max-w-md mx-auto pt-2">
+                    <div className="relative rounded-2xl shadow-xs">
+                      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                        <Search className="h-4 w-4 text-slate-400" />
+                      </div>
+                      <input
+                        type="text"
+                        value={faqSearchQuery}
+                        onChange={(e) => {
+                          setFaqSearchQuery(e.target.value);
+                          setExpandedFaq(null);
+                        }}
+                        placeholder={language === "bn" ? "প্রশ্ন বা উত্তর খুঁজুন..." : "Search FAQs by question or answer..."}
+                        className="block w-full rounded-2xl border border-slate-200/80 bg-white py-2.5 pl-10 pr-10 text-xs text-slate-800 placeholder-slate-400 focus:border-violet-500 focus:ring-1 focus:ring-violet-500/20 focus:outline-hidden transition-all shadow-xs"
+                      />
+                      {faqSearchQuery && (
+                        <button
+                          onClick={() => setFaqSearchQuery("")}
+                          className="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400 hover:text-slate-600 cursor-pointer"
+                        >
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                      )}
+                    </div>
                   </div>
                   
                   <div className="max-w-3xl mx-auto space-y-2.5 pt-4">
-                    {FAQ_ITEMS.map((faq, idx) => {
-                      const isExpanded = expandedFaq === idx;
-                      return (
-                        <div key={idx} className="bg-white border border-slate-200/60 rounded-xl overflow-hidden">
-                          <button
-                            onClick={() => setExpandedFaq(isExpanded ? null : idx)}
-                            className="w-full text-left px-5 py-3.5 flex items-center justify-between gap-4 hover:bg-slate-50/40"
-                          >
-                            <span className="text-xs font-medium text-slate-800 leading-snug">
-                              {faq.question}
-                            </span>
-                            <span className="shrink-0 p-1 bg-slate-50 rounded-lg text-slate-400">
-                              <ChevronDown className={`h-4 w-4 transform transition-transform duration-200 ${isExpanded ? "rotate-180 text-violet-600" : ""}`} />
-                            </span>
-                          </button>
-                          
-                          <AnimatePresence initial={false}>
-                            {isExpanded && (
-                              <motion.div
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: "auto", opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                              >
-                                <div className="px-5 pb-4 pt-3 border-t border-slate-100 bg-slate-50/20 space-y-3">
-                                  <p className="text-xs text-slate-600 leading-relaxed">
-                                    {faq.answer}
-                                  </p>
-                                  <div className="flex justify-end">
-                                    <button
-                                      onClick={() => handleCopyFaq(faq.answer, idx)}
-                                      className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white border border-slate-200/60 rounded-lg text-[10px] font-medium"
-                                    >
-                                      {copiedFaqIdx === idx ? "Copied!" : "Copy Answer"}
-                                    </button>
+                    {(() => {
+                      const filteredFaqs = FAQ_ITEMS.filter(faq => {
+                        const query = faqSearchQuery.toLowerCase().trim();
+                        if (!query) return true;
+                        return (
+                          faq.question.toLowerCase().includes(query) ||
+                          faq.answer.toLowerCase().includes(query)
+                        );
+                      });
+
+                      if (filteredFaqs.length === 0) {
+                        return (
+                          <div className="text-center py-10 bg-slate-50/50 rounded-2xl border border-dashed border-slate-200">
+                            <HelpCircle className="h-8 w-8 text-slate-300 mx-auto mb-2" />
+                            <p className="text-xs font-semibold text-slate-600">
+                              {language === "bn" ? "কোনো মিল পাওয়া যায়নি!" : "No matching questions found."}
+                            </p>
+                            <p className="text-[10px] text-slate-400 mt-1">
+                              {language === "bn" ? "অন্য কোনো শব্দ দিয়ে আবার চেষ্টা করুন।" : "Try searching with different keywords."}
+                            </p>
+                          </div>
+                        );
+                      }
+
+                      return filteredFaqs.map((faq, idx) => {
+                        const isExpanded = expandedFaq === idx;
+                        return (
+                          <div key={idx} className="bg-white border border-slate-200/60 rounded-xl overflow-hidden shadow-xs hover:border-slate-300/80 transition-all">
+                            <button
+                              onClick={() => setExpandedFaq(isExpanded ? null : idx)}
+                              className="w-full text-left px-5 py-3.5 flex items-center justify-between gap-4 hover:bg-slate-50/40 cursor-pointer"
+                            >
+                              <span className="text-xs font-medium text-slate-800 leading-snug">
+                                {faq.question}
+                              </span>
+                              <span className="shrink-0 p-1 bg-slate-50 rounded-lg text-slate-400">
+                                <ChevronDown className={`h-4 w-4 transform transition-transform duration-200 ${isExpanded ? "rotate-180 text-violet-600" : ""}`} />
+                              </span>
+                            </button>
+                            
+                            <AnimatePresence initial={false}>
+                              {isExpanded && (
+                                <motion.div
+                                  initial={{ height: 0, opacity: 0 }}
+                                  animate={{ height: "auto", opacity: 1 }}
+                                  exit={{ height: 0, opacity: 0 }}
+                                >
+                                  <div className="px-5 pb-4 pt-3 border-t border-slate-100 bg-slate-50/20 space-y-3">
+                                    <p className="text-xs text-slate-600 leading-relaxed">
+                                      {faq.answer}
+                                    </p>
+                                    <div className="flex justify-end">
+                                      <button
+                                        onClick={() => handleCopyFaq(faq.answer, idx)}
+                                        className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white border border-slate-200/60 rounded-lg text-[10px] font-medium text-slate-600 hover:bg-slate-50 cursor-pointer transition-colors"
+                                      >
+                                        {copiedFaqIdx === idx ? "Copied!" : "Copy Answer"}
+                                      </button>
+                                    </div>
                                   </div>
-                                </div>
-                              </motion.div>
-                            )}
-                          </AnimatePresence>
-                        </div>
-                      );
-                    })}
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </div>
+                        );
+                      });
+                    })()}
                   </div>
                 </div>
 
