@@ -94,6 +94,135 @@ const FALLBACK_DATA: Record<string, { text: string; sources: { title: string; ur
       { title: "Embassy of Poland New Delhi", url: "https://www.gov.pl/web/india/embassy-new-delhi" },
       { title: "VFS Global Poland - Bangladesh", url: "https://visa.vfsglobal.com/bgd/en/pol/" }
     ]
+  },
+  "Italy": {
+    text: `### 🇮🇹 Italy Student Visa (National Visa Type D) Intelligence for Bangladeshi Applicants
+
+## 1. Appointment Slot Wait Times (VFS Dhaka)
+* **VFS Global Italy Portal**: Appointments for Italian student visas are scheduled through VFS Global in Dhaka. Slots are highly competitive and can take **8 to 12 weeks** to secure during the peak pre-enrollment window (May to August).
+* **Universitaly Pre-Enrollment**: Before booking a slot, you must complete your pre-enrollment on the official Universitaly portal and receive approval (Form A/Summary) from your target Italian university.
+
+## 2. Processing Durations
+* **Standard Embassy Processing**: The Embassy of Italy in Dhaka typically takes **4 to 8 weeks** to process student visas once documents are submitted.
+
+## 3. Essential Action Tips & Requirements
+* **Financial Suitability**: You must show personal/parental bank statements with at least **€6,000 per academic year** (approx. ৳8,00,000 BDT) in accessible funds.
+* **DOV (Declaration of Value) or CIMEA**: Academic transcripts must have a Declaration of Value from the Italian Embassy or a CIMEA compatibility certificate to prove equivalence.
+* **Schengen Insurance & Flights**: A one-way flight booking reservation and travel medical insurance covering at least €30,000 are mandatory.`,
+    sources: [
+      { title: "Italian Embassy in Dhaka", url: "https://ambdhaka.esteri.it/" },
+      { title: "VFS Global Italy - Bangladesh", url: "https://visa.vfsglobal.com/bgd/en/ita/" }
+    ]
+  },
+  "USA": {
+    text: `### 🇺🇸 United States F-1 Student Visa Intelligence for Bangladeshi Applicants
+
+## 1. Appointment Slot Wait Times (Dhaka Embassy)
+* **US Embassy Dhaka Visa Queue**: Standard F-1 visa interview appointment wait times are currently **12 to 24 weeks (3 to 6 months)**. High-priority student visa drives are occasionally conducted in summer.
+* **Emergency Appointments**: If your program start date is within 60 days and no regular appointments are available, you can request an expedited/emergency appointment.
+
+## 2. Processing Durations
+* **Immediate Decision**: Unlike European visas, the F-1 visa decision is made **immediately during your in-person interview** at the US Embassy in Dhaka. If approved, passport delivery takes **3 to 5 business days**.
+
+## 3. Essential Action Tips & Requirements
+* **I-20 Form**: Secure your Form I-20 (Certificate of Eligibility for Nonimmigrant Student Status) from your university.
+* **SEVIS Fee**: Pay the **$350 SEVIS I-901 Fee** online before your interview.
+* **Strong Ties & Funding**: Demonstrate robust liquid funds covering tuition and living costs for at least the first year of study, alongside clear intentions to return to Bangladesh post-graduation.`,
+    sources: [
+      { title: "US Embassy in Bangladesh", url: "https://bd.usembassy.gov/" },
+      { title: "US Visa Scheduling - Bangladesh", url: "https://www.ustraveldocs.com/bd/" }
+    ]
+  },
+  "New Zealand": {
+    text: `### 🇳🇿 New Zealand Fee-Paying Student Visa Intelligence for Bangladeshi Applicants
+
+## 1. Appointment Slot Wait Times (Online Portal)
+* **RealMe Online Platform**: Applications are fully submitted online. No physical passport submission is needed initially, so there are no physical slot wait times.
+* **Biometrics**: Verification processes are completed online or via specific designated partners.
+
+## 2. Processing Durations
+* **Immigration New Zealand (INZ)**: Student visa processing usually takes **6 to 10 weeks**. Ensure you submit your application at least 3 months prior to your intake.
+
+## 3. Essential Action Tips & Requirements
+* **Funds Requirement**: Show at least **NZD $20,000 per year** of study for living costs, plus return travel tickets and tuition fee coverage.
+* **FTS (Funds Transfer Scheme)**: INZ may offer a Funds Transfer Scheme for Bangladeshi applicants, allowing safe locked-account transfers.
+* **Medical & Police Clearance**: Chest X-ray and medical certificates from authorized panel doctors in Dhaka are mandatory for programs longer than 6 months.`,
+    sources: [
+      { title: "Immigration New Zealand - Student Visa", url: "https://www.immigration.govt.nz/new-zealand-visas/apply-for-a-visa/about-visa/full-fee-paying-student-visa" }
+    ]
+  },
+  "Singapore": {
+    text: `### 🇸🇬 Singapore Student's Pass (STP) Intelligence for Bangladeshi Applicants
+
+## 1. Appointment Slot Wait Times (SOLAR System)
+* **SOLAR Digital Portal**: Registration is fully online using the Student's Pass On-Line Application & Registration (SOLAR) system after university admission.
+* **No Embassy Interview**: No physical embassy interview is required in Dhaka. Everything is processed digitally.
+
+## 2. Processing Durations
+* **Immigration & Checkpoints Authority (ICA)**: Standard processing times range from **2 to 4 weeks**. Peak season (June-August) might require up to 6 weeks.
+
+## 3. Essential Action Tips & Requirements
+* **Financial Guarantee**: Show sufficient funds (approximately SGD $30,000) for tuition and living costs in Singapore.
+* **In-Principle Approval (IPA)**: Once approved, you will receive an IPA letter, which serves as your single-entry visa to enter Singapore and collect your physical STP card.
+* **Medical Fitness Report**: A medical check-up (including HIV and Tuberculosis screening) is mandatory to claim your Pass upon arrival.`,
+    sources: [
+      { title: "Singapore ICA - Student's Pass", url: "https://www.ica.gov.sg/reside/STP" }
+    ]
+  },
+  "Malaysia": {
+    text: `### 🇲🇾 Malaysia Student Visa (eVAL) Intelligence for Bangladeshi Applicants
+
+## 1. Appointment Slot Wait Times (EMGS Portal)
+* **EMGS Digital System**: Malaysia student visas are processed online via the Education Malaysia Global Services (EMGS) portal.
+* **Single Entry Visa (SEV)**: Once EMGS issues your eVAL (Electronic Visa Approval Letter), you must submit your passport to the Malaysian High Commission in Dhaka via an authorized agent, which takes **5 to 7 days**.
+
+## 2. Processing Durations
+* **eVAL Issuance**: EMGS approval takes **3 to 4 weeks** to reach 100% status.
+
+## 3. Essential Action Tips & Requirements
+* **Medical Screening**: Pre-arrival medical screening must be completed by designated clinics in Bangladesh and uploaded to the EMGS portal.
+* **Academic Authentication**: Ensure high school certificates are verified by the board and MoFA in Dhaka.
+* **Passport Validity**: Your passport must be valid for at least 18 months beyond the start date of your academic program.`,
+    sources: [
+      { title: "Education Malaysia Global Services (EMGS)", url: "https://educationmalaysia.gov.my/" },
+      { title: "Malaysian High Commission Dhaka", url: "https://www.kln.gov.my/web/bgd_dhaka/home" }
+    ]
+  },
+  "UAE": {
+    text: `### 🇦🇪 United Arab Emirates Student Visa Intelligence for Bangladeshi Applicants
+
+## 1. Appointment Slot Wait Times (University Sponsored)
+* **University-led Process**: UAE student visas are fully sponsored and processed by the host university in Dubai, Abu Dhabi, or Sharjah.
+* **No Embassy Visit**: Fully digital, zero-wait times for booking appointments in Dhaka.
+
+## 2. Processing Durations
+* **GDRFA / ICA Processing**: Typical processing takes **2 to 3 weeks**. Urgent tracks are available for 1 week.
+
+## 3. Essential Action Tips & Requirements
+* **Visa Sponsorship Fees**: Annual student visa charges (approx. AED 2,000 to AED 3,500) must be paid to the university.
+* **Medical Screening**: Upon entry, students must complete medical fitness tests (blood test and chest X-ray) to convert their entry permit into an official Emirates ID.
+* **Tuition Fee Deposits**: Most universities require a full semester's tuition fee clear before starting the visa process.`,
+    sources: [
+      { title: "Official UAE Government Portal", url: "https://u.ae/en/information-and-services/education/higher-education/student-visa" }
+    ]
+  },
+  "Saudi Arabia": {
+    text: `### 🇸🇦 Saudi Arabia Study Visa Intelligence for Bangladeshi Applicants
+
+## 1. Appointment Slot Wait Times (Study in Saudi Portal)
+* **Study in Saudi Portal**: Applications are initiated online via the Ministry of Education's centralized system.
+* **Embassy Stamp**: Once the scholarship or admission is approved, passport submission is processed through authorized visa centers in Dhaka, taking **1 to 2 weeks**.
+
+## 2. Processing Durations
+* **Ministry Approval**: MoE clearance can take **4 to 8 weeks** during admissions cycles.
+
+## 3. Essential Action Tips & Requirements
+* **Fully Funded Scholarships**: Many Saudi student visas come with 100% tuition coverage, free accommodation, monthly stipends, and free annual flight tickets.
+* **Police Clearance Certificate**: A verified, MoFA-attested police clearance certificate from Bangladesh is mandatory.
+* **Attested Academic Records**: All previous academic transcripts must be translated to Arabic and attested by the Saudi Embassy in Dhaka.`,
+    sources: [
+      { title: "Study in Saudi Centralized Portal", url: "https://studyinsaudi.moe.gov.sa/" }
+    ]
   }
 };
 

@@ -99,6 +99,154 @@ const ACADEMIC_FALLBACK_DATA: Record<string, { text: string; sources: { title: s
       { title: "Ready, Study, Go! Poland", url: "https://study.gov.pl/" },
       { title: "Office for Foreigners - Poland Graduation Prospects", url: "https://www.gov.pl/web/udsc-en" }
     ]
+  },
+  "Italy": {
+    text: `### 🇮🇹 Italy Academic & Career Intelligence for Bangladeshi Students
+
+## 1. Education System Overview
+* **Affordable Excellence & Historic Legacy**: Italy features some of Europe's oldest and most prestigious universities. Tuition fees at public universities are highly affordable (averaging €1,000 to €3,000 per year) and are often based on family income (ISEE certification).
+* **Massive English Portfolios**: Major institutions offer a wide array of completely English-taught Bachelor's and Master's courses, particularly in engineering, architecture, design, and economics.
+* **Generous DSU Scholarships**: The regional DSU scholarships provide selected international students with 100% free tuition, free university student housing, and free meal plans, plus a yearly stipend of up to €7,000.
+
+## 2. Top 3 Universities for International Students
+* **Sapienza University of Rome**: Founded in 1303, one of Europe's largest universities, world-renowned for Classics, Physics, and Aerospace Engineering.
+* **Politecnico di Milano**: The top-ranked technical university in Italy, highly prestigious globally for engineering, architecture, and industrial design.
+* **University of Bologna**: Known as the oldest university in the Western world (founded 1088), offering robust, modern, English-medium curricula.
+
+## 3. Post-study Work Opportunities
+* **12-Month Job Seeker Residence Permit**: Upon completing a degree, graduates can apply for a 12-month permit (Permesso di Soggiorno per Cerca Occupazione) to look for a job or start a business.
+* **Work Authorization Conversion**: Once you secure a qualified employment contract, you can instantly convert your student/job-seeker permit into a standard work permit (lavoro subordinato) under the national quotas.
+* **Direct Permanent Residency Track**: Long-term EU residency is attainable after 5 years of continuous legal residence in Italy.`,
+    sources: [
+      { title: "Study in Italy - Official Portal", url: "https://studyinitaly.esteri.it/" },
+      { title: "Universitaly Portal", url: "https://www.universitaly.it/" }
+    ]
+  },
+  "USA": {
+    text: `### 🇺🇸 United States Academic & Career Intelligence for Bangladeshi Students
+
+## 1. Education System Overview
+* **The Global Standard in Higher Education**: The United States hosts the largest number of high-ranking universities globally, characterized by exceptional academic flexibility, substantial research budgets, and extensive industry-funded labs.
+* **Diverse Institutional Range**: Choose from top-tier research universities, prestigious private Ivy League schools, extensive public state university systems, and focused liberal arts colleges.
+* **Assistantships & Funding**: Graduate students can often offset tuition and secure living stipends via Graduate Assistantships (Teaching Assistant/TA or Research Assistant/RA).
+
+## 2. Top 3 Universities for International Students
+* **Massachusetts Institute of Technology (MIT)**: The world's undisputed leader in science, computer technology, and engineering sciences.
+* **Stanford University**: Anchored in Silicon Valley, leading globally in tech, venture capital, and business management.
+* **Harvard University**: The oldest and most prestigious Ivy League university, boasting elite portfolios across law, business, medicine, and humanities.
+
+## 3. Post-study Work Opportunities
+* **OPT (Optional Practical Training)**: Standard F-1 graduates are eligible for 12 months of temporary employment authorization matching their study field.
+* **STEM OPT Extension**: Graduates with eligible Science, Technology, Engineering, or Math (STEM) degrees receive an additional **24-month extension** (totaling 3 years of work rights in the US!).
+* **H-1B & Green Card Pathways**: OPT employment is the standard pipeline to secure corporate H-1B specialty occupation visa sponsorship and transition to employment-based permanent residency (Green Card).`,
+    sources: [
+      { title: "EducationUSA - Official Source on US Higher Ed", url: "https://educationusa.state.gov/" },
+      { title: "USCIS - Optional Practical Training for F-1 Students", url: "https://www.uscis.gov/working-in-the-united-states/students-and-employment/optional-practical-training-opt-for-f-1-students" }
+    ]
+  },
+  "New Zealand": {
+    text: `### 🇳🇿 New Zealand Academic & Career Intelligence for Bangladeshi Students
+
+## 1. Education System Overview
+* **Highly Practical & Project-led**: All 8 of New Zealand's public universities rank in the top 3% globally (QS World Rankings). The system emphasizes critical analysis, self-guided research, and practical problem-solving.
+* **Work During Studies**: International students are legally authorized to work up to 20 hours per week during academic semesters and full-time during holidays.
+* **Safe, Vibrant Quality of Life**: Highly welcoming environment with spectacular natural beauty, low crime rates, and robust post-graduate work streams.
+
+## 2. Top 3 Universities for International Students
+* **University of Auckland**: New Zealand's largest and highest-ranked university, globally renowned for research, medicine, and engineering.
+* **University of Otago**: Based in Dunedin, world-renowned for health sciences, biology, and molecular science.
+* **Victoria University of Wellington**: Located in the capital city, featuring strong government links, public administration, and creative technologies.
+
+## 3. Post-study Work Opportunities
+* **Post-Study Work Visa (PSWV)**: New Zealand offers a generous post-study work visa for up to **3 years**, depending on the level of qualification completed (typically 3 years for Bachelor's/Master's/PhD).
+* **Open Work Rights**: PSWV provides open work rights, allowing you to work for virtually any employer in any role.
+* **Path to Permanent Residency**: NZ utilizes a points-based Skilled Migrant Category alongside Green List occupations, offering straightforward pathways to residency for high-demand professionals.`,
+    sources: [
+      { title: "Study with New Zealand - Official Government Portal", url: "https://www.studywithnewzealand.govt.nz/" },
+      { title: "Immigration New Zealand - Post Study Work Visa", url: "https://www.immigration.govt.nz/new-zealand-visas/already-have-a-visa/my-situation-has-changed/study/post-study-work-visa" }
+    ]
+  },
+  "Singapore": {
+    text: `### 🇸🇬 Singapore Academic & Career Intelligence for Bangladeshi Students
+
+## 1. Education System Overview
+* **The Academic Capital of Asia**: Singapore represents an ultra-modern global hub of innovation, commerce, and technology, featuring world-leading academic standards.
+* **Bilingual & Multicultural**: Education is entirely in English, paired with high-quality, safe, and clean living environments.
+* **Tuition Grant Scheme (TGS)**: The Singapore government offers substantial tuition grants to international students in exchange for a commitment to work in Singapore for 3 years post-graduation.
+
+## 2. Top 3 Universities for International Students
+* **National University of Singapore (NUS)**: Ranked consistently in the global Top 10-15, famous for engineering, CS, and natural sciences.
+* **Nanyang Technological University (NTU)**: A powerhouse in technological innovation, materials sciences, and advanced computing.
+* **Singapore Management University (SMU)**: A specialized, business-style school modeled on Wharton, offering elite programs in finance, business, and economics.
+
+## 3. Post-study Work Opportunities
+* **Long-Term Social Visit Pass (LTVP)**: Graduates from local universities are eligible for a 1-year social visit pass specifically to seek professional work.
+* **Employment Pass (EP) or S Pass**: Once you secure a job meeting the minimum salary threshold, your employer sponsors an EP or S Pass.
+* **Straightforward Permanent Residency**: Singapore offers a direct PR application stream for professional pass holders who live and pay taxes in Singapore.`,
+    sources: [
+      { title: "Ministry of Education Singapore", url: "https://www.moe.gov.sg/post-secondary/overview" }
+    ]
+  },
+  "Malaysia": {
+    text: `### 🇲🇾 Malaysia Academic & Career Intelligence for Bangladeshi Students
+
+## 1. Education System Overview
+* **Affordable Global Hub**: Malaysia offers high-ranking global education at a fraction of Western costs. Typical tuition fees are $2,500 to $5,000 per year, coupled with very low living costs.
+* **Foreign Branch Campuses**: Hosts premium branch campuses of top-tier foreign universities (e.g., Monash University, University of Nottingham) offering identical degrees at a lower cost.
+* **Strategic Regional Hub**: Safe, multicultural country with extensive links to global MNCs across Southeast Asia.
+
+## 2. Top 3 Universities for International Students
+* **Universiti Malaya (UM)**: Malaysia's premier research university, ranked in the global top 70, strong in science, medicine, and engineering.
+* **Universiti Putra Malaysia (UPM)**: Exceptionally strong in agricultural science, forestry, biotechnology, and computer science.
+* **Taylor's University**: The top-ranked private university in Malaysia, internationally renowned for hospitality, business, and creative fields.
+
+## 3. Post-study Work Opportunities
+* **PLS (Pass Law Law Scheme)**: Graduates can apply for short-term residency to seek employment.
+* **Employment Pass (EP)**: To work in Malaysia, students must secure a job offer from an MSC-status or authorized company that sponsors an Employment Pass (Category I, II, or III).
+* **Regional Career Launchpad**: Provides excellent initial career starts with multinational companies operating in Kuala Lumpur and Penang.`,
+    sources: [
+      { title: "Education Malaysia Global Services", url: "https://educationmalaysia.gov.my/" }
+    ]
+  },
+  "UAE": {
+    text: `### 🇦🇪 United Arab Emirates Academic & Career Intelligence for Bangladeshi Students
+
+## 1. Education System Overview
+* **Expanding Global Campus Hub**: The UAE (particularly Dubai and Abu Dhabi) hosts prestigious branch campuses of top international universities (e.g., NYU Abu Dhabi, Heriot-Watt, Birmingham, Wollongong).
+* **Tax-Free Environment**: Living and learning in a tax-free, high-income country with a vibrant international student population.
+* **Strategic Geographical Hub**: Directly accessible from Dhaka with very high safety standards.
+
+## 2. Top 3 Universities for International Students
+* **United Arab Emirates University (UAEU)**: The country's flagship public research university, highly respected for sciences and engineering.
+* **New York University Abu Dhabi (NYUAD)**: An elite liberal arts and science branch campus of NYU, fully funded research, and highly selective.
+* **American University of Sharjah (AUS)**: Heavily renowned across the Gulf region for engineering, architecture, and business.
+
+## 3. Post-study Work Opportunities
+* **Golden Visa for Outstanding Graduates**: High-performing university graduates (GPA of 3.8+ or top percentile) are eligible for a prestigious **10-year Golden Visa** without any local sponsor!
+* **Standard Work Residency**: Transition to standard corporate residency is sponsor-led, which is highly dynamic given the massive tax-free commercial market in Dubai and Abu Dhabi.`,
+    sources: [
+      { title: "UAE Ministry of Education", url: "https://www.moe.gov.ae/en/" }
+    ]
+  },
+  "Saudi Arabia": {
+    text: `### 🇸🇦 Saudi Arabia Academic & Career Intelligence for Bangladeshi Students
+
+## 1. Education System Overview
+* **Elite Funding & Research Facilities**: Saudi Arabia's leading research universities are some of the wealthiest in the world, featuring massive endowment funds and state-of-the-art laboratory infrastructures.
+* **Fully Funded Scholarships**: Almost all international student admissions are accompanied by comprehensive scholarships covering tuition, housing, health care, and monthly stipends.
+* **Vision 2030 Growth**: Expanding industrial research collaborations under the historic Vision 2030 initiative.
+
+## 2. Top 3 Universities for International Students
+* **King Abdullah University of Science and Technology (KAUST)**: A graduate-only, international research university, globally prestigious for sciences and engineering.
+* **King Fahd University of Petroleum and Minerals (KFUPM)**: One of the elite engineering hubs in the Middle East, highly sought after by global energy sectors.
+* **King Saud University (KSU)**: Based in Riyadh, oldest public university in KSA with massive medical and research faculties.
+
+## 3. Post-study Work Opportunities
+* **Vision 2030 Corporate Hiring**: Graduates are highly prioritized for technical roles in major Saudi gigaprojects (e.g., NEOM, Aramco research centers).
+* **Iqama Transfer**: Transitioning from a student visa to a standard Employment Iqama is handled directly by sponsoring employers in Saudi Arabia.`,
+    sources: [
+      { title: "Study in Saudi Official Portal", url: "https://studyinsaudi.moe.gov.sa/" }
+    ]
   }
 };
 

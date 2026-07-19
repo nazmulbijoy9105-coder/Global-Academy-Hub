@@ -302,6 +302,96 @@ const ALL_DOCUMENTS = [
     countries: ["Poland"]
   },
   {
+    id: "italy_universitaly_and_financials",
+    titleEn: "Universitaly Summary & DSU Profile",
+    titleBn: "ইউনিভার্সিটারি সামারি এবং ডিএসইউ প্রোফাইল",
+    descEn: "Approved Universitaly Form A/Summary, regional DSU scholarship profile papers, and a personal/parental bank statement showing at least €6,000 per academic year.",
+    descBn: "অনুমোদিত ইউনিভার্সিটারি সামারি বা ফর্ম এ, ডিএসইউ স্কলারশিপের কাগজপত্র এবং বার্ষিক ন্যূনতম ৬,০০০ ইউরো সমপরিমাণ অর্থের ব্যাংক স্টেটমেন্ট।",
+    category: "financial",
+    countries: ["Italy"]
+  },
+  {
+    id: "italy_dov_or_cimea",
+    titleEn: "Italy DOV or CIMEA Statement",
+    titleBn: "ডিওভি অথবা চিমেয়া স্টেটমেন্ট",
+    descEn: "An official Declaration of Value (DOV) from the Italian Embassy or a CIMEA Statement of Comparability to verify academic equivalence.",
+    descBn: "ডিগ্রি সমমানের প্রমাণস্বরূপ ইতালিয়ান দূতাবাস থেকে প্রাপ্ত ডিওভি (Declaration of Value) অথবা CIMEA সার্টিফিকেটের মূল কপি।",
+    category: "academic",
+    countries: ["Italy"]
+  },
+  {
+    id: "usa_i20_and_sevis",
+    titleEn: "US Form I-20 & SEVIS Receipt",
+    titleBn: "মার্কিন ফর্ম আই-২০ এবং সেভিস পেমেন্ট রসিদ",
+    descEn: "Official Form I-20 issued by your SEVP-certified US university, along with the official $350 SEVIS I-901 payment receipt.",
+    descBn: "ইউএস বিশ্ববিদ্যালয় থেকে প্রাপ্ত অফিসিয়াল আই-২০ ফর্ম এবং ৩৫০ ডলার পরিশোধের সেভিস (SEVIS I-901) রসিদ।",
+    category: "mandatory",
+    countries: ["USA"]
+  },
+  {
+    id: "usa_ds160_confirmation",
+    titleEn: "DS-160 Confirmation & Visa Appointment",
+    titleBn: "ডিএস-১৬০ ফর্ম এবং অ্যাপয়েন্টমেন্ট কনফার্মেশন",
+    descEn: "Printed DS-160 nonimmigrant visa application confirmation page with barcode and the official visa interview booking letter.",
+    descBn: "বারকোডসহ ডিএস-১৬০ ভিসা আবেদন ফর্মের চূড়ান্ত কনফার্মেশন পেজ এবং সাক্ষাৎকার বুকিং নিশ্চিতকরণ পত্র।",
+    category: "mandatory",
+    countries: ["USA"]
+  },
+  {
+    id: "usa_sponsor_and_tax",
+    titleEn: "US Sponsor Bank Statements & Tax Returns",
+    titleBn: "ইউএস স্পন্সর ব্যাংক বিবরণী এবং ট্যাক্স রিটার্ন",
+    descEn: "At least 6 months of comprehensive personal/corporate bank statements from your sponsor showing immediate tuition & living coverage, along with affidavit of support (Form I-134) and recent tax return files.",
+    descBn: "প্রথম বছরের পুরো খরচ বহনের প্রমাণস্বরূপ স্পন্সরের অন্তত ৬ মাসের ব্যাংক স্টেটমেন্ট, এফিডেভিট অফ সাপোর্ট এবং ট্যাক্স রিটার্ন ফাইল।",
+    category: "financial",
+    countries: ["USA"]
+  },
+  {
+    id: "nz_realme_and_fts",
+    titleEn: "New Zealand RealMe Profile & FTS Proof",
+    titleBn: "নিউজিল্যান্ড রিয়েলমি প্রোফাইল এবং এফটিএস রসিদ",
+    descEn: "A fully completed digital profile on INZ portal via RealMe, and Funds Transfer Scheme (FTS) confirmation indicating secure living cost allocation (NZD $20,000+).",
+    descBn: "নিউজিল্যান্ডের রিয়েলমি পোর্টাল অ্যাকাউন্ট প্রোফাইল এবং ফান্ডস ট্রান্সফার স্কিম (FTS) এর মাধ্যমে ন্যূনতম ২০,০০০ নিউজিল্যান্ড ডলার লক অ্যাকাউন্টে স্থানান্তরের রসিদ।",
+    category: "financial",
+    countries: ["New Zealand"]
+  },
+  {
+    id: "singapore_solar_and_ipa",
+    titleEn: "Singapore SOLAR printout & IPA Letter",
+    titleBn: "সিঙ্গাপুর সোলার প্রিন্টআউট ও আইপিএ লেটার",
+    descEn: "The printed copy of your Student's Pass application via SOLAR system, and the official In-Principle Approval (IPA) letter issued by ICA.",
+    descBn: "সোলার সিস্টেমের মাধ্যমে আবেদনকৃত স্টুডেন্ট পাসের প্রিন্টআউট এবং সিঙ্গাপুর আইসিএ (ICA) কর্তৃক ইস্যুকৃত ইন-প্রিন্সিপাল অ্যাপ্রুভাল বা আইপিএ লেটার।",
+    category: "mandatory",
+    countries: ["Singapore"]
+  },
+  {
+    id: "malaysia_emgs_eval",
+    titleEn: "Malaysia EMGS eVAL Approval Letter",
+    titleBn: "মালয়েশিয়া ইএমজিএস ইভ্যাল অনুমোদন পত্র",
+    descEn: "Official Electronic Visa Approval Letter (eVAL) issued by EMGS, which is mandatory to print out and carry when boarding flights.",
+    descBn: "মালয়েশিয়ান ইএমজিএস (EMGS) কর্তৃক ইস্যুকৃত ইলেক্ট্রনিক ভিসা অ্যাপ্রুভাল লেটার (eVAL), যা মালয়েশিয়ায় প্রবেশের জন্য প্রধান নথিপত্র।",
+    category: "mandatory",
+    countries: ["Malaysia"]
+  },
+  {
+    id: "uae_sponsorship_and_entry_permit",
+    titleEn: "UAE University Sponsorship & GDRFA Permit",
+    titleBn: "ইউএই বিশ্ববিদ্যালয় স্পন্সরশিপ এবং এন্ট্রি পারমিট",
+    descEn: "Official University Sponsorship Document and the pre-arrival Entry Permit approved by the GDRFA or ICA of United Arab Emirates.",
+    descBn: "ইউএই বিশ্ববিদ্যালয় থেকে প্রেরিত অফিশিয়াল ভিসা স্পন্সরশিপ নথি এবং ফেডারেল অথরিটি থেকে ইস্যুকৃত প্রাক-আগমন এন্ট্রি পারমিট।",
+    category: "mandatory",
+    countries: ["UAE"]
+  },
+  {
+    id: "saudi_study_portal_and_attestation",
+    titleEn: "Saudi Scholarship Letter & Medical Clearance",
+    titleBn: "সৌদি স্কলারশিপ লেটার এবং মেডিকেল ক্লিয়ারেন্স",
+    descEn: "Official fully-funded scholarship/admission letter from 'Study in Saudi' portal, Arabic translated transcripts, and a verified medical fit report.",
+    descBn: "স্টাডি ইন সৌদি পোর্টাল থেকে প্রাপ্ত স্কলারশিপ বা অফার লেটার, আরবিতে অনুবাদকৃত সত্যায়িত সার্টিফিকেট এবং রেজিস্টার্ড ডক্টর কর্তৃক হেলথ ফিটনেস রিপোর্ট।",
+    category: "mandatory",
+    countries: ["Saudi Arabia"]
+  },
+  {
     id: "recommendation_letters",
     titleEn: "Letters of Recommendation",
     titleBn: "সুপারিশপত্র (রিকমেন্ডেশন লেটার)",
@@ -391,13 +481,72 @@ const ATTESTATION_DEADLINES: Record<string, Record<string, { days: string; alert
       alertEn: "⚠️ Poland requires first-year tuition paid upfront, plus secure double-entry Indian visa to attend interview in New Delhi. Allow 30-45 days for Indian visa.",
       alertBn: "⚠️ পোল্যান্ডে প্রথম বছরের টিউশন ফি আগেই দিতে হয় এবং দিল্লিতে ইন্টারভিউ দেওয়ার জন্য ভারতের ডাবল-এন্ট্রি ভিসা রেডি করতে ৩০-৪৫ দিন সময় লাগে।"
     }
+  },
+  Italy: {
+    academic_certificates: {
+      days: "15-30 days",
+      alertEn: "⚠️ Italy requires academic documents to have MoFA legalization and CIMEA evaluation or DOV (Declaration of Value) (takes 15-30 days). Ensure this is ready for pre-enrollment.",
+      alertBn: "⚠️ ইতালির আবেদনের জন্য সমস্ত শিক্ষাগত নথিপত্র পররাষ্ট্র মন্ত্রণালয় (MoFA) কর্তৃক সত্যায়িত এবং CIMEA/DOV সার্টিফিকেট থাকা আবশ্যক (১৫-৩০ দিন সময়)।"
+    },
+    italy_universitaly_and_financials: {
+      days: "30-60 days",
+      alertEn: "⚠️ Universitaly pre-enrollment approval is mandatory before VFS Dhaka submission. Maintain personal or parental bank statement (€6,000 equivalent) for at least 30-60 days.",
+      alertBn: "⚠️ ভিএফএস ঢাকাতে ফাইল সাবমিট করার আগে ইউনিভার্সিটি থেকে ইউনিভার্সিটালি অনুমোদন অত্যন্ত জরুরি। ব্যাংকে কমপক্ষে ৬,০০০ ইউরো সমপরিমাণ টাকা রাখুন।"
+    }
+  },
+  USA: {
+    usa_i20_and_sevis: {
+      days: "10-20 days",
+      alertEn: "⚠️ Ensure you pay your $350 SEVIS fee online and secure your original signed I-20 form before booking your interview at US Embassy Dhaka.",
+      alertBn: "⚠️ মার্কিন দূতাবাস ঢাকায় সাক্ষাৎকারের আগে অবশ্যই অনলাইন সেভিস ফি (৩৫০ ডলার) পরিশোধ এবং অরিজিনাল আই-২০ ফর্ম সংগ্রহ নিশ্চিত করুন।"
+    },
+    usa_sponsor_and_tax: {
+      days: "60-90 days",
+      alertEn: "⚠️ US student visa requires clear funding origin transparency. The sponsor must keep liquid funds and provide corresponding tax returns/income proof for 60-90 days.",
+      alertBn: "⚠️ ইউএস স্টুডেন্ট ভিসার ক্ষেত্রে স্পন্সর ব্যালেন্সের উৎস স্পষ্ট হতে হবে। স্পন্সরের ব্যাংকে টাকা রাখার পাশাপাশি তার আয়ের উৎস ও ট্যাক্স রিটার্ন ফাইল রেডি রাখুন।"
+    }
+  },
+  "New Zealand": {
+    nz_realme_and_fts: {
+      days: "30-45 days",
+      alertEn: "⚠️ The Funds Transfer Scheme (FTS) is highly recommended for Bangladeshis applying to NZ. Keep NZD $20,000+ matured for 30-45 days.",
+      alertBn: "⚠️ নিউজিল্যান্ডের স্টুডেন্ট ভিসার জন্য ফান্ডস ট্রান্সফার স্কিম (FTS) রিকমেন্ডেড। কমপক্ষে ২০,০০০ নিউজিল্যান্ড ডলার ৩০-৪৫ দিন ব্যাংকে রেডি রাখুন।"
+    }
+  },
+  Singapore: {
+    singapore_solar_and_ipa: {
+      days: "15-30 days",
+      alertEn: "⚠️ Singapore requires a SOLAR application submission and an official ICA-approved In-Principle Approval (IPA) letter (takes 15-30 days).",
+      alertBn: "⚠️ সিঙ্গাপুরে পড়ার জন্য সোলার সিস্টেমে আবেদন এবং আইসিএ (ICA) কর্তৃক ইন-প্রিন্সিপাল অ্যাপ্রুভাল লেটার সংগ্রহ আবশ্যক (১৫-৩০ দিন)।"
+    }
+  },
+  Malaysia: {
+    malaysia_emgs_eval: {
+      days: "20-35 days",
+      alertEn: "⚠️ EMGS eVAL clearance is mandatory. It takes around 20-35 days to reach 100% status. Do not book flight tickets without printed eVAL approval.",
+      alertBn: "⚠️ মালয়েশিয়া ভ্রমণের আগে ইএমজিএস ইভ্যাল (eVAL) ক্লিয়ারেন্স জরুরি। এটি ১০০% প্রগ্রেস হতে ২০-৩৫ দিন সময় নেয়।"
+    }
+  },
+  UAE: {
+    uae_sponsorship_and_entry_permit: {
+      days: "10-20 days",
+      alertEn: "⚠️ The host UAE university sponsors your entry permit. Allow 10-20 days for GDRFA/ICA approvals before departure from Bangladesh.",
+      alertBn: "⚠️ ইউএই ভিসা স্পন্সরশিপের প্রক্রিয়া বিশ্ববিদ্যালয় পরিচালনা করে। বাংলাদেশে ঢাকা ত্যাগ করার আগে ১০-২০ দিন সময় হাতে রাখুন।"
+    }
+  },
+  "Saudi Arabia": {
+    saudi_study_portal_and_attestation: {
+      days: "30-45 days",
+      alertEn: "⚠️ Academic certificates must be translated to Arabic and legalized by the Saudi Embassy in Dhaka (takes 30-45 days).",
+      alertBn: "⚠️ সমস্ত সার্টিফিকেট আরবিতে অনুবাদ করে ঢাকার সৌদি দূতাবাস থেকে লিগালাইজ করে নিতে হবে (৩০-৪৫ দিন সময় লাগে)।"
+    }
   }
 };
 
 export default function App() {
   // --- States ---
   const [user, setUser] = useState<User | null>(null);
-  const [activeTab, setActiveTab] = useState<"chat" | "dashboard" | "pricing" | "tracker" | "payments" | "channels" | "simulator" | "checklist" | "about">("chat");
+  const [activeTab, setActiveTab] = useState<"chat" | "explorer" | "dashboard" | "pricing" | "tracker" | "payments" | "channels" | "simulator" | "checklist" | "about">("chat");
   const [language, setLanguage] = useState<"en" | "bn">("en");
 
   // --- Contact / Counseling Form States ---
@@ -2282,6 +2431,18 @@ But I can tell you that for ${profile.targetCountry} higher study:
           </button>
 
           <button
+            onClick={() => setActiveTab("explorer")}
+            className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-wide uppercase shrink-0 transition-all duration-200 ${
+              activeTab === "explorer" 
+                ? "bg-violet-600 text-white shadow-lg shadow-violet-100 font-bold translate-x-1" 
+                : "text-slate-500 hover:text-slate-900 hover:bg-white hover:shadow-sm"
+            }`}
+          >
+            <Globe className="w-4 h-4 shrink-0" />
+            {language === "bn" ? "ইউনিভার্সিটি এক্সপ্লোরার" : "University Explorer"}
+          </button>
+
+          <button
             onClick={() => setActiveTab("channels")}
             className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-wide uppercase shrink-0 transition-all duration-200 ${
               activeTab === "channels" 
@@ -3228,9 +3389,9 @@ But I can tell you that for ${profile.targetCountry} higher study:
 
                         {/* Preferred countries select chips */}
                         <div className="col-span-1 md:col-span-2 space-y-2 mt-2">
-                          <label className="text-slate-500 font-semibold block text-[11px] uppercase tracking-wider">Preferred Schengen Destinations (Select Multiple)</label>
+                          <label className="text-slate-500 font-semibold block text-[11px] uppercase tracking-wider">Preferred Global Destinations (Select Multiple)</label>
                           <div className="flex flex-wrap gap-2">
-                            {["Germany", "Sweden", "Finland", "Poland"].map(country => {
+                            {["Germany", "Sweden", "Finland", "Poland", "Italy", "USA", "New Zealand", "Singapore", "Malaysia", "UAE", "Saudi Arabia"].map(country => {
                               const isSelected = (profile.preferredCountries || []).includes(country);
                               return (
                                 <button
@@ -3254,7 +3415,7 @@ But I can tell you that for ${profile.targetCountry} higher study:
                                   }}
                                   className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all flex items-center gap-1 cursor-pointer ${
                                     isSelected 
-                                      ? "bg-violet-600 text-white border-violet-600" 
+                                      ? "bg-violet-600 text-white border-violet-600 animate-fade-in" 
                                       : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100 disabled:opacity-75"
                                   }`}
                                 >
@@ -3262,6 +3423,13 @@ But I can tell you that for ${profile.targetCountry} higher study:
                                   {country === "Sweden" && "🇸🇪 Sweden"}
                                   {country === "Finland" && "🇫🇮 Finland"}
                                   {country === "Poland" && "🇵🇱 Poland"}
+                                  {country === "Italy" && "🇮🇹 Italy"}
+                                  {country === "USA" && "🇺🇸 USA"}
+                                  {country === "New Zealand" && "🇳🇿 New Zealand"}
+                                  {country === "Singapore" && "🇸🇬 Singapore"}
+                                  {country === "Malaysia" && "🇲🇾 Malaysia"}
+                                  {country === "UAE" && "🇦🇪 UAE"}
+                                  {country === "Saudi Arabia" && "🇸🇦 Saudi Arabia"}
                                   {isSelected && <span className="text-[9px]">✓</span>}
                                 </button>
                               );
@@ -3273,7 +3441,7 @@ But I can tell you that for ${profile.targetCountry} higher study:
                         <div className="col-span-1 md:col-span-2 space-y-2 mt-2">
                           <label className="text-slate-500 font-semibold block text-[11px] uppercase tracking-wider">Desired Fields of Study (Select Multiple)</label>
                           <div className="flex flex-wrap gap-1.5">
-                            {["Computer Science", "Data Science", "Software Engineering", "Business Administration", "Finance & Economics", "Electrical Engineering", "Mechanical Engineering", "Biotechnology"].map(field => {
+                            {["Computer Science", "Data Science", "Software Engineering", "Business Administration", "Finance & Economics", "Electrical Engineering", "Mechanical Engineering", "Biotechnology", "Medicine & Public Health", "Environmental Science & Sustainability", "Space Exploration & Physics", "Islamic Finance & Halal Management", "Creative Arts & Design", "Law & International Relations", "Psychology"].map(field => {
                               const isSelected = (profile.desiredFields || []).includes(field);
                               return (
                                 <button
@@ -3297,7 +3465,7 @@ But I can tell you that for ${profile.targetCountry} higher study:
                                   }}
                                   className={`px-2.5 py-1 rounded-lg text-[10.5px] font-bold border transition-all cursor-pointer ${
                                     isSelected 
-                                      ? "bg-violet-600 text-white border-violet-600" 
+                                      ? "bg-violet-600 text-white border-violet-600 animate-fade-in" 
                                       : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100 disabled:opacity-75"
                                   }`}
                                 >
@@ -3306,6 +3474,54 @@ But I can tell you that for ${profile.targetCountry} higher study:
                               );
                             })}
                           </div>
+
+                          {/* Custom field input */}
+                          {isEditingProfile && (
+                            <div className="pt-2 flex gap-2">
+                              <input
+                                type="text"
+                                id="custom-field-input"
+                                placeholder={language === "bn" ? "অন্যান্য বিষয়ের নাম লিখুন..." : "Type custom field / subject..."}
+                                className="px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-semibold text-slate-800 bg-white focus:outline-none focus:border-violet-500 w-full max-w-xs"
+                                onKeyDown={(e) => {
+                                  if (e.key === "Enter") {
+                                    e.preventDefault();
+                                    const val = (e.target as HTMLInputElement).value.trim();
+                                    if (val) {
+                                      const current = profile.desiredFields || [];
+                                      if (!current.includes(val)) {
+                                        setProfile(prev => ({
+                                          ...prev,
+                                          desiredFields: [...current, val]
+                                        }));
+                                      }
+                                      (e.target as HTMLInputElement).value = "";
+                                    }
+                                  }
+                                }}
+                              />
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const input = document.getElementById("custom-field-input") as HTMLInputElement;
+                                  const val = input?.value.trim();
+                                  if (val) {
+                                    const current = profile.desiredFields || [];
+                                    if (!current.includes(val)) {
+                                      setProfile(prev => ({
+                                        ...prev,
+                                        desiredFields: [...current, val]
+                                      }));
+                                    }
+                                    input.value = "";
+                                  }
+                                }}
+                                className="px-3 py-1.5 bg-violet-50 text-violet-600 border border-violet-100 rounded-lg text-xs font-bold hover:bg-violet-100 cursor-pointer"
+                              >
+                                {language === "bn" ? "যোগ করুন" : "Add Field"}
+                              </button>
+                            </div>
+                          )}
                         </div>
                       </form>
                     </div>
@@ -3598,7 +3814,14 @@ But I can tell you that for ${profile.targetCountry} higher study:
                             {country === "Sweden" && "🇸🇪 Sweden"}
                             {country === "Finland" && "🇫🇮 Finland"}
                             {country === "Poland" && "🇵🇱 Poland"}
-                            {country !== "Germany" && country !== "Sweden" && country !== "Finland" && country !== "Poland" && country}
+                            {country === "Italy" && "🇮🇹 Italy"}
+                            {country === "USA" && "🇺🇸 USA"}
+                            {country === "New Zealand" && "🇳🇿 New Zealand"}
+                            {country === "Singapore" && "🇸🇬 Singapore"}
+                            {country === "Malaysia" && "🇲🇾 Malaysia"}
+                            {country === "UAE" && "🇦🇪 UAE"}
+                            {country === "Saudi Arabia" && "🇸🇦 Saudi Arabia"}
+                            {country !== "Germany" && country !== "Sweden" && country !== "Finland" && country !== "Poland" && country !== "Italy" && country !== "USA" && country !== "New Zealand" && country !== "Singapore" && country !== "Malaysia" && country !== "UAE" && country !== "Saudi Arabia" && country}
                           </button>
                         ))}
                       </div>
@@ -4160,6 +4383,19 @@ But I can tell you that for ${profile.targetCountry} higher study:
               </motion.div>
             )}
 
+            {/* UNIVERSITY EXPLORER TAB */}
+            {activeTab === "explorer" && (
+              <motion.div
+                key="explorer-tab"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs space-y-6"
+              >
+                <UniversityExplorer language={language} />
+              </motion.div>
+            )}
+
             {/* 4. PROGRESS TRACKER TAB */}
             {activeTab === "tracker" && (
               <motion.div
@@ -4173,7 +4409,7 @@ But I can tell you that for ${profile.targetCountry} higher study:
                   <div className="flex items-center justify-between mb-6 pb-3 border-b border-slate-100">
                     <h3 className="font-display font-bold text-sm text-slate-900 flex items-center gap-2">
                       <CheckCircle2 className="h-5 w-5 text-violet-600" />
-                      Schengen Visa Milestone Progress Map
+                      {profile.targetCountry} Student Visa Milestone Progress Map
                     </h3>
                     <span className="text-xs text-slate-400 font-mono">
                       Track ID: #GAH-{user ? user.id.slice(4, 9) : "GUEST"}
@@ -4956,8 +5192,8 @@ But I can tell you that for ${profile.targetCountry} higher study:
                       </h2>
                       <p className="text-xs md:text-sm text-indigo-100 leading-relaxed">
                         {language === "bn" 
-                          ? `আপনার প্রোফাইল অনুযায়ী (${profile.targetDegree} ডিগ্রী, IELTS ${profile.ielts}, CGPA ${profile.gpa}) শেনজেনভুক্ত দেশে আবেদন করার প্রয়োজনীয় নথিপত্র নিচে দেওয়া হলো।`
-                          : `Customized specifically for your profile (${profile.targetDegree} Degree, IELTS ${profile.ielts}, CGPA ${profile.gpa}) to ensure zero rejection rates at the Dhaka Embassy.`}
+                          ? `আপনার প্রোফাইল অনুযায়ী (${profile.targetDegree} ডিগ্রী, IELTS ${profile.ielts}, CGPA ${profile.gpa}) এবং পছন্দ অনুযায়ী (${profile.targetCountry}) আবেদনের প্রয়োজনীয় নথিপত্র নিচে দেওয়া হলো।`
+                          : `Customized specifically for your profile (${profile.targetDegree} Degree, IELTS ${profile.ielts}, CGPA ${profile.gpa}) to ensure zero rejection rates.`}
                       </p>
                     </div>
 
