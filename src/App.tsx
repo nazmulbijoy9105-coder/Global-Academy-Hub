@@ -11,11 +11,12 @@ import {
   HelpCircle, GraduationCap, DollarSign, Calendar, ChevronDown, Info,
   Facebook, Instagram, Youtube, Twitter, Linkedin,
   LogOut, Download, Phone, Mail, Award, Loader2, Send, Plus, Trash2, Edit3, Check, Copy, MessageCircle,
-  Mic, Square, Play, Volume2, Clock, BookOpen, RefreshCw, FileText, Filter, Search, X, Shield, Users, Bot, ExternalLink, Globe
+  Mic, Square, Play, Volume2, Clock, BookOpen, RefreshCw, FileText, Filter, Search, X, Shield, Server, Users, Bot, ExternalLink, Globe
 } from "lucide-react";
 import { User, Conversation, Message, Payment, ServiceTier, StudentProfile } from "./types";
 import AuthModal from "./components/AuthModal";
 import ReportViewer from "./components/ReportViewer";
+import UniversityExplorer from "./components/UniversityExplorer";
 import Logo from "./components/Logo";
 import { jsPDF } from "jspdf";
 
@@ -457,6 +458,13 @@ export default function App() {
   const [emailAlertInputVal, setEmailAlertInputVal] = useState<string>("");
   const [emailAlertLogs, setEmailAlertLogs] = useState<any[]>([]);
   const [emailSubscriptions, setEmailSubscriptions] = useState<any[]>([]);
+  const [smtpStatus, setSmtpStatus] = useState<{
+    configured: boolean;
+    host: string;
+    port: string;
+    user: string;
+    fromEmail: string;
+  } | null>(null);
 
   // Initialize email alert input value when user changes or loads
   useEffect(() => {
@@ -493,6 +501,12 @@ export default function App() {
       if (logRes.ok) {
         const logs = await logRes.json();
         setEmailAlertLogs(logs);
+      }
+
+      const smtpRes = await fetch("/api/email-alerts/smtp-status");
+      if (smtpRes.ok) {
+        const sStatus = await smtpRes.json();
+        setSmtpStatus(sStatus);
       }
     } catch (e) {
       console.error("Error fetching email alert data:", e);
@@ -3997,6 +4011,11 @@ But I can tell you that for ${profile.targetCountry} higher study:
 
                 </div>
 
+                {/* University Explorer Section */}
+                <div className="mt-12 pt-8 border-t border-slate-200/80">
+                  <UniversityExplorer language={language} />
+                </div>
+
                 {/* FAQ section */}
                 <div className="mt-12 pt-8 border-t border-slate-200/80 space-y-4">
                   <div className="text-center space-y-2 max-w-xl mx-auto">
@@ -5534,16 +5553,110 @@ But I can tell you that for ${profile.targetCountry} higher study:
                           </div>
                         </div>
 
-                        {/* Informational Note */}
-                        <div className="p-3 bg-amber-500/5 border border-amber-200/30 rounded-2xl text-[11px] text-amber-800 flex items-start gap-2 font-medium">
-                          <Info className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-                          <div className="space-y-0.5">
-                            <span className="font-bold">{language === "bn" ? "সার্ভার কনফিগারেশন নোট:" : "Integration Sandbox Details:"}</span>
-                            <p className="text-slate-650 leading-relaxed text-[10px]">
-                              {language === "bn"
-                                ? "অ্যাপটি রিয়েল-টাইম SMTP ইমেইল ডেলিভারি সমর্থন করে। আপনি যদি আপনার জিমেইল বা ডোমেইন মেইল দিয়ে আসল ইমেইল পেতে চান, তবে আপনার `.env` ফাইলে SMTP_HOST, SMTP_USER এবং SMTP_PASS ভ্যালুগুলো যোগ করুন। কনফিগারেশন না থাকলে এটি সিকিউর স্যান্ডবক্স লগ হিসেবে উপরে হিস্ট্রি রেকর্ড করবে।"
-                                : "This app fully integrates standard SMTP servers using nodemailer. To receive real emails, set up SMTP_HOST, SMTP_USER, and SMTP_PASS in your environment's Secrets panel. If SMTP is not defined, alerts are safely preserved in our backend database and logged above."}
-                            </p>
+                        {/* SMTP Live Status and Setup Guide */}
+                        <div className="pt-6 border-t border-slate-150 space-y-6">
+                          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 bg-slate-50 border border-slate-200/60 rounded-2xl">
+                            <div className="flex items-start gap-3">
+                              <div className={`p-2 rounded-xl mt-0.5 ${smtpStatus?.configured ? "bg-emerald-50 text-emerald-600" : "bg-amber-50/70 text-amber-600"}`}>
+                                <Server className="w-5 h-5" />
+                              </div>
+                              <div className="space-y-1">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span className="font-bold text-xs text-slate-900 uppercase tracking-wide">
+                                    {language === "bn" ? "SMTP সার্ভার স্ট্যাটাস" : "SMTP Server Status"}
+                                  </span>
+                                  <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider ${
+                                    smtpStatus?.configured 
+                                      ? "bg-emerald-100 text-emerald-800" 
+                                      : "bg-amber-100 text-amber-800"
+                                  }`}>
+                                    <span className={`w-1.5 h-1.5 rounded-full ${smtpStatus?.configured ? "bg-emerald-500 animate-pulse" : "bg-amber-500"}`} />
+                                    {smtpStatus?.configured 
+                                      ? (language === "bn" ? "সক্রিয় (SMTP)" : "Active (SMTP)") 
+                                      : (language === "bn" ? "স্যান্ডবক্স মোড" : "Sandbox Mode")}
+                                  </span>
+                                </div>
+                                <p className="text-[11px] text-slate-500 leading-relaxed font-medium">
+                                  {smtpStatus?.configured 
+                                    ? (language === "bn" ? "আপনার কাস্টম SMTP সার্ভার যুক্ত এবং ইমেইল প্রেরণের জন্য প্রস্তুত।" : "Your custom SMTP server is integrated and ready to send real emails.")
+                                    : (language === "bn" ? "কোন কাস্টম SMTP নেই। ইমেইলগুলো উপরে স্যান্ডবক্স লগে সংরক্ষিত হবে।" : "No custom SMTP server configured. Emails are securely logged in the sandbox above.")}
+                                </p>
+                              </div>
+                            </div>
+                            
+                            {/* Short stats */}
+                            <div className="text-[10px] space-y-1 font-mono text-slate-600 md:text-right border-t md:border-t-0 pt-3 md:pt-0 border-slate-200">
+                              <div>Host: <span className="font-bold text-slate-800">{smtpStatus?.host || "Not set"}</span></div>
+                              <div>Port: <span className="font-bold text-slate-800">{smtpStatus?.port || "Not set"}</span></div>
+                              <div>User: <span className="font-bold text-slate-800">{smtpStatus?.user || "Not set"}</span></div>
+                            </div>
+                          </div>
+
+                          {/* How-to Setup Guide */}
+                          <div className="bg-slate-50/50 border border-slate-200 rounded-2xl p-5 md:p-6 space-y-4">
+                            <h4 className="text-xs font-black uppercase text-slate-500 tracking-wider flex items-center gap-2">
+                              <HelpCircle className="w-4 h-4 text-violet-600" />
+                              <span>{language === "bn" ? "কিভাবে আপনার SMTP কনফিগার করবেন? (SMTP Setup Guide)" : "How to Configure SMTP & Send Real Emails"}</span>
+                            </h4>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-600 leading-relaxed">
+                              {/* Step by Step English */}
+                              <div className="space-y-3">
+                                <div className="font-bold text-slate-800 flex items-center gap-1.5">
+                                  <span className="w-5 h-5 rounded-full bg-violet-100 text-violet-700 flex items-center justify-center font-bold text-[10px]">EN</span>
+                                  <span>Step-by-Step Setup (English)</span>
+                                </div>
+                                <ul className="space-y-2 list-disc pl-4 text-slate-600">
+                                  <li>
+                                    <strong>Get credentials:</strong> For Gmail, go to Google Account &gt; Security &gt; 2-Step Verification &gt; App Passwords. Generate a 16-character password.
+                                  </li>
+                                  <li>
+                                    <strong>Go to Settings / Secrets:</strong> In your workspace, locate the **Secrets/Environment Variables** panel.
+                                  </li>
+                                  <li>
+                                    <strong>Add SMTP values:</strong> Use the environment variable keys defined below to configure:
+                                    <pre className="mt-1.5 p-2.5 bg-slate-900 text-emerald-400 font-mono text-[9.5px] rounded-lg overflow-x-auto">
+{`SMTP_HOST="smtp.gmail.com"
+SMTP_PORT="587"
+SMTP_USER="your.email@gmail.com"
+SMTP_PASS="xxxx xxxx xxxx xxxx"
+SMTP_FROM_EMAIL="Global Hub Alerts <your.email@gmail.com>"`}
+                                    </pre>
+                                  </li>
+                                  <li>
+                                    <strong>Restart Server:</strong> After setting your variables, restart the dev server. New deadline notifications will arrive straight to your inbox!
+                                  </li>
+                                </ul>
+                              </div>
+
+                              {/* Step by Step Bengali */}
+                              <div className="space-y-3">
+                                <div className="font-bold text-slate-800 flex items-center gap-1.5">
+                                  <span className="w-5 h-5 rounded-full bg-violet-100 text-violet-700 flex items-center justify-center font-bold text-[10px]">BN</span>
+                                  <span>ধাপ-ভিত্তিক সেটআপ নির্দেশিকা (Bengali)</span>
+                                </div>
+                                <ul className="space-y-2 list-disc pl-4 text-slate-600">
+                                  <li>
+                                    <strong>জিমেইল অ্যাপ পাসওয়ার্ড:</strong> Google Account &gt; Security &gt; 2-Step Verification এ গিয়ে একদম নিচে <strong>App Passwords</strong> তৈরি করুন। ১৬ ডিজিটের পাসওয়ার্ডটি কপি করুন।
+                                  </li>
+                                  <li>
+                                    <strong>কনফিগারেশন অ্যাড করুন:</strong> আপনার ওয়ার্কস্পেসের Secrets প্যানেলে গিয়ে নিচের ভ্যালুগুলো যোগ করুন।
+                                  </li>
+                                  <li>
+                                    <strong>এনভায়রনমেন্ট ভেরিয়েবলস:</strong>
+                                    <pre className="mt-1.5 p-2.5 bg-slate-900 text-emerald-400 font-mono text-[9.5px] rounded-lg overflow-x-auto">
+{`SMTP_HOST="smtp.gmail.com"
+SMTP_PORT="587"
+SMTP_USER="আপনার-মেইল@gmail.com"
+SMTP_PASS="১৬-ডিজিটের-অ্যাপ-পাসওয়ার্ড"`}
+                                    </pre>
+                                  </li>
+                                  <li>
+                                    <strong>রিস্টার্ট করুন:</strong> পরিবর্তনগুলো সংরক্ষণ করে অ্যাপের ডিক্লেয়ার্ড ডেডলাইনে ইমেইল এলার্ট পেতে ও টেস্ট করতে রিফ্রেশ দিন!
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>

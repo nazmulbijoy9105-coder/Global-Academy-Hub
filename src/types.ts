@@ -62,3 +62,19 @@ export interface StudentProfile {
   cvSkills?: string[];
   lastUpdated?: number;
 }
+
+export interface University {
+  id: string;
+  name: string;
+  country: string;
+  region: "Asia" | "Middle East" | "Europe" | "USA" | "New Zealand";
+  subjects: {
+    common: string[];
+    uncommon: string[];
+  };
+  costLevel: "Low" | "Medium" | "High";
+  tuitionRange: string;
+  livingCostRange: string;
+  rankRange: string;
+  highlights: string[];
+}

@@ -83,6 +83,36 @@ async function startServer() {
   };
 
   // Email Alerts Endpoints
+  app.get("/api/email-alerts/smtp-status", (req, res) => {
+    const host = process.env.SMTP_HOST || "";
+    const port = process.env.SMTP_PORT || "587";
+    const user = process.env.SMTP_USER || "";
+    const fromEmail = process.env.SMTP_FROM_EMAIL || "";
+    const isConfigured = !!(host && user && process.env.SMTP_PASS);
+
+    // Mask the username/email for security
+    let maskedUser = "None";
+    if (user) {
+      const parts = user.split("@");
+      if (parts.length === 2) {
+        const name = parts[0];
+        const domain = parts[1];
+        const maskedName = name.length > 2 ? name[0] + "***" + name[name.length - 1] : "***";
+        maskedUser = `${maskedName}@${domain}`;
+      } else {
+        maskedUser = user.length > 4 ? user.substring(0, 2) + "***" + user.substring(user.length - 2) : "***";
+      }
+    }
+
+    res.json({
+      configured: isConfigured,
+      host: host || "Not set",
+      port,
+      user: maskedUser,
+      fromEmail: fromEmail || "Not set"
+    });
+  });
+
   app.get("/api/email-alerts/subscriptions", (req, res) => {
     const list = readJsonFile(emailSubscriptionsPath, []);
     res.json(list);
